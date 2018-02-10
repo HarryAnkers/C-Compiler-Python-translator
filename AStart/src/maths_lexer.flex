@@ -18,7 +18,7 @@ extern "C" int fileno(FILE *stream);
 [}]             { return T_RCUBRACKET; }
 
 //SYMBOLS
-[=]             { return T_EQUAL; }
+[=]             { return T_ASSIGN; }
 [.]             { return T_DOT; }
 [,]             { return T_COMMA; }
 [:]             { return T_COLON; }
@@ -29,6 +29,7 @@ extern "C" int fileno(FILE *stream);
 [double]	{ return T_DOUBLE; }
 [string]	{ return T_STRING; }
 [bool]		{ return T_BOOL; }
+[void]		{ return T_VOID; }
 
 //LOGICAL OPERATORS
 [&&]		{ return T_LAND; }

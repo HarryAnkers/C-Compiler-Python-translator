@@ -35,19 +35,27 @@
 
 ROOT : EXPR { g_root = $1; }
 
-EXPR : TERM                 { $$ = $1; }
-        | EXPR T_PLUS TERM       { $$ = new AddOperator( $1 , $3 ); }
-        | EXPR T_MINUS TERM       { $$ = new SubOperator( $1 , $3 ); }
+FUNCTION : TYPE ID T_LBRACKET T_RBRACKET T_LBRACKET T_LCUBRACKET T_RCUBRACKET { $$ = $1; }
 
-TERM : FACTOR               { $$ = $1; }
-        | TERM T_TIMES FACTOR  { $$ = new MulOperator( $1 , $3 ); }
-        | TERM T_DIVIDE FACTOR  { $$ = new DivOperator( $1 , $3 ); }
+TYPE :  INT                          { $$ = $1; }
+        | DOUBLE                      { $$ = $1; }
+        | STRING                      { $$ = $1; }
+        | BOOL                        { $$ = $1; }
+        | VOID                        { $$ = $1; }
 
-FACTOR : T_NUMBER           { $$ = new Number( $1 ); }
-        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
-        | T_VARIABLE { $$ = new Variable( *$1 );}
-        | T_LOG T_LBRACKET EXPR T_RBRACKET { $$ = new LogFunction( $3 ); }
-        | T_EXP T_LBRACKET EXPR T_RBRACKET { $$ = new ExpFunction( $3 ); }
+EXPR :   TERM                         { $$ = $1; }
+        | EXPR T_PLUS TERM            { $$ = new AddOperator( $1 , $3 ); }
+        | EXPR T_MINUS TERM           { $$ = new SubOperator( $1 , $3 ); }
+
+TERM :   FACTOR                       { $$ = $1; }
+        | TERM T_TIMES FACTOR         { $$ = new MulOperator( $1 , $3 ); }
+        | TERM T_DIVIDE FACTOR        { $$ = new DivOperator( $1 , $3 ); }
+
+FACTOR : T_NUMBER                     { $$ = new Number( $1 ); }
+        | T_LBRACKET EXPR T_RBRACKET  { $$ = $2; }
+        | T_VARIABLE                  { $$ = new Variable( *$1 );}
+        | T_LOG T_LBRACKET EXPR T_RBRACKET  { $$ = new LogFunction( $3 ); }
+        | T_EXP T_LBRACKET EXPR T_RBRACKET  { $$ = new ExpFunction( $3 ); }
         | T_SQRT T_LBRACKET EXPR T_RBRACKET { $$ = new SqrtFunction( $3 ); }
 
 %%
