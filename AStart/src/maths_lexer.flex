@@ -9,13 +9,16 @@ extern "C" int fileno(FILE *stream);
 
 %%
 
+//main
+[main]          { return T_MAIN; }
+
 //BRACKET SYMBOLS
-[<]		{ return T_MORE; }
-[>]		{ return T_LESS; }
 [(]             { return T_LSQBRACKET; }
 [)]             { return T_RSQBRACKET; }
 [{]             { return T_LCUBRACKET; }
 [}]             { return T_RCUBRACKET; }
+[(]             { return T_LBRACKET; }
+[)]             { return T_RBRACKET; }
 
 //SYMBOLS
 [=]             { return T_ASSIGN; }
@@ -45,9 +48,6 @@ extern "C" int fileno(FILE *stream);
 [+]             { return T_PLUS; }
 [-]             { return T_MINUS; }
 [\^]             { return T_EXPONENT; }
-
-[(]             { return T_LBRACKET; }
-[)]             { return T_RBRACKET; }
 
 log             { return T_LOG;   }
 exp             { return T_EXP; }

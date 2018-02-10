@@ -21,13 +21,17 @@
 }
 
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_LBRACKET T_RBRACKET
+%token T_LBRACKET T_RBRACKET T_LSQBRACKET T_RSQBRACKET T_LCUBRACKET T_RCUBRACKET
 %token T_LOG T_EXP T_SQRT
 %token T_NUMBER T_VARIABLE
+%token T_ASSIGN T_DOT T_COMMA T_COLON T_SEMICOLON
+%token T_INT T_DOUBLE T_STRING T_BOOL T_VOID
+%token T_MAIN
 
-%type <expr> EXPR TERM FACTOR
+%type <expr> EXPR TERM FACTOR TYPE FUNCTION ID T_MAIN
 %type <number> T_NUMBER
 %type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME
+%type <string> T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 
 %start ROOT
 
@@ -37,7 +41,9 @@ ROOT : EXPR { g_root = $1; }
 
 FUNCTION : TYPE ID T_LBRACKET T_RBRACKET T_LBRACKET T_LCUBRACKET T_RCUBRACKET { $$ = $1; }
 
-TYPE :  INT                          { $$ = $1; }
+ID :    T_MAIN                        { $$ = $1; }  
+
+TYPE :  INT                           { $$ = $1; }
         | DOUBLE                      { $$ = $1; }
         | STRING                      { $$ = $1; }
         | BOOL                        { $$ = $1; }
