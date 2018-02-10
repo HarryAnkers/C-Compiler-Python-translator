@@ -1,2 +1,6 @@
 MilestoneID,             Dependencies, EstimatedEffort, Lead,  Completed, Description
-DefineInitialMilestones,             ,               1,    ?,           , Come up with initial milestones for getting started
+DefineInitialMilestones,             ,1,    ?,           , Come up with initial milestones for getting started
+Convert one file to python,,,,,
+Convert 5 files to python,,,,,
+Pass all the given python tests,,,,,
+Convert one c file to mips,,,,,

@@ -8,6 +8,37 @@ extern "C" int fileno(FILE *stream);
 %}
 
 %%
+
+//BRACKET SYMBOLS
+[<]		{ return T_MORE; }
+[>]		{ return T_LESS; }
+[(]             { return T_LSQBRACKET; }
+[)]             { return T_RSQBRACKET; }
+[{]             { return T_LCUBRACKET; }
+[}]             { return T_RCUBRACKET; }
+
+//SYMBOLS
+[=]             { return T_EQUAL; }
+[.]             { return T_DOT; }
+[,]             { return T_COMMA; }
+[:]             { return T_COLON; }
+[;]             { return T_SEMICOLON; }
+
+//TYPES
+[int]		{ return T_INT; }
+[double]	{ return T_DOUBLE; }
+[string]	{ return T_STRING; }
+[bool]		{ return T_BOOL; }
+
+//LOGICAL OPERATORS
+[&&]		{ return T_LAND; }
+[||]		{ return T_LOR; }
+[==]		{ return T_LEQUAL; }
+[!=]		{ return T_LNOTEQUAL; }
+[<=]		{ return T_LMOREORLESS; }
+[>=]		{ return T_LMOREOREQUAL; }
+
+//MATHS OPERATORS
 [*]             { return T_TIMES; }
 [/]             { return T_DIVIDE; }
 [+]             { return T_PLUS; }
@@ -23,7 +54,7 @@ sqrt            { return T_SQRT; }
 
 [-]?[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
-[a-z]+          { yylval.string=new std::string(yytext); return T_VARIABLE; }
+([A-Z][a-z])+          { yylval.string=new std::string(yytext); return T_VARIABLE; }
 
 [ \t\r\n]+		{;}
 
