@@ -36,7 +36,7 @@ class ReturnStatement : public Statement
 
         //translator 
         virtual void translate(std::ostream &dst) const =0;
-}
+};
 
 class AssignStatement : public Statement
 {
@@ -54,6 +54,6 @@ class AssignStatement : public Statement
 
         //translator 
         virtual void translate(std::ostream &dst) const =0;
-}
+};
 
 #endif

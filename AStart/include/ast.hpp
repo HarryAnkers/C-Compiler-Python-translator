@@ -12,6 +12,5 @@
 #include "ast/ast_Body.hpp"
 
 extern const MainBody *parseAST();
-//extern const Expression *parseAST();
 
 #endif
