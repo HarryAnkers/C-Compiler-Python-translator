@@ -7,15 +7,19 @@
 
 #include <memory>
 
+#include "ast_main_body.hpp"
+
 class MainBody;
 
 typedef const MainBody *MainBodyPtr;
 
-class Expression
+class MainBody
 {
+private: 
+    Ptr mainFunc
 public:
-    virtual ~MainBody()
-    {}
+    virtual ~MainBody(ptr _mainFunc)
+    mainFunc(_mainFunc){}
 
     //translate
     virtual void translate(std::ostream &dst) const =0;
