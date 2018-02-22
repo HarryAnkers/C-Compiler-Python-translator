@@ -7,7 +7,6 @@
 #include <cmath>
 
 class Function
-    : public MainBody
 {
 private:
     String funcId;
@@ -20,21 +19,30 @@ protected:
         : funcBody(_funcBody)
     {}
 public:
-    virtual void print(std::ostream &dst) const =0;
+    String getFuncID() const
+    { return funcId; }
+    
+    ArgsPtr getArgs() const
+    { return args; }
+
+    BodyPtr getFuncBody() const
+    { return funcBody; }
+
+    virtual void print(std::ostream &dst) const override{
+        dst<<getFuncID()<<"(";
+        args->print(dst);
+        dst<<")";
+        dst<<"{";
+        funcBody->print(dst);
+        dst<<"}"
+    };
 
     virtual void translate(std::ostream &dst) const =0;
 };
 
 class Main
-: public Function
+    : public Function
 {
-private:
-    
 public:
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<"main( ";
-        args->print(dst);
-        dst<<" )";
-    }
+
 };
