@@ -3,19 +3,18 @@
 
 #include "ast_MainBody.hpp"
 
-#include <string>
 
 class Function : public MainBody
 {
     private:
-        string id;
+        std::string id;
         CompilerPtr body;
     protected:
-        Function(string _id, CompilerPtr _body):
-        id(_id), nextBody(_nextBody){}
+        Function(std::string _id, CompilerPtr _body):
+        id(_id), body(_body){}
     public:
-        string getId(){return id;}
-        ComplierPtr getBody(){return body;}
+        std::string getId(){return id;}
+        CompilerPtr getBody(){return body;}
 
         //print tester
         virtual void print(std::ostream &dst) const override

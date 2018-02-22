@@ -14,10 +14,10 @@ typedef const MainBody *CompilerPtr;
 class MainBody
 {
 private:
-    CompilerPtr function;
+    //CompilerPtr function;
 protected:
-    MainBody(CompilerPtr _function):
-    function(_function){}
+    //MainBody(CompilerPtr _function):
+    //function(_function){}
 public:
     virtual ~MainBody()
     {}

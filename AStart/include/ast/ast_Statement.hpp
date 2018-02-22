@@ -4,17 +4,7 @@
 #include "ast_MainBody.hpp"
 #include "ast_expression.hpp"
 
-class Statement : public MainBody
-{
-    public:
-        //print tester
-        virtual void print(std::ostream &dst) const =0;
-
-        //translator 
-        virtual void translate(std::ostream &dst) const =0;
-};
-
-class ReturnStatement : public Statement
+class ReturnStatement : public MainBody
 {
     protected:
         ExpressionPtr expression;
@@ -34,13 +24,13 @@ class ReturnStatement : public Statement
         virtual void translate(std::ostream &dst) const =0;
 };
 
-class AssignStatement : public Statement
+class AssignStatement : public MainBody
 {
     protected:
-        string id;
+        std::string id;
         ExpressionPtr expression;
 
-        AssignStatement(string _id, CompileExpressionPtrrPtr _expression):
+        AssignStatement(std::string _id, ExpressionPtr _expression):
         id(_id), expression(_expression){}
     public:
         //print tester
