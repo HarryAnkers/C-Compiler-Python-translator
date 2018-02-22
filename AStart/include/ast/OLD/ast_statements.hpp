@@ -9,32 +9,21 @@ class Statement
     : public Body
 {
 private:
-    //type
-    //value of type above
+    BodyPtr arg;
 protected:
-    Function(BodyPtr _statem)
+    Statement(BodyPtr _arg)
+        : arg(_arg)
     {}
 public:
-    virtual const char * getFunction() const =0;
+    virtual const char * getStatement() const =0;
 
-    virtual void print(std::ostream &dst) const =0;
-    }
-};
+    BodyPtr getArg() const
+    { return arg; }
 
-class ReturnStatement
-: public Statement
-{
-public:
-    ReturnStatement(){}
-    
-    virtual const char *getFunction() const
-    { return "retrun"; }
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
+    virtual void print(std::ostream &dst) const override
     {
-        double v=getArg()->evaluate(bindings);
-        return log(v);
+        dst<<getStatement()<<"( ";
+        arg->print(dst);
+        dst<<" )";
     }
 };

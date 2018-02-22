@@ -16,7 +16,7 @@ typedef const MainBody *MainBodyPtr;
 class MainBody
 {
 private: 
-    Ptr MainBodyPtr
+    Ptr mainFunc
 public:
     virtual ~MainBody(ptr _mainFunc)
     mainFunc(_mainFunc){}

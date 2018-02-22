@@ -7,21 +7,17 @@
 
 #include <memory>
 
-#include "ast_main_body.hpp"
+class Body;
 
-class MainBody;
+typedef const Body *BodyPtr;
 
-typedef const MainBody *MainBodyPtr;
-
-class MainBody
+class Expression
 {
-private: 
-    Ptr MainBodyPtr
 public:
-    virtual ~MainBody(ptr _mainFunc)
-    mainFunc(_mainFunc){}
+    virtual ~Body()
+    {}
 
-    //translate
+    //! Tell and expression to print itself to the given stream
     virtual void translate(std::ostream &dst) const =0;
 
     //print to verify input

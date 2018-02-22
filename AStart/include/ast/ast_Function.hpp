@@ -9,16 +9,23 @@ class Function : public MainBody
 {
     private:
         string id;
-        CompilerPtr nextBody;
+        CompilerPtr body;
     protected:
-        Function(string _id, CompilerPtr _nextBody):
+        Function(string _id, CompilerPtr _body):
         id(_id), nextBody(_nextBody){}
     public:
         string getId(){return id;}
-        ComplierPtr getNextBody(){return nextBody;}
+        ComplierPtr getBody(){return body;}
 
         //print tester
-        virtual void print(std::ostream &dst) const =0;
+        virtual void print(std::ostream &dst) const override
+        {
+            dst<<"type ";
+            dst<<id<<"(";
+            dst<<id<<"){"<<std::endl;
+            body->print(dst);
+            dst<<"}"<<std::endl;
+        }
 
         //translator 
         virtual void translate(std::ostream &dst) const =0;

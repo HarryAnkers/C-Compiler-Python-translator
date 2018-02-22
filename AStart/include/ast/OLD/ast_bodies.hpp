@@ -11,7 +11,7 @@ class Body;
 
 typedef const Body *BodyPtr;
 
-class Expression
+class Body
 {
 public:
     virtual ~Body()
