@@ -44,15 +44,15 @@ ROOT : MAIN_BODY { g_root = $1; }
 MAIN_BODY : DEC_FUNCTION
 
 //delcares a new function with the func_id and runs through body recursively arg implimented late
-DEC_FUNCTION : TYPE P_ID P_LBRACKET P_RBRACKET P_LCURLY BODY P_RCURLY {$$ = new Function($2, $6);}
+DEC_FUNCTION : TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCURLY BODY T_RCURLY {$$ = new Function($2, $6);}
 
 //terminal cases
-TYPE : P_INT      {$$=$1;}
-    | P_DOUBLE    {$$=$1;}
-    | P_STRING    {$$=$1;}
-    | P_VOID      {$$=$1;}
-    | P_CHAR      {$$=$1;}
-    | P_BOOL      {$$=$1;}
+TYPE : T_INT      {$$=$1;}
+    | T_DOUBLE    {$$=$1;}
+    | T_STRING    {$$=$1;}
+    | T_VOID      {$$=$1;}
+    | T_CHAR      {$$=$1;}
+    | T_BOOL      {$$=$1;}
 
 //recursive with each line of code left associative
 //each body contains one statement and a body pointer
@@ -64,12 +64,12 @@ STATEMENT :  ASSIGN_STATEMENT   {$$=$1;}
     | DECLARE_VAR               {$$=$1;}
     | FUNCTION                  {$$=$1;}
 
-RETURN_STATEMENT : P_RETURN EXPRESSION P_SEMICOLON {$$ = new Return($2);}
+RETURN_STATEMENT : T_RETURN EXPRESSION T_SEMICOLON {$$ = new Return($2);}
 
-DECLARE_VAR : TYPE P_ID P_ASSIGN EXPRESSION P_SEMICOLON {$$ = new DeclareVar($2, $4);}  
-    | TYPE P_ID P_SEMICOLON {$$ = new DeclareVar($2);}
+DECLARE_VAR : TYPE T_VARIABLE T_ASSIGN EXPRESSION T_SEMICOLON {$$ = new DeclareVar($2, $4);}  
+    | TYPE T_VARIABLE T_SEMICOLON {$$ = new DeclareVar($2);}
 
-FUNCTION : P_ID P_LBRACKET P_RBRACKET P_SEMICOLON;
+FUNCTION : T_VARIABLE T_LBRACKET T_RBRACKET T_SEMICOLON;
 
 %%
 

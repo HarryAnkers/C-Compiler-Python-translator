@@ -1,5 +1,5 @@
 #ifndef ast_Body_hpp
-#define ast_Function_hpp
+#define ast_Body_hpp
 
 #include "ast_Body.hpp"
 
