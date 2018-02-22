@@ -37,32 +37,36 @@
 
 %%
 
-ROOT : EXPR { g_root = $1; }
+ROOT : MAIN_BODY { g_root = $1; }
 
-FUNCTION : TYPE ID T_LBRACKET T_RBRACKET T_LBRACKET T_LCUBRACKET T_RCUBRACKET { $$ = $1; }
+//choose main in main body so it gets priority
+MAIN_BODY : DEC_FUNCTION
+    | TYPE MAIN LBRACKET DEC_ARG RBRACKET LCURLY BODY RCURLY
 
-ID :    T_MAIN                        { $$ = $1; }  
+DEC_FUNCTION : TYPE FUNC_ID LBRACKET RBRACKET LCURLY BODY RCURLY
 
-TYPE :  INT                           { $$ = $1; }
-        | DOUBLE                      { $$ = $1; }
-        | STRING                      { $$ = $1; }
-        | BOOL                        { $$ = $1; }
-        | VOID                        { $$ = $1; }
+//delcares a new function with the func_id and runs through body recursively arg implimented late
 
-EXPR :   TERM                         { $$ = $1; }
-        | EXPR T_PLUS TERM            { $$ = new AddOperator( $1 , $3 ); }
-        | EXPR T_MINUS TERM           { $$ = new SubOperator( $1 , $3 ); }
+//this contains nothing not sure yet
+DEC_ARG : DEC_ARG TYPE ARG
+    | TYPE ARG
 
-TERM :   FACTOR                       { $$ = $1; }
-        | TERM T_TIMES FACTOR         { $$ = new MulOperator( $1 , $3 ); }
-        | TERM T_DIVIDE FACTOR        { $$ = new DivOperator( $1 , $3 ); }
+//terminal cases
+TYPE : INT
+    | DOUBLE
+    | STRING
+    | VOID
+    | CHAR
+    | BOOL
 
-FACTOR : T_NUMBER                     { $$ = new Number( $1 ); }
-        | T_LBRACKET EXPR T_RBRACKET  { $$ = $2; }
-        | T_VARIABLE                  { $$ = new Variable( *$1 );}
-        | T_LOG T_LBRACKET EXPR T_RBRACKET  { $$ = new LogFunction( $3 ); }
-        | T_EXP T_LBRACKET EXPR T_RBRACKET  { $$ = new ExpFunction( $3 ); }
-        | T_SQRT T_LBRACKET EXPR T_RBRACKET { $$ = new SqrtFunction( $3 ); }
+//recursive with each line of code left associative
+BODY : STATEMENT BODY
+    | STATEMENT
+
+
+STATEMENT :  ASSIGN_STATEMENT
+    | RETURN_STATEMENT
+    | DECLARE_VAR
 
 %%
 
