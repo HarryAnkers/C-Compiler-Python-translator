@@ -2,17 +2,11 @@
 #define ast_Statement_hpp
 
 #include "ast_MainBody.hpp"
+#include "ast_expression.hpp"
 
 class Statement : public MainBody
 {
-    protected:
-        CompilerPtr expression;
-
-        Statement(CompilerPtr _expression):
-        expression(_expression){}
     public:
-        CompilerPtr getExpression(){return expression;}
-
         //print tester
         virtual void print(std::ostream &dst) const =0;
 
@@ -23,7 +17,9 @@ class Statement : public MainBody
 class ReturnStatement : public Statement
 {
     protected:
-        ReturnStatement(CompilerPtr _expression):
+        ExpressionPtr expression;
+
+        ReturnStatement(ExpressionPtr _expression):
         expression(_expression){}
     public:
 
@@ -41,10 +37,12 @@ class ReturnStatement : public Statement
 class AssignStatement : public Statement
 {
     protected:
-        ReturnStatement(CompilerPtr _expression):
-        expression(_expression){}
-    public:
+        string id;
+        ExpressionPtr expression;
 
+        AssignStatement(string _id, CompileExpressionPtrrPtr _expression):
+        id(_id), expression(_expression){}
+    public:
         //print tester
         virtual void print(std::ostream &dst) const override
         {

@@ -1,6 +1,8 @@
 #ifndef ast_primitives_hpp
 #define ast_primitives_hpp
 
+#include "ast_expression.hpp"
+
 #include <string>
 #include <iostream>
 

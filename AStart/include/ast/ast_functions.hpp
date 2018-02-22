@@ -5,13 +5,13 @@
 
 #include <cmath>
 
-class Function
+class Function_maths
     : public Expression
 {
 private:
     ExpressionPtr arg;
 protected:
-    Function(ExpressionPtr _arg)
+    Function_maths(ExpressionPtr _arg)
         : arg(_arg)
     {}
 public:
@@ -37,11 +37,11 @@ public:
 };
 
 class LogFunction
-: public Function
+: public Function_maths
 {
 public:
     LogFunction(ExpressionPtr _arg)
-    : Function(_arg)
+    : Function_maths(_arg)
     {}
     
     virtual const char *getFunction() const
@@ -57,11 +57,11 @@ public:
 };
 
 class ExpFunction
-    : public Function
+    : public Function_maths
 {
 public:
     ExpFunction(ExpressionPtr _arg)
-        : Function(_arg)
+        : Function_maths(_arg)
     {}
 
     virtual const char *getFunction() const
@@ -77,11 +77,11 @@ public:
 };
 
 class SqrtFunction
-    : public Function
+    : public Function_maths
 {
 public:
     SqrtFunction(ExpressionPtr _arg)
-        : Function(_arg)
+        : Function_maths(_arg)
     {}
 
     virtual const char *getFunction() const
