@@ -36,37 +36,40 @@
 %start ROOT
 
 %%
+//syntax notes P_ means its a primative
 
 ROOT : MAIN_BODY { g_root = $1; }
 
 //choose main in main body so it gets priority
 MAIN_BODY : DEC_FUNCTION
-    | TYPE MAIN LBRACKET DEC_ARG RBRACKET LCURLY BODY RCURLY
-
-DEC_FUNCTION : TYPE FUNC_ID LBRACKET RBRACKET LCURLY BODY RCURLY
 
 //delcares a new function with the func_id and runs through body recursively arg implimented late
-
-//this contains nothing not sure yet
-DEC_ARG : DEC_ARG TYPE ARG
-    | TYPE ARG
+DEC_FUNCTION : TYPE P_ID P_LBRACKET P_RBRACKET P_LCURLY BODY P_RCURLY {$$ = new Function($2, $6);}
 
 //terminal cases
-TYPE : INT
-    | DOUBLE
-    | STRING
-    | VOID
-    | CHAR
-    | BOOL
+TYPE : P_INT      {$$=$1;}
+    | P_DOUBLE    {$$=$1;}
+    | P_STRING    {$$=$1;}
+    | P_VOID      {$$=$1;}
+    | P_CHAR      {$$=$1;}
+    | P_BOOL      {$$=$1;}
 
 //recursive with each line of code left associative
-BODY : STATEMENT BODY
-    | STATEMENT
+//each body contains one statement and a body pointer
+BODY : STATEMENT BODY   {$$ = new Body($1,$2)}
+    | STATEMENT         {$$ = new Body($1)}
 
+STATEMENT :  ASSIGN_STATEMENT   {$$=$1;}
+    | RETURN_STATEMENT          {$$=$1;}
+    | DECLARE_VAR               {$$=$1;}
+    | FUNCTION                  {$$=$1;}
 
-STATEMENT :  ASSIGN_STATEMENT
-    | RETURN_STATEMENT
-    | DECLARE_VAR
+RETURN_STATEMENT : P_RETURN EXPRESSION P_SEMICOLON {$$ = new Return($2);}
+
+DECLARE_VAR : TYPE P_ID P_ASSIGN EXPRESSION P_SEMICOLON {$$ = new DeclareVar($2, $4);}  
+    | TYPE P_ID P_SEMICOLON {$$ = new DeclareVar($2);}
+
+FUNCTION : P_ID P_LBRACKET P_RBRACKET P_SEMICOLON;
 
 %%
 
