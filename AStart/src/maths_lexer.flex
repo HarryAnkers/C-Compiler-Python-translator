@@ -10,13 +10,15 @@ extern "C" int fileno(FILE *stream);
 %%
 
 //main
-[main]          { return T_MAIN; }
+// dont need[main]          { return T_MAIN; }
 
 //BRACKET SYMBOLS
-[(]             { return T_LSQBRACKET; }
-[)]             { return T_RSQBRACKET; }
+[[]             { return T_LSQBRACKET; }
+[]]             { return T_RSQBRACKET; }
 [{]             { return T_LCUBRACKET; }
 [}]             { return T_RCUBRACKET; }
+[<]             { return T_LTRIBRACKET; }
+[>]             { return T_RTRIBRACKET; }
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }
 
