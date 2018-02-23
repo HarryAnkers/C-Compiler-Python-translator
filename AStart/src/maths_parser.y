@@ -78,7 +78,7 @@ DECLARE_VAR : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new DeclareStatement(*$1
 
 ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
-FUNCTION_STATEMENT : T_ID T_LBRACKET T_RBRACKET T_SEMICOLON {$$ = new Function(*$1);}
+FUNCTION_STATEMENT : T_ID T_LBRACKET T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1);}
 
 EXPR : TERM                 { $$ = $1; }
         | EXPR T_PLUS TERM       { $$ = new AddOperator( $1 , $3 ); }
