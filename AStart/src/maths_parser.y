@@ -3,7 +3,7 @@
 
   #include <cassert>
 
-  extern const Expression *g_root; // A way of getting the AST out
+  extern const MainBody *g_root; // A way of getting the AST out
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -15,6 +15,7 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
+  const MainBody *compptr;
   const Expression *expr;
   double number;
   std::string *string;
@@ -28,6 +29,7 @@
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 %token T_MAIN
 
+%type <compptr>
 %type <expr> EXPR TERM FACTOR TYPE FUNCTION ID T_MAIN
 %type <number> T_NUMBER
 %type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME
@@ -41,7 +43,10 @@
 ROOT : MAIN_BODY { g_root = $1; }
 
 //choose main in main body so it gets priority
-MAIN_BODY : DEC_FUNCTION
+MAIN_BODY : FUNCTION_LIST
+
+FUNCTION_LIST : DEC_FUNCTION FUNCTION_LIST      {$$ = new FUNCTION_LIST($1,$2)}
+    | DEC_FUNCTION                      {$$ = new FUNCTION_LIST($1)}
 
 //delcares a new function with the func_id and runs through body recursively arg implimented late
 DEC_FUNCTION : TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCURLY BODY T_RCURLY {$$ = new Function($2, $6);}
@@ -73,9 +78,9 @@ FUNCTION : T_VARIABLE T_LBRACKET T_RBRACKET T_SEMICOLON;
 
 %%
 
-const Expression *g_root; // Definition of variable (to match declaration earlier)
+const MainBody *g_root; // Definition of variable (to match declaration earlier)
 
-const Expression *parseAST()
+const MainBody *parseAST()
 {
   g_root=0;
   yyparse();

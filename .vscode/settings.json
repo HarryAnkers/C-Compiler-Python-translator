@@ -32,6 +32,7 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "typeinfo": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "map": "cpp"
     }
 }

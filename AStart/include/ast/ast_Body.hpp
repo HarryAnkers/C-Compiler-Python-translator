@@ -1,7 +1,7 @@
 #ifndef ast_Body_hpp
 #define ast_Body_hpp
 
-#include "ast_Body.hpp"
+#include "ast_MainBody.hpp"
 
 class Body : public MainBody
 {
@@ -22,8 +22,10 @@ class Body : public MainBody
         {
             statement->print(dst);
             dst<<std::endl;
-            nextBody->print(dst);
-            dst<<std::endl;
+            if(nextBody!=NULL){
+                nextBody->print(dst);
+                dst<<std::endl;
+            }
         }
 
         //translator 
