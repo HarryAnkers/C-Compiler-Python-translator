@@ -59,7 +59,7 @@ return            { return T_RETURN; }
 
 [-]?[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
-([A-Z][a-z])+          { yylval.string=new std::string(yytext); return T_VARIABLE; }
+([A-Z][a-z])+          { yylval.string=new std::string(yytext); return T_ID; }
 
 [ \t\r\n]+		{;}
 
