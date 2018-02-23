@@ -6,22 +6,20 @@
 
 class Function : public MainBody
 {
-    private:
-        std::string id;
-        CompilerPtr body;
-    protected:
-        Function(std::string _id, CompilerPtr _body):
-        id(_id), body(_body){}
     public:
-        std::string getId(){return id;}
-        CompilerPtr getBody(){return body;}
+        std::string id;
+        std::string type;
+        CompilerPtr body;
+    
+        Function(const std::string &_type,const std::string &_id, CompilerPtr _body):
+        type(_type), id(_id), body(_body){}
 
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            dst<<"type ";
+            dst<<type<<" ";
             dst<<id<<"(";
-            dst<<id<<"){"<<std::endl;
+            dst<<"){"<<std::endl;
             body->print(dst);
             dst<<"}"<<std::endl;
         }

@@ -6,18 +6,18 @@
 
 class ReturnStatement : public MainBody
 {
-    protected:
+    public:
         ExpressionPtr expression;
 
         ReturnStatement(ExpressionPtr _expression):
         expression(_expression){}
-    public:
 
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            dst<<"return "<<std::endl;
+            dst<<"return ";
             expression->print(dst);
+            dst<<";"<<std::endl;
         }
 
         //translator 
@@ -26,18 +26,19 @@ class ReturnStatement : public MainBody
 
 class AssignStatement : public MainBody
 {
-    protected:
+    public:
         std::string id;
         ExpressionPtr expression;
 
-        AssignStatement(std::string _id, ExpressionPtr _expression):
+        AssignStatement(std::string &_id, ExpressionPtr _expression):
         id(_id), expression(_expression){}
-    public:
+
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            dst<<"return "<<std::endl;
+            dst<<id<<"=";
             expression->print(dst);
+            dst<<";"<<std::endl;
         }
 
         //translator 
@@ -46,21 +47,45 @@ class AssignStatement : public MainBody
 
 class DeclareStatement : public MainBody
 {
-    protected:
+    public:
         std::string type;
         std::string id;
         ExpressionPtr expression;
 
-        DeclareStatement(std::string _type, std::string _id, ExpressionPtr _expression):
+        DeclareStatement(std::string &_type, std::string &_id, ExpressionPtr _expression):
         type(_type), id(_id), expression(_expression){}
-        DeclareStatement(std::string _type, std::string _id):
-        type(_type), id(_id){}
-    public:
+        DeclareStatement(std::string &_type, std::string &_id):
+        type(_type), id(_id), expression(NULL){}
+
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            dst<<id<<"=";
-            expression->print(dst);
+            dst<<type<<" "<<id;
+            if(expression!=NULL){
+                dst<<"=";
+                expression->print(dst);
+            }
+            dst<<";"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst) const override{};
+};
+
+class FunctionStatement : public MainBody
+{
+    public:
+        std::string id;
+
+        FunctionStatement(std::string &_id):
+        id(_id){}
+
+        //print tester
+        virtual void print(std::ostream &dst) const override
+        {
+            dst<<id<<"(";
+
+            dst<<id<<");";
         }
 
         //translator 

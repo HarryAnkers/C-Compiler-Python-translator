@@ -1,5 +1,5 @@
-#ifndef ast_functions_hpp
-#define ast_functions_hpp
+#ifndef ast_functions_maths_hpp
+#define ast_functions_maths_hpp
 
 #include "ast_expression.hpp"
 

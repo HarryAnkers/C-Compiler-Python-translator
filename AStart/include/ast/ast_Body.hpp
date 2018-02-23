@@ -5,25 +5,20 @@
 
 class Body : public MainBody
 {
-    private:
+    public:
         CompilerPtr statement;
         CompilerPtr nextBody;
-    protected:
+    
         Body(CompilerPtr _statement, CompilerPtr _nextBody):
         statement(_statement), nextBody(_nextBody){}
-    public:
-        CompilerPtr getStatement(){return statement;}
-        CompilerPtr getNextBody(){return nextBody;}
 
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            statement->print(dst);
-            dst<<std::endl;
             if(nextBody!=NULL){
                 nextBody->print(dst);
-                dst<<std::endl;
             }
+            statement->print(dst);
         }
 
         //translator 

@@ -12,10 +12,11 @@ int main(int argc, char *argv[])
     }
     
     // Parse the AST
-    const Expression *ast=parseAST();
+    const MainBody *ast=parseAST();
     
     // evaluate it with the bindings given
-    double res=ast->evaluate(bindings);
+    //double res=ast->evaluate(bindings);
+    double res = 0;
     
     // Print it out
     std::cout << std::fixed << std::setprecision(6) << res << std::endl;
