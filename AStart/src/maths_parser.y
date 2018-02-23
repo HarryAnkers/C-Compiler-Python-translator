@@ -54,6 +54,9 @@ FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
 //delcares a new function with the func_id and runs through body recursively arg implimented late
 DEC_FUNCTION : TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $6);}
 
+ARGUMENT_LIST : ARGUMENT_LIST TYPE T_ID     {$$ = new Argument(*$2, *$3, $1)}
+    | TYPE T_ID                             {$$ = new Argument(*$1, *$2)}
+
 //terminal cases
 TYPE : T_INT      {$$=$1;}
     | T_DOUBLE    {$$=$1;}

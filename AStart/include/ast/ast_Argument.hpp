@@ -12,6 +12,8 @@ class Argument : public MainBody
     
         Argument(string &_argId, string &_argType, CompilerPtr _nextArguments):
         argId(_argId), argType(_argType), nextArguments(_nextArguments){}
+        Argument(string &_argId, string &_argType):
+        argId(_argId), argType(_argType), nextArguments(NULL){}
 
         //print tester
         virtual void print(std::ostream &dst) const override
