@@ -21,7 +21,7 @@ class ReturnStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const =0;
+        //virtual void translate(std::ostream &dst) const =0;
 };
 
 class AssignStatement : public MainBody
@@ -41,7 +41,30 @@ class AssignStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const =0;
+        //virtual void translate(std::ostream &dst) const =0;
+};
+
+class DeclareStatement : public MainBody
+{
+    protected:
+        std::string type;
+        std::string id;
+        ExpressionPtr expression;
+
+        DeclareStatement(std::string _type, std::string _id, ExpressionPtr _expression):
+        type(_type), id(_id), expression(_expression){}
+        DeclareStatement(std::string _type, std::string _id):
+        type(_type), id(_id){}
+    public:
+        //print tester
+        virtual void print(std::ostream &dst) const override
+        {
+            dst<<id<<"=";
+            expression->print(dst);
+        }
+
+        //translator 
+        //virtual void translate(std::ostream &dst) const =0;
 };
 
 #endif

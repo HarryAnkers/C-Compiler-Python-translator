@@ -11,8 +11,6 @@ private:
 protected:
     Function_List(CompilerPtr _function, CompilerPtr _nextFunction):
         function(_function), nextFunction(_nextFunction){}
-    Function_List(CompilerPtr _function):
-        function(_function){}
 public:
     CompilerPtr getFunction(){return function;}
     CompilerPtr getNextFunction(){return nextFunction;}
@@ -29,7 +27,7 @@ public:
     }
 
     //translator 
-    virtual void translate(std::ostream &dst) const =0;
+    //virtual void translate(std::ostream &dst) const =0;
 };
 
 

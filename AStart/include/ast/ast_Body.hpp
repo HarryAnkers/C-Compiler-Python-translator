@@ -11,8 +11,6 @@ class Body : public MainBody
     protected:
         Body(CompilerPtr _statement, CompilerPtr _nextBody):
         statement(_statement), nextBody(_nextBody){}
-        Body(CompilerPtr _statement):
-        statement(_statement){}
     public:
         CompilerPtr getStatement(){return statement;}
         CompilerPtr getNextBody(){return nextBody;}
@@ -29,7 +27,7 @@ class Body : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const =0;
+        //virtual void translate(std::ostream &dst) const =0;
 };
 
 

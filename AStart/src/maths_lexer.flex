@@ -55,6 +55,8 @@ log             { return T_LOG;   }
 exp             { return T_EXP; }
 sqrt            { return T_SQRT; }
 
+return            { return T_RETURN; }
+
 [-]?[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
 ([A-Z][a-z])+          { yylval.string=new std::string(yytext); return T_VARIABLE; }
