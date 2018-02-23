@@ -11,6 +11,7 @@
 #include "ast/ast_Function_List.hpp"
 #include "ast/ast_Statement.hpp"
 #include "ast/ast_Body.hpp"
+#include "ast/ast_Argument.hpp"
 
 extern const MainBody *parseAST();
 
