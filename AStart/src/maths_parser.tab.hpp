@@ -88,7 +88,7 @@ extern int yydebug;
     T_EXP = 282,
     T_SQRT = 283,
     T_NUMBER = 284,
-    T_VARIABLE = 285,
+    T_ID = 285,
     T_RETURN = 286
   };
 #endif

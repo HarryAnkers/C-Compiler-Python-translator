@@ -141,7 +141,7 @@ extern int yydebug;
     T_EXP = 282,
     T_SQRT = 283,
     T_NUMBER = 284,
-    T_VARIABLE = 285,
+    T_ID = 285,
     T_RETURN = 286
   };
 #endif
@@ -492,8 +492,8 @@ static const char *const yytname[] =
   "T_LBRACKET", "T_RBRACKET", "T_ASSIGN", "T_DOT", "T_COMMA", "T_COLON",
   "T_SEMICOLON", "T_INT", "T_DOUBLE", "T_STRING", "T_BOOL", "T_VOID",
   "T_TIMES", "T_DIVIDE", "T_PLUS", "T_MINUS", "T_EXPONENT", "T_LOG",
-  "T_EXP", "T_SQRT", "T_NUMBER", "T_VARIABLE", "T_RETURN", "$accept",
-  "ROOT", "MAIN_BODY", "FUNCTION_LIST", "DEC_FUNCTION", "TYPE", "BODY",
+  "T_EXP", "T_SQRT", "T_NUMBER", "T_ID", "T_RETURN", "$accept", "ROOT",
+  "MAIN_BODY", "FUNCTION_LIST", "DEC_FUNCTION", "TYPE", "BODY",
   "STATEMENT", "RETURN_STATEMENT", "DECLARE_VAR", "FUNCTION", "EXPR",
   "TERM", "FACTOR", YY_NULLPTR
 };
@@ -1301,7 +1301,7 @@ yyreduce:
 
   case 3:
 #line 48 "src/maths_parser.y" /* yacc.c:1646  */
-    {(yyval.compptr) = (yyvsp[0].compptr)}
+    {(yyval.compptr) = (yyvsp[0].compptr); }
 #line 1306 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1319,7 +1319,7 @@ yyreduce:
 
   case 6:
 #line 54 "src/maths_parser.y" /* yacc.c:1646  */
-    {(yyval.compptr) = new Function((yyvsp[-5].string), (yyvsp[-1].compptr));}
+    {(yyval.compptr) = new Function(*(yyvsp[-5].string), (yyvsp[-1].compptr));}
 #line 1324 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1391,13 +1391,13 @@ yyreduce:
 
   case 18:
 #line 75 "src/maths_parser.y" /* yacc.c:1646  */
-    {(yyval.compptr) = new DeclareStatement((yyvsp[-3].string), (yyvsp[-1].expr));}
+    {(yyval.compptr) = new DeclareStatement(*(yyvsp[-3].string), (yyvsp[-1].expr));}
 #line 1396 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 76 "src/maths_parser.y" /* yacc.c:1646  */
-    {(yyval.compptr) = new DeclareStatement((yyvsp[-1].string));}
+    {(yyval.compptr) = new DeclareStatement(*(yyvsp[-1].string));}
 #line 1402 "src/maths_parser.tab.cpp" /* yacc.c:1646  */
     break;
 

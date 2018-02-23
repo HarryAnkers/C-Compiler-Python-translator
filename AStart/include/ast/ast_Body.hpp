@@ -27,7 +27,7 @@ class Body : public MainBody
         }
 
         //translator 
-        //virtual void translate(std::ostream &dst) const =0;
+        virtual void translate(std::ostream &dst) const override{};
 };
 
 

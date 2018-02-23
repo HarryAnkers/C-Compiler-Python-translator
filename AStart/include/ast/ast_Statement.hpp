@@ -21,7 +21,7 @@ class ReturnStatement : public MainBody
         }
 
         //translator 
-        //virtual void translate(std::ostream &dst) const =0;
+        virtual void translate(std::ostream &dst) const override{};
 };
 
 class AssignStatement : public MainBody
@@ -41,7 +41,7 @@ class AssignStatement : public MainBody
         }
 
         //translator 
-        //virtual void translate(std::ostream &dst) const =0;
+        virtual void translate(std::ostream &dst) const override{};
 };
 
 class DeclareStatement : public MainBody
@@ -64,7 +64,7 @@ class DeclareStatement : public MainBody
         }
 
         //translator 
-        //virtual void translate(std::ostream &dst) const =0;
+        virtual void translate(std::ostream &dst) const override{};
 };
 
 #endif

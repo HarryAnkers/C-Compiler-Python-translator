@@ -28,7 +28,7 @@ Grammar
     3 FUNCTION_LIST: DEC_FUNCTION FUNCTION_LIST
     4              | DEC_FUNCTION
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
     6 TYPE: T_INT
     7     | T_DOUBLE
@@ -45,10 +45,10 @@ Grammar
 
    16 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON
 
-   17 DECLARE_VAR: TYPE T_VARIABLE T_ASSIGN EXPR T_SEMICOLON
-   18            | TYPE T_VARIABLE T_SEMICOLON
+   17 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
+   18            | TYPE T_ID T_SEMICOLON
 
-   19 FUNCTION: T_VARIABLE T_LBRACKET T_RBRACKET T_SEMICOLON
+   19 FUNCTION: T_ID T_LBRACKET T_RBRACKET T_SEMICOLON
 
    20 EXPR: TERM
    21     | EXPR T_PLUS TERM
@@ -61,7 +61,7 @@ Grammar
 
    27 FACTOR: T_NUMBER
    28       | T_LBRACKET EXPR T_RBRACKET
-   29       | T_VARIABLE
+   29       | T_ID
    30       | T_LOG T_LBRACKET EXPR T_RBRACKET
    31       | T_EXP T_LBRACKET EXPR T_RBRACKET
    32       | T_SQRT T_LBRACKET EXPR T_RBRACKET
@@ -98,7 +98,7 @@ T_LOG (281) 30
 T_EXP (282) 31
 T_SQRT (283) 32
 T_NUMBER (284) 27
-T_VARIABLE (285) 5 17 18 19 29
+T_ID (285) 5 17 18 19 29
 T_RETURN (286) 16
 
 
@@ -227,9 +227,9 @@ State 9
 
 State 10
 
-    5 DEC_FUNCTION: TYPE . T_VARIABLE T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE . T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
-    T_VARIABLE  shift, and go to state 13
+    T_ID  shift, and go to state 13
 
 
 State 11
@@ -248,36 +248,36 @@ State 12
 
 State 13
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE . T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID . T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
     T_LBRACKET  shift, and go to state 14
 
 
 State 14
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET . T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET . T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
     T_RBRACKET  shift, and go to state 15
 
 
 State 15
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
 
     T_LCUBRACKET  shift, and go to state 16
 
 
 State 16
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
 
-    T_INT       shift, and go to state 1
-    T_DOUBLE    shift, and go to state 2
-    T_STRING    shift, and go to state 3
-    T_BOOL      shift, and go to state 4
-    T_VOID      shift, and go to state 5
-    T_VARIABLE  shift, and go to state 17
-    T_RETURN    shift, and go to state 18
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 17
+    T_RETURN  shift, and go to state 18
 
     TYPE              go to state 19
     BODY              go to state 20
@@ -289,7 +289,7 @@ State 16
 
 State 17
 
-   19 FUNCTION: T_VARIABLE . T_LBRACKET T_RBRACKET T_SEMICOLON
+   19 FUNCTION: T_ID . T_LBRACKET T_RBRACKET T_SEMICOLON
 
     T_LBRACKET  shift, and go to state 25
 
@@ -303,7 +303,7 @@ State 18
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 32
     TERM    go to state 33
@@ -312,15 +312,15 @@ State 18
 
 State 19
 
-   17 DECLARE_VAR: TYPE . T_VARIABLE T_ASSIGN EXPR T_SEMICOLON
-   18            | TYPE . T_VARIABLE T_SEMICOLON
+   17 DECLARE_VAR: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
+   18            | TYPE . T_ID T_SEMICOLON
 
-    T_VARIABLE  shift, and go to state 35
+    T_ID  shift, and go to state 35
 
 
 State 20
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
 
     T_RCUBRACKET  shift, and go to state 36
 
@@ -330,13 +330,13 @@ State 21
    11 BODY: STATEMENT . BODY
    12     | STATEMENT .
 
-    T_INT       shift, and go to state 1
-    T_DOUBLE    shift, and go to state 2
-    T_STRING    shift, and go to state 3
-    T_BOOL      shift, and go to state 4
-    T_VOID      shift, and go to state 5
-    T_VARIABLE  shift, and go to state 17
-    T_RETURN    shift, and go to state 18
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 17
+    T_RETURN  shift, and go to state 18
 
     $default  reduce using rule 12 (BODY)
 
@@ -371,7 +371,7 @@ State 24
 
 State 25
 
-   19 FUNCTION: T_VARIABLE T_LBRACKET . T_RBRACKET T_SEMICOLON
+   19 FUNCTION: T_ID T_LBRACKET . T_RBRACKET T_SEMICOLON
 
     T_RBRACKET  shift, and go to state 38
 
@@ -385,7 +385,7 @@ State 26
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 39
     TERM    go to state 33
@@ -422,7 +422,7 @@ State 30
 
 State 31
 
-   29 FACTOR: T_VARIABLE .
+   29 FACTOR: T_ID .
 
     $default  reduce using rule 29 (FACTOR)
 
@@ -462,8 +462,8 @@ State 34
 
 State 35
 
-   17 DECLARE_VAR: TYPE T_VARIABLE . T_ASSIGN EXPR T_SEMICOLON
-   18            | TYPE T_VARIABLE . T_SEMICOLON
+   17 DECLARE_VAR: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
+   18            | TYPE T_ID . T_SEMICOLON
 
     T_ASSIGN     shift, and go to state 49
     T_SEMICOLON  shift, and go to state 50
@@ -471,7 +471,7 @@ State 35
 
 State 36
 
-    5 DEC_FUNCTION: TYPE T_VARIABLE T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
 
     $default  reduce using rule 5 (DEC_FUNCTION)
 
@@ -485,7 +485,7 @@ State 37
 
 State 38
 
-   19 FUNCTION: T_VARIABLE T_LBRACKET T_RBRACKET . T_SEMICOLON
+   19 FUNCTION: T_ID T_LBRACKET T_RBRACKET . T_SEMICOLON
 
     T_SEMICOLON  shift, and go to state 51
 
@@ -510,7 +510,7 @@ State 40
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 53
     TERM    go to state 33
@@ -526,7 +526,7 @@ State 41
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 54
     TERM    go to state 33
@@ -542,7 +542,7 @@ State 42
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 55
     TERM    go to state 33
@@ -565,7 +565,7 @@ State 44
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     TERM    go to state 56
     FACTOR  go to state 34
@@ -580,7 +580,7 @@ State 45
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     TERM    go to state 57
     FACTOR  go to state 34
@@ -595,7 +595,7 @@ State 46
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     FACTOR  go to state 58
 
@@ -609,7 +609,7 @@ State 47
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     FACTOR  go to state 59
 
@@ -623,7 +623,7 @@ State 48
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     TERM    go to state 60
     FACTOR  go to state 34
@@ -631,14 +631,14 @@ State 48
 
 State 49
 
-   17 DECLARE_VAR: TYPE T_VARIABLE T_ASSIGN . EXPR T_SEMICOLON
+   17 DECLARE_VAR: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
 
     T_LBRACKET  shift, and go to state 26
     T_LOG       shift, and go to state 27
     T_EXP       shift, and go to state 28
     T_SQRT      shift, and go to state 29
     T_NUMBER    shift, and go to state 30
-    T_VARIABLE  shift, and go to state 31
+    T_ID        shift, and go to state 31
 
     EXPR    go to state 61
     TERM    go to state 33
@@ -647,14 +647,14 @@ State 49
 
 State 50
 
-   18 DECLARE_VAR: TYPE T_VARIABLE T_SEMICOLON .
+   18 DECLARE_VAR: TYPE T_ID T_SEMICOLON .
 
     $default  reduce using rule 18 (DECLARE_VAR)
 
 
 State 51
 
-   19 FUNCTION: T_VARIABLE T_LBRACKET T_RBRACKET T_SEMICOLON .
+   19 FUNCTION: T_ID T_LBRACKET T_RBRACKET T_SEMICOLON .
 
     $default  reduce using rule 19 (FUNCTION)
 
@@ -753,7 +753,7 @@ State 60
 
 State 61
 
-   17 DECLARE_VAR: TYPE T_VARIABLE T_ASSIGN EXPR . T_SEMICOLON
+   17 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
    21 EXPR: EXPR . T_PLUS TERM
    22     | EXPR . T_MINUS TERM
 
@@ -785,6 +785,6 @@ State 64
 
 State 65
 
-   17 DECLARE_VAR: TYPE T_VARIABLE T_ASSIGN EXPR T_SEMICOLON .
+   17 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
 
     $default  reduce using rule 17 (DECLARE_VAR)
