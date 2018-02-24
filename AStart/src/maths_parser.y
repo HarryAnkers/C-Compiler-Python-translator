@@ -32,6 +32,7 @@
 
 %type <compptr> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
 %type <compptr> STATEMENT RETURN_STATEMENT DECLARE_VAR ASSIGN_STATEMENT FUNCTION_STATEMENT
+%type <compptr> ARGUMENT_LIST
 %type <expr> EXPR TERM FACTOR
 %type <number> T_NUMBER
 %type <string> T_ID 
@@ -43,7 +44,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : DEC_FUNCTION { g_root = $1; }
+ROOT : MAIN_BODY { g_root = $1; }
 
 //choose main in main body so it gets priority
 MAIN_BODY : FUNCTION_LIST {$$ = $1; }
@@ -52,10 +53,10 @@ FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
     | DEC_FUNCTION                      {$$ = $1;}
 
 //delcares a new function with the func_id and runs through body recursively arg implimented late
-DEC_FUNCTION : TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $6);}
+DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
-ARGUMENT_LIST : ARGUMENT_LIST TYPE T_ID     {$$ = new Argument(*$2, *$3, $1)}
-    | TYPE T_ID                             {$$ = new Argument(*$1, *$2)}
+ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
+    | TYPE T_ID                             {$$ = new Argument(*$1, *$2);}
 
 //terminal cases
 TYPE : T_INT      {$$=$1;}

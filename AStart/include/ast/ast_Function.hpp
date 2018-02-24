@@ -10,15 +10,17 @@ class Function : public MainBody
         std::string id;
         std::string type;
         CompilerPtr body;
+        CompilerPtr arguments;
     
-        Function(const std::string &_type,const std::string &_id, CompilerPtr _body):
-        type(_type), id(_id), body(_body){}
+        Function(const std::string &_type,const std::string &_id, CompilerPtr _arguments, CompilerPtr _body):
+        type(_type), id(_id), arguments(_arguments), body(_body){}
 
         //print tester
         virtual void print(std::ostream &dst) const override
         {
             dst<<type<<" ";
             dst<<id<<"(";
+            arguments->print(dst);
             dst<<"){"<<std::endl;
             body->print(dst);
             dst<<"}"<<std::endl;

@@ -1,7 +1,6 @@
 Nonterminals useless in grammar
 
-   MAIN_BODY
-   FUNCTION_LIST
+   FUNCTION_STATEMENT
 
 
 Terminals unused in grammar
@@ -11,7 +10,6 @@ Terminals unused in grammar
    T_LTRIBRACKET
    T_RTRIBRACKET
    T_DOT
-   T_COMMA
    T_COLON
    T_LAND
    T_LOR
@@ -23,58 +21,63 @@ Terminals unused in grammar
 
 Rules useless in grammar
 
-   30 MAIN_BODY: FUNCTION_LIST
-
-   31 FUNCTION_LIST: FUNCTION_LIST DEC_FUNCTION
-   32              | DEC_FUNCTION
+   35 FUNCTION_STATEMENT: T_ID T_LBRACKET T_RBRACKET T_SEMICOLON
 
 
-State 57 conflicts: 2 shift/reduce
+State 66 conflicts: 2 shift/reduce
 
 
 Grammar
 
     0 $accept: ROOT $end
 
-    1 ROOT: DEC_FUNCTION
+    1 ROOT: MAIN_BODY
 
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    2 MAIN_BODY: FUNCTION_LIST
 
-    3 TYPE: T_INT
-    4     | T_DOUBLE
-    5     | T_STRING
-    6     | T_VOID
-    7     | T_BOOL
+    3 FUNCTION_LIST: FUNCTION_LIST DEC_FUNCTION
+    4              | DEC_FUNCTION
 
-    8 BODY: BODY STATEMENT
-    9     | STATEMENT
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
-   10 STATEMENT: RETURN_STATEMENT
-   11          | DECLARE_VAR
-   12          | ASSIGN_STATEMENT
+    6 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID
+    7              | TYPE T_ID
 
-   13 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON
+    8 TYPE: T_INT
+    9     | T_DOUBLE
+   10     | T_STRING
+   11     | T_VOID
+   12     | T_BOOL
 
-   14 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
-   15            | TYPE T_ID T_SEMICOLON
+   13 BODY: BODY STATEMENT
+   14     | STATEMENT
 
-   16 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR T_SEMICOLON
+   15 STATEMENT: RETURN_STATEMENT
+   16          | DECLARE_VAR
+   17          | ASSIGN_STATEMENT
 
-   17 EXPR: TERM
-   18     | EXPR T_PLUS TERM
-   19     | EXPR T_MINUS TERM
+   18 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON
 
-   20 TERM: FACTOR
-   21     | TERM T_TIMES FACTOR
-   22     | TERM T_DIVIDE FACTOR
-   23     | FACTOR T_EXPONENT TERM
+   19 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
+   20            | TYPE T_ID T_SEMICOLON
 
-   24 FACTOR: T_NUMBER
-   25       | T_LBRACKET EXPR T_RBRACKET
-   26       | T_ID
-   27       | T_LOG T_LBRACKET EXPR T_RBRACKET
-   28       | T_EXP T_LBRACKET EXPR T_RBRACKET
-   29       | T_SQRT T_LBRACKET EXPR T_RBRACKET
+   21 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR T_SEMICOLON
+
+   22 EXPR: TERM
+   23     | EXPR T_PLUS TERM
+   24     | EXPR T_MINUS TERM
+
+   25 TERM: FACTOR
+   26     | TERM T_TIMES FACTOR
+   27     | TERM T_DIVIDE FACTOR
+   28     | FACTOR T_EXPONENT TERM
+
+   29 FACTOR: T_NUMBER
+   30       | T_LBRACKET EXPR T_RBRACKET
+   31       | T_ID
+   32       | T_LOG T_LBRACKET EXPR T_RBRACKET
+   33       | T_EXP T_LBRACKET EXPR T_RBRACKET
+   34       | T_SQRT T_LBRACKET EXPR T_RBRACKET
 
 
 Terminals, with rules where they appear
@@ -83,39 +86,39 @@ $end (0) 0
 error (256)
 T_LSQBRACKET (258)
 T_RSQBRACKET (259)
-T_LCUBRACKET (260) 2
-T_RCUBRACKET (261) 2
+T_LCUBRACKET (260) 5
+T_RCUBRACKET (261) 5
 T_LTRIBRACKET (262)
 T_RTRIBRACKET (263)
-T_LBRACKET (264) 2 25 27 28 29
-T_RBRACKET (265) 2 25 27 28 29
-T_ASSIGN (266) 14 16
+T_LBRACKET (264) 5 30 32 33 34
+T_RBRACKET (265) 5 30 32 33 34
+T_ASSIGN (266) 19 21
 T_DOT (267)
-T_COMMA (268)
+T_COMMA (268) 6
 T_COLON (269)
-T_SEMICOLON (270) 13 14 15 16
+T_SEMICOLON (270) 18 19 20 21
 T_LAND (271)
 T_LOR (272)
 T_LEQUAL (273)
 T_LNOTEQUAL (274)
 T_LLESSOREQUAL (275)
 T_LMOREOREQUAL (276)
-T_INT (277) 3
-T_DOUBLE (278) 4
-T_STRING (279) 5
-T_BOOL (280) 7
-T_VOID (281) 6
-T_TIMES (282) 21
-T_DIVIDE (283) 22
-T_PLUS (284) 18
-T_MINUS (285) 19
-T_EXPONENT (286) 23
-T_LOG (287) 27
-T_EXP (288) 28
-T_SQRT (289) 29
-T_NUMBER (290) 24
-T_ID (291) 2 14 15 16 26
-T_RETURN (292) 13
+T_INT (277) 8
+T_DOUBLE (278) 9
+T_STRING (279) 10
+T_BOOL (280) 12
+T_VOID (281) 11
+T_TIMES (282) 26
+T_DIVIDE (283) 27
+T_PLUS (284) 23
+T_MINUS (285) 24
+T_EXPONENT (286) 28
+T_LOG (287) 32
+T_EXP (288) 33
+T_SQRT (289) 34
+T_NUMBER (290) 29
+T_ID (291) 5 6 7 19 20 21 31
+T_RETURN (292) 18
 
 
 Nonterminals, with rules where they appear
@@ -124,26 +127,32 @@ $accept (38)
     on left: 0
 ROOT (39)
     on left: 1, on right: 0
-DEC_FUNCTION (40)
+MAIN_BODY (40)
     on left: 2, on right: 1
-TYPE (41)
-    on left: 3 4 5 6 7, on right: 2 14 15
-BODY (42)
-    on left: 8 9, on right: 2 8
-STATEMENT (43)
-    on left: 10 11 12, on right: 8 9
-RETURN_STATEMENT (44)
-    on left: 13, on right: 10
-DECLARE_VAR (45)
-    on left: 14 15, on right: 11
-ASSIGN_STATEMENT (46)
-    on left: 16, on right: 12
-EXPR (47)
-    on left: 17 18 19, on right: 13 14 16 18 19 25 27 28 29
-TERM (48)
-    on left: 20 21 22 23, on right: 17 18 19 21 22 23
-FACTOR (49)
-    on left: 24 25 26 27 28 29, on right: 20 21 22 23
+FUNCTION_LIST (41)
+    on left: 3 4, on right: 2 3
+DEC_FUNCTION (42)
+    on left: 5, on right: 3 4
+ARGUMENT_LIST (43)
+    on left: 6 7, on right: 5 6
+TYPE (44)
+    on left: 8 9 10 11 12, on right: 5 6 7 19 20
+BODY (45)
+    on left: 13 14, on right: 5 13
+STATEMENT (46)
+    on left: 15 16 17, on right: 13 14
+RETURN_STATEMENT (47)
+    on left: 18, on right: 15
+DECLARE_VAR (48)
+    on left: 19 20, on right: 16
+ASSIGN_STATEMENT (49)
+    on left: 21, on right: 17
+EXPR (50)
+    on left: 22 23 24, on right: 18 19 21 23 24 30 32 33 34
+TERM (51)
+    on left: 25 26 27 28, on right: 22 23 24 26 27 28
+FACTOR (52)
+    on left: 29 30 31 32 33 34, on right: 25 26 27 28
 
 
 State 0
@@ -156,624 +165,714 @@ State 0
     T_BOOL    shift, and go to state 4
     T_VOID    shift, and go to state 5
 
-    ROOT          go to state 6
-    DEC_FUNCTION  go to state 7
-    TYPE          go to state 8
+    ROOT           go to state 6
+    MAIN_BODY      go to state 7
+    FUNCTION_LIST  go to state 8
+    DEC_FUNCTION   go to state 9
+    TYPE           go to state 10
 
 
 State 1
 
-    3 TYPE: T_INT .
+    8 TYPE: T_INT .
 
-    $default  reduce using rule 3 (TYPE)
+    $default  reduce using rule 8 (TYPE)
 
 
 State 2
 
-    4 TYPE: T_DOUBLE .
+    9 TYPE: T_DOUBLE .
 
-    $default  reduce using rule 4 (TYPE)
+    $default  reduce using rule 9 (TYPE)
 
 
 State 3
 
-    5 TYPE: T_STRING .
+   10 TYPE: T_STRING .
 
-    $default  reduce using rule 5 (TYPE)
+    $default  reduce using rule 10 (TYPE)
 
 
 State 4
 
-    7 TYPE: T_BOOL .
+   12 TYPE: T_BOOL .
 
-    $default  reduce using rule 7 (TYPE)
+    $default  reduce using rule 12 (TYPE)
 
 
 State 5
 
-    6 TYPE: T_VOID .
+   11 TYPE: T_VOID .
 
-    $default  reduce using rule 6 (TYPE)
+    $default  reduce using rule 11 (TYPE)
 
 
 State 6
 
     0 $accept: ROOT . $end
 
-    $end  shift, and go to state 9
+    $end  shift, and go to state 11
 
 
 State 7
 
-    1 ROOT: DEC_FUNCTION .
+    1 ROOT: MAIN_BODY .
 
     $default  reduce using rule 1 (ROOT)
 
 
 State 8
 
-    2 DEC_FUNCTION: TYPE . T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
-
-    T_ID  shift, and go to state 10
-
-
-State 9
-
-    0 $accept: ROOT $end .
-
-    $default  accept
-
-
-State 10
-
-    2 DEC_FUNCTION: TYPE T_ID . T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
-
-    T_LBRACKET  shift, and go to state 11
-
-
-State 11
-
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET . T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
-
-    T_RBRACKET  shift, and go to state 12
-
-
-State 12
-
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
-
-    T_LCUBRACKET  shift, and go to state 13
-
-
-State 13
-
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
+    2 MAIN_BODY: FUNCTION_LIST .
+    3 FUNCTION_LIST: FUNCTION_LIST . DEC_FUNCTION
 
     T_INT     shift, and go to state 1
     T_DOUBLE  shift, and go to state 2
     T_STRING  shift, and go to state 3
     T_BOOL    shift, and go to state 4
     T_VOID    shift, and go to state 5
-    T_ID      shift, and go to state 14
-    T_RETURN  shift, and go to state 15
 
-    TYPE              go to state 16
-    BODY              go to state 17
-    STATEMENT         go to state 18
-    RETURN_STATEMENT  go to state 19
-    DECLARE_VAR       go to state 20
-    ASSIGN_STATEMENT  go to state 21
+    $default  reduce using rule 2 (MAIN_BODY)
+
+    DEC_FUNCTION  go to state 12
+    TYPE          go to state 10
+
+
+State 9
+
+    4 FUNCTION_LIST: DEC_FUNCTION .
+
+    $default  reduce using rule 4 (FUNCTION_LIST)
+
+
+State 10
+
+    5 DEC_FUNCTION: TYPE . T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_ID  shift, and go to state 13
+
+
+State 11
+
+    0 $accept: ROOT $end .
+
+    $default  accept
+
+
+State 12
+
+    3 FUNCTION_LIST: FUNCTION_LIST DEC_FUNCTION .
+
+    $default  reduce using rule 3 (FUNCTION_LIST)
+
+
+State 13
+
+    5 DEC_FUNCTION: TYPE T_ID . T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LBRACKET  shift, and go to state 14
 
 
 State 14
 
-   16 ASSIGN_STATEMENT: T_ID . T_ASSIGN EXPR T_SEMICOLON
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET . ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
 
-    T_ASSIGN  shift, and go to state 22
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    ARGUMENT_LIST  go to state 15
+    TYPE           go to state 16
 
 
 State 15
 
-   13 RETURN_STATEMENT: T_RETURN . EXPR T_SEMICOLON
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST . T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    6 ARGUMENT_LIST: ARGUMENT_LIST . T_COMMA TYPE T_ID
 
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 29
-    TERM    go to state 30
-    FACTOR  go to state 31
+    T_RBRACKET  shift, and go to state 17
+    T_COMMA     shift, and go to state 18
 
 
 State 16
 
-   14 DECLARE_VAR: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
-   15            | TYPE . T_ID T_SEMICOLON
+    7 ARGUMENT_LIST: TYPE . T_ID
 
-    T_ID  shift, and go to state 32
+    T_ID  shift, and go to state 19
 
 
 State 17
 
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
-    8 BODY: BODY . STATEMENT
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
 
-    T_RCUBRACKET  shift, and go to state 33
+    T_LCUBRACKET  shift, and go to state 20
+
+
+State 18
+
+    6 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA . TYPE T_ID
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    TYPE  go to state 21
+
+
+State 19
+
+    7 ARGUMENT_LIST: TYPE T_ID .
+
+    $default  reduce using rule 7 (ARGUMENT_LIST)
+
+
+State 20
+
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 22
+    T_RETURN  shift, and go to state 23
+
+    TYPE              go to state 24
+    BODY              go to state 25
+    STATEMENT         go to state 26
+    RETURN_STATEMENT  go to state 27
+    DECLARE_VAR       go to state 28
+    ASSIGN_STATEMENT  go to state 29
+
+
+State 21
+
+    6 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE . T_ID
+
+    T_ID  shift, and go to state 30
+
+
+State 22
+
+   21 ASSIGN_STATEMENT: T_ID . T_ASSIGN EXPR T_SEMICOLON
+
+    T_ASSIGN  shift, and go to state 31
+
+
+State 23
+
+   18 RETURN_STATEMENT: T_RETURN . EXPR T_SEMICOLON
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 38
+    TERM    go to state 39
+    FACTOR  go to state 40
+
+
+State 24
+
+   19 DECLARE_VAR: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
+   20            | TYPE . T_ID T_SEMICOLON
+
+    T_ID  shift, and go to state 41
+
+
+State 25
+
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
+   13 BODY: BODY . STATEMENT
+
+    T_RCUBRACKET  shift, and go to state 42
     T_INT         shift, and go to state 1
     T_DOUBLE      shift, and go to state 2
     T_STRING      shift, and go to state 3
     T_BOOL        shift, and go to state 4
     T_VOID        shift, and go to state 5
-    T_ID          shift, and go to state 14
-    T_RETURN      shift, and go to state 15
+    T_ID          shift, and go to state 22
+    T_RETURN      shift, and go to state 23
 
-    TYPE              go to state 16
-    STATEMENT         go to state 34
-    RETURN_STATEMENT  go to state 19
-    DECLARE_VAR       go to state 20
-    ASSIGN_STATEMENT  go to state 21
-
-
-State 18
-
-    9 BODY: STATEMENT .
-
-    $default  reduce using rule 9 (BODY)
-
-
-State 19
-
-   10 STATEMENT: RETURN_STATEMENT .
-
-    $default  reduce using rule 10 (STATEMENT)
-
-
-State 20
-
-   11 STATEMENT: DECLARE_VAR .
-
-    $default  reduce using rule 11 (STATEMENT)
-
-
-State 21
-
-   12 STATEMENT: ASSIGN_STATEMENT .
-
-    $default  reduce using rule 12 (STATEMENT)
-
-
-State 22
-
-   16 ASSIGN_STATEMENT: T_ID T_ASSIGN . EXPR T_SEMICOLON
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 35
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 23
-
-   25 FACTOR: T_LBRACKET . EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 36
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 24
-
-   27 FACTOR: T_LOG . T_LBRACKET EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 37
-
-
-State 25
-
-   28 FACTOR: T_EXP . T_LBRACKET EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 38
+    TYPE              go to state 24
+    STATEMENT         go to state 43
+    RETURN_STATEMENT  go to state 27
+    DECLARE_VAR       go to state 28
+    ASSIGN_STATEMENT  go to state 29
 
 
 State 26
 
-   29 FACTOR: T_SQRT . T_LBRACKET EXPR T_RBRACKET
+   14 BODY: STATEMENT .
 
-    T_LBRACKET  shift, and go to state 39
+    $default  reduce using rule 14 (BODY)
 
 
 State 27
 
-   24 FACTOR: T_NUMBER .
+   15 STATEMENT: RETURN_STATEMENT .
 
-    $default  reduce using rule 24 (FACTOR)
+    $default  reduce using rule 15 (STATEMENT)
 
 
 State 28
 
-   26 FACTOR: T_ID .
+   16 STATEMENT: DECLARE_VAR .
 
-    $default  reduce using rule 26 (FACTOR)
+    $default  reduce using rule 16 (STATEMENT)
 
 
 State 29
 
-   13 RETURN_STATEMENT: T_RETURN EXPR . T_SEMICOLON
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
+   17 STATEMENT: ASSIGN_STATEMENT .
 
-    T_SEMICOLON  shift, and go to state 40
-    T_PLUS       shift, and go to state 41
-    T_MINUS      shift, and go to state 42
+    $default  reduce using rule 17 (STATEMENT)
 
 
 State 30
 
-   17 EXPR: TERM .
-   21 TERM: TERM . T_TIMES FACTOR
-   22     | TERM . T_DIVIDE FACTOR
+    6 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID .
 
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 17 (EXPR)
+    $default  reduce using rule 6 (ARGUMENT_LIST)
 
 
 State 31
 
-   20 TERM: FACTOR .
-   23     | FACTOR . T_EXPONENT TERM
+   21 ASSIGN_STATEMENT: T_ID T_ASSIGN . EXPR T_SEMICOLON
 
-    T_EXPONENT  shift, and go to state 45
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
 
-    $default  reduce using rule 20 (TERM)
+    EXPR    go to state 44
+    TERM    go to state 39
+    FACTOR  go to state 40
 
 
 State 32
 
-   14 DECLARE_VAR: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
-   15            | TYPE T_ID . T_SEMICOLON
+   30 FACTOR: T_LBRACKET . EXPR T_RBRACKET
 
-    T_ASSIGN     shift, and go to state 46
-    T_SEMICOLON  shift, and go to state 47
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 45
+    TERM    go to state 39
+    FACTOR  go to state 40
 
 
 State 33
 
-    2 DEC_FUNCTION: TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
+   32 FACTOR: T_LOG . T_LBRACKET EXPR T_RBRACKET
 
-    $default  reduce using rule 2 (DEC_FUNCTION)
+    T_LBRACKET  shift, and go to state 46
 
 
 State 34
 
-    8 BODY: BODY STATEMENT .
+   33 FACTOR: T_EXP . T_LBRACKET EXPR T_RBRACKET
 
-    $default  reduce using rule 8 (BODY)
+    T_LBRACKET  shift, and go to state 47
 
 
 State 35
 
-   16 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR . T_SEMICOLON
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
+   34 FACTOR: T_SQRT . T_LBRACKET EXPR T_RBRACKET
 
-    T_SEMICOLON  shift, and go to state 48
-    T_PLUS       shift, and go to state 41
-    T_MINUS      shift, and go to state 42
+    T_LBRACKET  shift, and go to state 48
 
 
 State 36
 
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
-   25 FACTOR: T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 49
-    T_PLUS      shift, and go to state 41
-    T_MINUS     shift, and go to state 42
-
-
-State 37
-
-   27 FACTOR: T_LOG T_LBRACKET . EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 50
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 38
-
-   28 FACTOR: T_EXP T_LBRACKET . EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 51
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 39
-
-   29 FACTOR: T_SQRT T_LBRACKET . EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 52
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 40
-
-   13 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON .
-
-    $default  reduce using rule 13 (RETURN_STATEMENT)
-
-
-State 41
-
-   18 EXPR: EXPR T_PLUS . TERM
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    TERM    go to state 53
-    FACTOR  go to state 31
-
-
-State 42
-
-   19 EXPR: EXPR T_MINUS . TERM
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    TERM    go to state 54
-    FACTOR  go to state 31
-
-
-State 43
-
-   21 TERM: TERM T_TIMES . FACTOR
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    FACTOR  go to state 55
-
-
-State 44
-
-   22 TERM: TERM T_DIVIDE . FACTOR
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    FACTOR  go to state 56
-
-
-State 45
-
-   23 TERM: FACTOR T_EXPONENT . TERM
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    TERM    go to state 57
-    FACTOR  go to state 31
-
-
-State 46
-
-   14 DECLARE_VAR: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
-
-    T_LBRACKET  shift, and go to state 23
-    T_LOG       shift, and go to state 24
-    T_EXP       shift, and go to state 25
-    T_SQRT      shift, and go to state 26
-    T_NUMBER    shift, and go to state 27
-    T_ID        shift, and go to state 28
-
-    EXPR    go to state 58
-    TERM    go to state 30
-    FACTOR  go to state 31
-
-
-State 47
-
-   15 DECLARE_VAR: TYPE T_ID T_SEMICOLON .
-
-    $default  reduce using rule 15 (DECLARE_VAR)
-
-
-State 48
-
-   16 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR T_SEMICOLON .
-
-    $default  reduce using rule 16 (ASSIGN_STATEMENT)
-
-
-State 49
-
-   25 FACTOR: T_LBRACKET EXPR T_RBRACKET .
-
-    $default  reduce using rule 25 (FACTOR)
-
-
-State 50
-
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
-   27 FACTOR: T_LOG T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 59
-    T_PLUS      shift, and go to state 41
-    T_MINUS     shift, and go to state 42
-
-
-State 51
-
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
-   28 FACTOR: T_EXP T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 60
-    T_PLUS      shift, and go to state 41
-    T_MINUS     shift, and go to state 42
-
-
-State 52
-
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
-   29 FACTOR: T_SQRT T_LBRACKET EXPR . T_RBRACKET
-
-    T_RBRACKET  shift, and go to state 61
-    T_PLUS      shift, and go to state 41
-    T_MINUS     shift, and go to state 42
-
-
-State 53
-
-   18 EXPR: EXPR T_PLUS TERM .
-   21 TERM: TERM . T_TIMES FACTOR
-   22     | TERM . T_DIVIDE FACTOR
-
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 18 (EXPR)
-
-
-State 54
-
-   19 EXPR: EXPR T_MINUS TERM .
-   21 TERM: TERM . T_TIMES FACTOR
-   22     | TERM . T_DIVIDE FACTOR
-
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 19 (EXPR)
-
-
-State 55
-
-   21 TERM: TERM T_TIMES FACTOR .
-
-    $default  reduce using rule 21 (TERM)
-
-
-State 56
-
-   22 TERM: TERM T_DIVIDE FACTOR .
-
-    $default  reduce using rule 22 (TERM)
-
-
-State 57
-
-   21 TERM: TERM . T_TIMES FACTOR
-   22     | TERM . T_DIVIDE FACTOR
-   23     | FACTOR T_EXPONENT TERM .
-
-    T_TIMES   shift, and go to state 43
-    T_DIVIDE  shift, and go to state 44
-
-    T_TIMES   [reduce using rule 23 (TERM)]
-    T_DIVIDE  [reduce using rule 23 (TERM)]
-    $default  reduce using rule 23 (TERM)
-
-
-State 58
-
-   14 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
-   18 EXPR: EXPR . T_PLUS TERM
-   19     | EXPR . T_MINUS TERM
-
-    T_SEMICOLON  shift, and go to state 62
-    T_PLUS       shift, and go to state 41
-    T_MINUS      shift, and go to state 42
-
-
-State 59
-
-   27 FACTOR: T_LOG T_LBRACKET EXPR T_RBRACKET .
-
-    $default  reduce using rule 27 (FACTOR)
-
-
-State 60
-
-   28 FACTOR: T_EXP T_LBRACKET EXPR T_RBRACKET .
-
-    $default  reduce using rule 28 (FACTOR)
-
-
-State 61
-
-   29 FACTOR: T_SQRT T_LBRACKET EXPR T_RBRACKET .
+   29 FACTOR: T_NUMBER .
 
     $default  reduce using rule 29 (FACTOR)
 
 
+State 37
+
+   31 FACTOR: T_ID .
+
+    $default  reduce using rule 31 (FACTOR)
+
+
+State 38
+
+   18 RETURN_STATEMENT: T_RETURN EXPR . T_SEMICOLON
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+
+    T_SEMICOLON  shift, and go to state 49
+    T_PLUS       shift, and go to state 50
+    T_MINUS      shift, and go to state 51
+
+
+State 39
+
+   22 EXPR: TERM .
+   26 TERM: TERM . T_TIMES FACTOR
+   27     | TERM . T_DIVIDE FACTOR
+
+    T_TIMES   shift, and go to state 52
+    T_DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 22 (EXPR)
+
+
+State 40
+
+   25 TERM: FACTOR .
+   28     | FACTOR . T_EXPONENT TERM
+
+    T_EXPONENT  shift, and go to state 54
+
+    $default  reduce using rule 25 (TERM)
+
+
+State 41
+
+   19 DECLARE_VAR: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
+   20            | TYPE T_ID . T_SEMICOLON
+
+    T_ASSIGN     shift, and go to state 55
+    T_SEMICOLON  shift, and go to state 56
+
+
+State 42
+
+    5 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 5 (DEC_FUNCTION)
+
+
+State 43
+
+   13 BODY: BODY STATEMENT .
+
+    $default  reduce using rule 13 (BODY)
+
+
+State 44
+
+   21 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR . T_SEMICOLON
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+
+    T_SEMICOLON  shift, and go to state 57
+    T_PLUS       shift, and go to state 50
+    T_MINUS      shift, and go to state 51
+
+
+State 45
+
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+   30 FACTOR: T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 58
+    T_PLUS      shift, and go to state 50
+    T_MINUS     shift, and go to state 51
+
+
+State 46
+
+   32 FACTOR: T_LOG T_LBRACKET . EXPR T_RBRACKET
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 59
+    TERM    go to state 39
+    FACTOR  go to state 40
+
+
+State 47
+
+   33 FACTOR: T_EXP T_LBRACKET . EXPR T_RBRACKET
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 60
+    TERM    go to state 39
+    FACTOR  go to state 40
+
+
+State 48
+
+   34 FACTOR: T_SQRT T_LBRACKET . EXPR T_RBRACKET
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 61
+    TERM    go to state 39
+    FACTOR  go to state 40
+
+
+State 49
+
+   18 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON .
+
+    $default  reduce using rule 18 (RETURN_STATEMENT)
+
+
+State 50
+
+   23 EXPR: EXPR T_PLUS . TERM
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    TERM    go to state 62
+    FACTOR  go to state 40
+
+
+State 51
+
+   24 EXPR: EXPR T_MINUS . TERM
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    TERM    go to state 63
+    FACTOR  go to state 40
+
+
+State 52
+
+   26 TERM: TERM T_TIMES . FACTOR
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    FACTOR  go to state 64
+
+
+State 53
+
+   27 TERM: TERM T_DIVIDE . FACTOR
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    FACTOR  go to state 65
+
+
+State 54
+
+   28 TERM: FACTOR T_EXPONENT . TERM
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    TERM    go to state 66
+    FACTOR  go to state 40
+
+
+State 55
+
+   19 DECLARE_VAR: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
+
+    T_LBRACKET  shift, and go to state 32
+    T_LOG       shift, and go to state 33
+    T_EXP       shift, and go to state 34
+    T_SQRT      shift, and go to state 35
+    T_NUMBER    shift, and go to state 36
+    T_ID        shift, and go to state 37
+
+    EXPR    go to state 67
+    TERM    go to state 39
+    FACTOR  go to state 40
+
+
+State 56
+
+   20 DECLARE_VAR: TYPE T_ID T_SEMICOLON .
+
+    $default  reduce using rule 20 (DECLARE_VAR)
+
+
+State 57
+
+   21 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR T_SEMICOLON .
+
+    $default  reduce using rule 21 (ASSIGN_STATEMENT)
+
+
+State 58
+
+   30 FACTOR: T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 30 (FACTOR)
+
+
+State 59
+
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+   32 FACTOR: T_LOG T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 68
+    T_PLUS      shift, and go to state 50
+    T_MINUS     shift, and go to state 51
+
+
+State 60
+
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+   33 FACTOR: T_EXP T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 69
+    T_PLUS      shift, and go to state 50
+    T_MINUS     shift, and go to state 51
+
+
+State 61
+
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+   34 FACTOR: T_SQRT T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 70
+    T_PLUS      shift, and go to state 50
+    T_MINUS     shift, and go to state 51
+
+
 State 62
 
-   14 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
+   23 EXPR: EXPR T_PLUS TERM .
+   26 TERM: TERM . T_TIMES FACTOR
+   27     | TERM . T_DIVIDE FACTOR
 
-    $default  reduce using rule 14 (DECLARE_VAR)
+    T_TIMES   shift, and go to state 52
+    T_DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 23 (EXPR)
+
+
+State 63
+
+   24 EXPR: EXPR T_MINUS TERM .
+   26 TERM: TERM . T_TIMES FACTOR
+   27     | TERM . T_DIVIDE FACTOR
+
+    T_TIMES   shift, and go to state 52
+    T_DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 24 (EXPR)
+
+
+State 64
+
+   26 TERM: TERM T_TIMES FACTOR .
+
+    $default  reduce using rule 26 (TERM)
+
+
+State 65
+
+   27 TERM: TERM T_DIVIDE FACTOR .
+
+    $default  reduce using rule 27 (TERM)
+
+
+State 66
+
+   26 TERM: TERM . T_TIMES FACTOR
+   27     | TERM . T_DIVIDE FACTOR
+   28     | FACTOR T_EXPONENT TERM .
+
+    T_TIMES   shift, and go to state 52
+    T_DIVIDE  shift, and go to state 53
+
+    T_TIMES   [reduce using rule 28 (TERM)]
+    T_DIVIDE  [reduce using rule 28 (TERM)]
+    $default  reduce using rule 28 (TERM)
+
+
+State 67
+
+   19 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
+   23 EXPR: EXPR . T_PLUS TERM
+   24     | EXPR . T_MINUS TERM
+
+    T_SEMICOLON  shift, and go to state 71
+    T_PLUS       shift, and go to state 50
+    T_MINUS      shift, and go to state 51
+
+
+State 68
+
+   32 FACTOR: T_LOG T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 32 (FACTOR)
+
+
+State 69
+
+   33 FACTOR: T_EXP T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 33 (FACTOR)
+
+
+State 70
+
+   34 FACTOR: T_SQRT T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 34 (FACTOR)
+
+
+State 71
+
+   19 DECLARE_VAR: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
+
+    $default  reduce using rule 19 (DECLARE_VAR)

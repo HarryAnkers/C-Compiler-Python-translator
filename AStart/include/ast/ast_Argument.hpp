@@ -6,13 +6,13 @@
 class Argument : public MainBody
 {
     public:
-        string argId;
-        string argType
+        std::string argId;
+        std::string argType;
         CompilerPtr nextArguments;
     
-        Argument(string &_argId, string &_argType, CompilerPtr _nextArguments):
+        Argument(std::string &_argId, std::string &_argType, CompilerPtr _nextArguments):
         argId(_argId), argType(_argType), nextArguments(_nextArguments){}
-        Argument(string &_argId, string &_argType):
+        Argument(std::string &_argId, std::string &_argType):
         argId(_argId), argType(_argType), nextArguments(NULL){}
 
         //print tester
@@ -20,15 +20,13 @@ class Argument : public MainBody
         {
             if(nextArguments!=NULL){
                 nextArguments->print(dst);
-                dst<<", "
+                dst<<", ";
             }
-            argType->print(dst);
-            argId->print(dst);
+            dst<<argId<<" "<<argType;
         }
 
         //translator 
         virtual void translate(std::ostream &dst) const override{};
 };
-
 
 #endif
