@@ -78,26 +78,31 @@ extern int yydebug;
     T_APOSTROPHE = 272,
     T_LAND = 273,
     T_LOR = 274,
-    T_LEQUAL = 275,
-    T_LNOTEQUAL = 276,
-    T_LLESSOREQUAL = 277,
-    T_LMOREOREQUAL = 278,
-    T_INT = 279,
-    T_DOUBLE = 280,
-    T_STRING = 281,
-    T_BOOL = 282,
-    T_VOID = 283,
-    T_TIMES = 284,
-    T_DIVIDE = 285,
-    T_PLUS = 286,
-    T_MINUS = 287,
-    T_EXPONENT = 288,
-    T_LOG = 289,
-    T_EXP = 290,
-    T_SQRT = 291,
-    T_NUMBER = 292,
-    T_ID = 293,
-    T_RETURN = 294
+    T_LNOT = 275,
+    T_LEQUAL = 276,
+    T_LNOTEQUAL = 277,
+    T_LLESSEQUAL = 278,
+    T_LMOREEQUAL = 279,
+    T_LMORE = 280,
+    T_LLESS = 281,
+    T_INT = 282,
+    T_DOUBLE = 283,
+    T_STRING = 284,
+    T_BOOL = 285,
+    T_VOID = 286,
+    T_TIMES = 287,
+    T_DIVIDE = 288,
+    T_PLUS = 289,
+    T_MINUS = 290,
+    T_EXPONENT = 291,
+    T_LOG = 292,
+    T_EXP = 293,
+    T_SQRT = 294,
+    T_NUMBER = 295,
+    T_ID = 296,
+    T_RETURN = 297,
+    T_ELSE = 298,
+    T_IF = 299
   };
 #endif
 
@@ -113,7 +118,7 @@ union YYSTYPE
   double number;
   std::string *string;
 
-#line 117 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 122 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

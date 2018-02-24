@@ -138,4 +138,134 @@ class FunctionStatement : public MainBody
         }
 };
 
+class If : public MainBody
+{
+    public:
+        ExpressionPtr conditon;
+        CompilerPtr body;
+    
+        If(ExpressionPtr _conditon, CompilerPtr _body):
+        conditon(_conditon), body(_body){}
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"if ";
+            conditon->print(dst);
+            dst<<" {"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"if ";
+            conditon->print(dst);
+            dst<<" {"<<std::endl;
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+};
+
+class ElseIf : public MainBody
+{
+    public:
+        ExpressionPtr conditon;
+        CompilerPtr body;
+    
+        ElseIf(ExpressionPtr _conditon, CompilerPtr _body):
+        conditon(_conditon), body(_body){}
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"else if (";
+            conditon->print(dst);
+            dst<<") {"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"elif(";
+            conditon->print(dst);
+            dst<<") {"<<std::endl;
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+};
+
+class Else : public MainBody
+{
+    public:
+        CompilerPtr body;
+    
+        Else(CompilerPtr _body):
+        body(_body){}
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"else {"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"else {"<<std::endl;
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+};
+
 #endif

@@ -14,10 +14,18 @@ extern "C" int fileno(FILE *stream);
 []]             { return T_RSQBRACKET; }
 [{]             { return T_LCUBRACKET; }
 [}]             { return T_RCUBRACKET; }
-[<]             { return T_LTRIBRACKET; }
-[>]             { return T_RTRIBRACKET; }
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }
+
+"&&"		{ return T_LAND; }
+"||"		{ return T_LOR; }
+"=="		{ return T_LEQUAL; }
+[!]		  { return T_LNOT; }
+"!="		{ return T_LNOTEQUAL; }
+"<="		{ return T_LLESSEQUAL; }
+">="		{ return T_LMOREEQUAL; }
+[<]     { return T_LMORE; }
+[>]     { return T_LLESS; }
 
 [=]             { return T_ASSIGN; }
 [.]             { return T_DOT; }
@@ -33,13 +41,6 @@ extern "C" int fileno(FILE *stream);
 "bool"		{ yylval.string=new std::string(yytext); return T_BOOL; }
 "void"		{ yylval.string=new std::string(yytext); return T_VOID; }
 
-"&&"		{ return T_LAND; }
-"||"		{ return T_LOR; }
-"=="		{ return T_LEQUAL; }
-"!="		{ return T_LNOTEQUAL; }
-"<="		{ return T_LLESSOREQUAL; }
-">="		{ return T_LMOREOREQUAL; }
-
 [*]             { return T_TIMES; }
 [/]             { return T_DIVIDE; }
 [+]             { return T_PLUS; }
@@ -51,6 +52,8 @@ extern "C" int fileno(FILE *stream);
 "sqrt"            { return T_SQRT; }
 
 "return"            { return T_RETURN; }
+"if"            { return T_IF; }
+"else"            { return T_ELSE; }
 
 [-]?[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
