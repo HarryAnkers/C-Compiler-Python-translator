@@ -9,18 +9,19 @@ class Argument : public MainBody
         std::string argType;
         std::string argId;
         CompilerPtr nextArguments;
+        bool skip=false;
     
         Argument(std::string &_argType, std::string &_argId, CompilerPtr _nextArguments):
         argType(_argType), argId(_argId), nextArguments(_nextArguments){}
         Argument(std::string &_argType, std::string &_argId):
         argType(_argType), argId(_argId), nextArguments(NULL){}
         Argument():
-        argType(NULL), argId(NULL), nextArguments(NULL){}
+        argType(NULL), argId(NULL), nextArguments(NULL){skip=true;}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
         {
-            if(argId!=NULL){
+            if(skip){
                 if(nextArguments!=NULL){
                     nextArguments->print(dst, indent);
                     dst<<", ";
@@ -31,7 +32,7 @@ class Argument : public MainBody
 
         //translator 
         virtual void translate(std::ostream &dst, int &indent) const override{
-            if(argId!=NULL){
+            if(skip){
                 if(nextArguments!=NULL){
                     nextArguments->translate(dst, indent);
                     dst<<", ";
