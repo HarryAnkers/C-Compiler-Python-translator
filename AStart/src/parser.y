@@ -44,7 +44,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : FUNCTION_STATEMENT { g_root = $1; }
+ROOT : MAIN_BODY { g_root = $1; }
 
 //choose main in main body so it gets priority
 MAIN_BODY : FUNCTION_LIST {$$ = $1; }

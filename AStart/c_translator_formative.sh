@@ -3,11 +3,11 @@
 if [[ "$1" != "" ]] ; then
     compiler="$1"
 else
-    compiler="bin/c_translator"
+    compiler="bin/translate_test"
 fi
 
 have_compiler=0
-if [[ ! -f bin/c_compiler ]] ; then
+if [[ ! -f bin/translate_test ]] ; then
     >&2 echo "Warning : cannot find compiler at path ${compiler}. Only checking C reference against python reference."
     have_compiler=1
 fi
