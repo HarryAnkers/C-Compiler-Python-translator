@@ -44,7 +44,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : MAIN_BODY { g_root = $1; }
+ROOT : FUNCTION_STATEMENT { g_root = $1; }
 
 //choose main in main body so it gets priority
 MAIN_BODY : FUNCTION_LIST {$$ = $1; }
@@ -52,33 +52,29 @@ MAIN_BODY : FUNCTION_LIST {$$ = $1; }
 FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
     | DEC_FUNCTION                      {$$ = $1;}
 
-//delcares a new function with the func_id and runs through body recursively arg implimented late
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
     | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
-    | %epsilon                                      {$$ = new Argument()}
+    | %empty                                        {$$ = new Argument();}
 
 ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA T_ID      {$$ = new ArgumentNoType(*$3, $1);}
     | T_ID                                                      {$$ = new ArgumentNoType(*$1);}
-    | %epsilon                                                  {$$ = new ArgumentNoType()}
+    | %empty                                                    {$$ = new ArgumentNoType();}
 
-//terminal cases
 TYPE : T_INT      {$$=$1;}
     | T_DOUBLE    {$$=$1;}
     | T_STRING    {$$=$1;}
     | T_VOID      {$$=$1;}
     | T_BOOL      {$$=$1;}
 
-//recursive with each line of code left associative
-//each body contains one statement and a body pointer
 BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
     | STATEMENT         {$$ = $1;}
-    | %epsilon          {$$ = new Body()}
+    | %empty          {$$ = new Body();}
     
 STATEMENT :  RETURN_STATEMENT       {$$=$1;}
     | DECLARE_VAR                   {$$=$1;}
-    //| FUNCTION                    {$$=$1;}
+    | FUNCTION_STATEMENT            {$$=$1;}
     | ASSIGN_STATEMENT              {$$=$1;}
 
 RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
@@ -88,7 +84,7 @@ DECLARE_VAR : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*
 
 ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
-FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
+FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
 
 EXPR_TOP : EXPR                             {$$=$1}
         | T_SPEACHMARK T_ID T_SPEACHMARK    {$$= new String(*$2);}

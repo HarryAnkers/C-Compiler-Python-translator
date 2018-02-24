@@ -124,7 +124,7 @@ class FunctionStatement : public MainBody
             }
             dst<<id<<"(";
             arguments->print(dst,indent);
-            dst<<id<<");";
+            dst<<");";
         }
 
         //translator 
@@ -134,7 +134,7 @@ class FunctionStatement : public MainBody
             }
             dst<<id<<"(";
             arguments->print(dst,indent);
-            dst<<id<<")";
+            dst<<")";
         }
 };
 

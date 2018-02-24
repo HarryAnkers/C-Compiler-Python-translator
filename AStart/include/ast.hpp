@@ -12,6 +12,7 @@
 #include "ast/ast_Statement.hpp"
 #include "ast/ast_Body.hpp"
 #include "ast/ast_Argument.hpp"
+#include "ast/ast_ArgumentNoType.hpp"
 
 extern const MainBody *parseAST();
 
