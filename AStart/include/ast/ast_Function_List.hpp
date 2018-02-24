@@ -23,7 +23,13 @@ public:
     }
 
     //translator 
-    virtual void translate(std::ostream &dst) const override{};
+    virtual void translate(std::ostream &dst) const override{
+        if(nextFunction!=NULL){
+            nextFunction->translate(dst);
+            dst<<std::endl;
+        }
+        function->translate(dst);
+    };
 };
 
 

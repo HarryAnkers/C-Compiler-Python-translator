@@ -26,7 +26,13 @@ class Argument : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            if(nextArguments!=NULL){
+                nextArguments->translate(dst);
+                dst<<", ";
+            }
+            dst<<argId;
+        };
 };
 
 #endif

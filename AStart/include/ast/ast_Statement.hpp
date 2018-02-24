@@ -21,7 +21,11 @@ class ReturnStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            dst<<"return ";
+            expression->print(dst);
+            dst<<std::endl;
+        };
 };
 
 class AssignStatement : public MainBody
@@ -42,7 +46,11 @@ class AssignStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            dst<<id<<"=";
+            expression->print(dst);
+            dst<<std::endl;
+        };
 };
 
 class DeclareStatement : public MainBody
@@ -69,7 +77,14 @@ class DeclareStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            dst<<id;
+            if(expression!=NULL){
+                dst<<"=";
+                expression->print(dst);
+                dst<<std::endl;
+            } else { dst<<"=0"<<std::endl; }
+        };
 };
 
 class FunctionStatement : public MainBody
@@ -89,7 +104,11 @@ class FunctionStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            dst<<id<<"(";
+
+            dst<<id<<")";
+        };
 };
 
 #endif

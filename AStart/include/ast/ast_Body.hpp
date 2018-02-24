@@ -22,7 +22,12 @@ class Body : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            if(nextBody!=NULL){
+                nextBody->translate(dst);
+            }
+            statement->translate(dst);
+        };
 };
 
 

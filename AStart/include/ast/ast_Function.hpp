@@ -7,10 +7,10 @@
 class Function : public MainBody
 {
     public:
-        std::string id;
         std::string type;
-        CompilerPtr body;
+        std::string id;
         CompilerPtr arguments;
+        CompilerPtr body;
     
         Function(const std::string &_type,const std::string &_id, CompilerPtr _arguments, CompilerPtr _body):
         type(_type), id(_id), arguments(_arguments), body(_body){}
@@ -18,8 +18,7 @@ class Function : public MainBody
         //print tester
         virtual void print(std::ostream &dst) const override
         {
-            dst<<type<<" ";
-            dst<<id<<"(";
+            dst<<type<<" "<<id<<"(";
             arguments->print(dst);
             dst<<"){"<<std::endl;
             body->print(dst);
@@ -27,7 +26,13 @@ class Function : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{};
+        virtual void translate(std::ostream &dst) const override{
+            dst<<"def "<<id<<"(";
+            arguments->translate(dst);
+            dst<<"):"<<std::endl;
+            dst<<"\t";
+            body->translate(dst);
+        };
 };
 
 

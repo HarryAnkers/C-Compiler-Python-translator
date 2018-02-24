@@ -1,19 +1,23 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
-all : bin/print_canonical bin/eval_expr
+all : bin/print_test bin/eval_expr bin/translate_test
 
-src/maths_parser.tab.cpp src/maths_parser.tab.hpp : src/maths_parser.y
-	bison -v -d src/maths_parser.y -o src/maths_parser.tab.cpp
+src/parser.tab.cpp src/parser.tab.hpp : src/parser.y
+	bison -v -d src/parser.y -o src/parser.tab.cpp
 
-src/maths_lexer.yy.cpp : src/maths_lexer.flex src/maths_parser.tab.hpp
-	flex -o src/maths_lexer.yy.cpp  src/maths_lexer.flex
+src/lexer.yy.cpp : src/lexer.flex src/parser.tab.hpp
+	flex -o src/lexer.yy.cpp  src/lexer.flex
 
-bin/print_canonical : src/print_canonical.o src/maths_parser.tab.o src/maths_lexer.yy.o src/maths_parser.tab.o
+bin/print_test : src/print_test.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
 	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/print_canonical $^
+	g++ $(CPPFLAGS) -o bin/print_test $^
+
+bin/translate_test : src/translate_test.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
+	mkdir -p bin
+	g++ $(CPPFLAGS) -o bin/translate_test $^
 	
-bin/eval_expr : src/eval_expr.o src/maths_parser.tab.o src/maths_lexer.yy.o src/maths_parser.tab.o
+bin/eval_expr : src/eval_expr.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/eval_expr $^
 
