@@ -59,5 +59,42 @@ public:
     }
 };
 
+class String
+    : public Expression
+{
+public:
+    std::string value;
+    String(std::string _value)
+        : value(_value)
+    {}
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<value;
+    }
+
+    virtual double evaluate(
+        const std::map<std::string,double> &bindings
+    ) const override {return -1;}
+};
+
+class Char
+    : public Expression
+{
+public:
+    char value;
+    Char(char _value)
+        : value(_value)
+    {}
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<value;
+    }
+
+    virtual double evaluate(
+        const std::map<std::string,double> &bindings
+    ) const override {return -1;}
+};
 
 #endif

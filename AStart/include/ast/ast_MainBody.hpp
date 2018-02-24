@@ -18,10 +18,10 @@ public:
     {}
 
     //print tester
-    virtual void print(std::ostream &dst) const =0;
+    virtual void print(std::ostream &dst, int &indent) const =0;
 
     //translator 
-    virtual void translate(std::ostream &dst) const =0;
+    virtual void translate(std::ostream &dst, int &indent) const =0;
 };
 
 

@@ -16,23 +16,26 @@ class Function : public MainBody
         type(_type), id(_id), arguments(_arguments), body(_body){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
             dst<<type<<" "<<id<<"(";
-            arguments->print(dst);
+            arguments->print(dst,indent);
             dst<<"){"<<std::endl;
-            body->print(dst);
+            indent++;
+            body->print(dst,indent);
+            indent--;
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
+        virtual void translate(std::ostream &dst, int &indent) const override{
             dst<<"def "<<id<<"(";
-            arguments->translate(dst);
+            arguments->translate(dst,indent);
             dst<<"):"<<std::endl;
-            dst<<"\t";
-            body->translate(dst);
-        };
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+        }
 };
 
 

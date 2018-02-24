@@ -1,6 +1,8 @@
 Nonterminals useless in grammar
 
+   ARGUMENT_LIST_NO_TYPE
    FUNCTION_STATEMENT
+   EXPR_TOP
 
 
 Terminals unused in grammar
@@ -11,6 +13,8 @@ Terminals unused in grammar
    T_RTRIBRACKET
    T_DOT
    T_COLON
+   T_SPEACHMARK
+   T_APOSTROPHE
    T_LAND
    T_LOR
    T_LEQUAL
@@ -21,7 +25,14 @@ Terminals unused in grammar
 
 Rules useless in grammar
 
-   35 FUNCTION_STATEMENT: T_ID T_LBRACKET T_RBRACKET T_SEMICOLON
+   35 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA T_ID
+   36                      | T_ID
+
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_SEMICOLON
+
+   38 EXPR_TOP: EXPR
+   39         | T_SPEACHMARK T_ID T_SPEACHMARK
+   40         | T_APOSTROPHE T_ID T_APOSTROPHE
 
 
 State 66 conflicts: 2 shift/reduce
@@ -97,61 +108,63 @@ T_DOT (267)
 T_COMMA (268) 6
 T_COLON (269)
 T_SEMICOLON (270) 18 19 20 21
-T_LAND (271)
-T_LOR (272)
-T_LEQUAL (273)
-T_LNOTEQUAL (274)
-T_LLESSOREQUAL (275)
-T_LMOREOREQUAL (276)
-T_INT (277) 8
-T_DOUBLE (278) 9
-T_STRING (279) 10
-T_BOOL (280) 12
-T_VOID (281) 11
-T_TIMES (282) 26
-T_DIVIDE (283) 27
-T_PLUS (284) 23
-T_MINUS (285) 24
-T_EXPONENT (286) 28
-T_LOG (287) 32
-T_EXP (288) 33
-T_SQRT (289) 34
-T_NUMBER (290) 29
-T_ID (291) 5 6 7 19 20 21 31
-T_RETURN (292) 18
+T_SPEACHMARK (271)
+T_APOSTROPHE (272)
+T_LAND (273)
+T_LOR (274)
+T_LEQUAL (275)
+T_LNOTEQUAL (276)
+T_LLESSOREQUAL (277)
+T_LMOREOREQUAL (278)
+T_INT (279) 8
+T_DOUBLE (280) 9
+T_STRING (281) 10
+T_BOOL (282) 12
+T_VOID (283) 11
+T_TIMES (284) 26
+T_DIVIDE (285) 27
+T_PLUS (286) 23
+T_MINUS (287) 24
+T_EXPONENT (288) 28
+T_LOG (289) 32
+T_EXP (290) 33
+T_SQRT (291) 34
+T_NUMBER (292) 29
+T_ID (293) 5 6 7 19 20 21 31
+T_RETURN (294) 18
 
 
 Nonterminals, with rules where they appear
 
-$accept (38)
+$accept (40)
     on left: 0
-ROOT (39)
+ROOT (41)
     on left: 1, on right: 0
-MAIN_BODY (40)
+MAIN_BODY (42)
     on left: 2, on right: 1
-FUNCTION_LIST (41)
+FUNCTION_LIST (43)
     on left: 3 4, on right: 2 3
-DEC_FUNCTION (42)
+DEC_FUNCTION (44)
     on left: 5, on right: 3 4
-ARGUMENT_LIST (43)
+ARGUMENT_LIST (45)
     on left: 6 7, on right: 5 6
-TYPE (44)
+TYPE (46)
     on left: 8 9 10 11 12, on right: 5 6 7 19 20
-BODY (45)
+BODY (47)
     on left: 13 14, on right: 5 13
-STATEMENT (46)
+STATEMENT (48)
     on left: 15 16 17, on right: 13 14
-RETURN_STATEMENT (47)
+RETURN_STATEMENT (49)
     on left: 18, on right: 15
-DECLARE_VAR (48)
+DECLARE_VAR (50)
     on left: 19 20, on right: 16
-ASSIGN_STATEMENT (49)
+ASSIGN_STATEMENT (51)
     on left: 21, on right: 17
-EXPR (50)
+EXPR (52)
     on left: 22 23 24, on right: 18 19 21 23 24 30 32 33 34
-TERM (51)
+TERM (53)
     on left: 25 26 27 28, on right: 22 23 24 26 27 28
-FACTOR (52)
+FACTOR (54)
     on left: 29 30 31 32 33 34, on right: 25 26 27 28
 
 

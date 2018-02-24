@@ -13,23 +13,23 @@ public:
         function(_function), nextFunction(_nextFunction){}
 
     //print tester
-    virtual void print(std::ostream &dst) const override
+    virtual void print(std::ostream &dst, int &indent) const override
     {
         if(nextFunction!=NULL){
-            nextFunction->print(dst);
+            nextFunction->print(dst, indent);
             dst<<std::endl;
         }
-        function->print(dst);
+        function->print(dst, indent);
     }
 
     //translator 
-    virtual void translate(std::ostream &dst) const override{
+    virtual void translate(std::ostream &dst, int &indent) const override{
         if(nextFunction!=NULL){
-            nextFunction->translate(dst);
+            nextFunction->translate(dst, indent);
             dst<<std::endl;
         }
-        function->translate(dst);
-    };
+        function->translate(dst, indent);
+    }
 };
 
 

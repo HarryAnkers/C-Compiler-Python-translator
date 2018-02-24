@@ -13,15 +13,21 @@ class ReturnStatement : public MainBody
         expression(_expression){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<"return ";
             expression->print(dst);
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<"return ";
             expression->print(dst);
             dst<<std::endl;
@@ -38,15 +44,21 @@ class AssignStatement : public MainBody
         id(_id), expression(_expression){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<id<<"=";
             expression->print(dst);
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<id<<"=";
             expression->print(dst);
             dst<<std::endl;
@@ -66,8 +78,11 @@ class DeclareStatement : public MainBody
         type(_type), id(_id), expression(NULL){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<type<<" "<<id;
             if(expression!=NULL){
                 dst<<"=";
@@ -77,13 +92,18 @@ class DeclareStatement : public MainBody
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
                 expression->print(dst);
                 dst<<std::endl;
-            } else { dst<<"=0"<<std::endl; }
+            } else { 
+                dst<<"=0"<<std::endl; 
+            }
         };
 };
 
@@ -91,24 +111,31 @@ class FunctionStatement : public MainBody
 {
     public:
         std::string id;
+        CompilerPtr arguments;
 
-        FunctionStatement(std::string &_id):
-        id(_id){}
+        FunctionStatement(std::string &_id, CompilerPtr _arguments):
+        id(_id), arguments(_arguments){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<id<<"(";
-
+            arguments->print(dst,indent);
             dst<<id<<");";
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
             dst<<id<<"(";
-
+            arguments->print(dst,indent);
             dst<<id<<")";
-        };
+        }
 };
 
 #endif

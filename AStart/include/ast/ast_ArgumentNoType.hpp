@@ -1,21 +1,20 @@
-#ifndef ast_Argument_hpp
-#define ast_Argument_hpp
+#ifndef ast_ArgumentNoType_hpp
+#define ast_ArgumentNoType_hpp
 
 #include "ast_MainBody.hpp"
 
-class Argument : public MainBody
+class ArgumentNoType : public MainBody
 {
     public:
-        std::string argType;
         std::string argId;
         CompilerPtr nextArguments;
     
-        Argument(std::string &_argType, std::string &_argId, CompilerPtr _nextArguments):
-        argType(_argType), argId(_argId), nextArguments(_nextArguments){}
-        Argument(std::string &_argType, std::string &_argId):
-        argType(_argType), argId(_argId), nextArguments(NULL){}
-        Argument():
-        argType(NULL), argId(NULL), nextArguments(NULL){}
+        ArgumentNoType( std::string &_argId, CompilerPtr _nextArguments):
+        argId(_argId), nextArguments(_nextArguments){}
+        ArgumentNoType( std::string &_argId):
+        argId(_argId), nextArguments(NULL){}
+        ArgumentNoType():
+        argId(NULL), nextArguments(NULL){}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -25,7 +24,7 @@ class Argument : public MainBody
                     nextArguments->print(dst, indent);
                     dst<<", ";
                 }
-                dst<<argType<<" "<<argId;
+                dst<<argId;
             }
         }
 

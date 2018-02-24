@@ -4,7 +4,8 @@ int main()
 {
     const MainBody *ast=parseAST();
     
-    ast->print(std::cout);
+    int i=0;
+    ast->print(std::cout,i);
     std::cout<<std::endl;
 
     return 0;

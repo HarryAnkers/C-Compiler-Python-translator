@@ -22,7 +22,7 @@
 }
 
 %token T_LSQBRACKET T_RSQBRACKET T_LCUBRACKET T_RCUBRACKET T_LTRIBRACKET T_RTRIBRACKET T_LBRACKET T_RBRACKET
-%token T_ASSIGN T_DOT T_COMMA T_COLON T_SEMICOLON
+%token T_ASSIGN T_DOT T_COMMA T_COLON T_SEMICOLON T_SPEACHMARK T_APOSTROPHE
 %token T_LAND T_LOR T_LEQUAL T_LNOTEQUAL T_LLESSOREQUAL T_LMOREOREQUAL
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
@@ -32,8 +32,8 @@
 
 %type <compptr> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
 %type <compptr> STATEMENT RETURN_STATEMENT DECLARE_VAR ASSIGN_STATEMENT FUNCTION_STATEMENT
-%type <compptr> ARGUMENT_LIST
-%type <expr> EXPR TERM FACTOR
+%type <compptr> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
+%type <expr> EXPR EXPR_TOP TERM FACTOR
 %type <number> T_NUMBER
 %type <string> T_ID 
 %type <string> T_LOG T_EXP T_SQRT
@@ -56,7 +56,12 @@ FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
-    | TYPE T_ID                             {$$ = new Argument(*$1, *$2);}
+    | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
+    | %epsilon                                      {$$ = new Argument()}
+
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA T_ID      {$$ = new ArgumentNoType(*$3, $1);}
+    | T_ID                                                      {$$ = new ArgumentNoType(*$1);}
+    | %epsilon                                                  {$$ = new ArgumentNoType()}
 
 //terminal cases
 TYPE : T_INT      {$$=$1;}
@@ -69,35 +74,40 @@ TYPE : T_INT      {$$=$1;}
 //each body contains one statement and a body pointer
 BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
     | STATEMENT         {$$ = $1;}
+    | %epsilon          {$$ = new Body()}
     
-STATEMENT :  RETURN_STATEMENT          {$$=$1;}
-    | DECLARE_VAR               {$$=$1;}
-    //| FUNCTION                  {$$=$1;}
-    | ASSIGN_STATEMENT   {$$=$1;}
+STATEMENT :  RETURN_STATEMENT       {$$=$1;}
+    | DECLARE_VAR                   {$$=$1;}
+    //| FUNCTION                    {$$=$1;}
+    | ASSIGN_STATEMENT              {$$=$1;}
 
 RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
 
-DECLARE_VAR : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new DeclareStatement(*$1, *$2, $4);}  
-    | TYPE T_ID T_SEMICOLON {$$ = new DeclareStatement(*$1, *$2);}
+DECLARE_VAR : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
+    | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
 
 ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
-FUNCTION_STATEMENT : T_ID T_LBRACKET T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1);}
+FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
 
-EXPR : TERM                 { $$ = $1; }
-        | EXPR T_PLUS TERM       { $$ = new AddOperator( $1 , $3 ); }
-        | EXPR T_MINUS TERM       { $$ = new SubOperator( $1 , $3 ); }
+EXPR_TOP : EXPR                             {$$=$1}
+        | T_SPEACHMARK T_ID T_SPEACHMARK    {$$= new String(*$2);}
+        | T_APOSTROPHE T_ID T_APOSTROPHE    {$$= new Char(*$2);}
 
-TERM : FACTOR               { $$ = $1; }
-        | TERM T_TIMES FACTOR  { $$ = new MulOperator( $1 , $3 ); }
-        | TERM T_DIVIDE FACTOR  { $$ = new DivOperator( $1 , $3 ); }
-        | FACTOR T_EXPONENT TERM  { $$ = new ExpOperator( $1 , $3 ); }
+EXPR : TERM                                 { $$ = $1; }
+        | EXPR T_PLUS TERM                  { $$ = new AddOperator( $1 , $3 ); }
+        | EXPR T_MINUS TERM                 { $$ = new SubOperator( $1 , $3 ); }
 
-FACTOR : T_NUMBER           { $$ = new Number( $1 ); }
-        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
-        | T_ID { $$ = new Variable( *$1 );}
-        | T_LOG T_LBRACKET EXPR T_RBRACKET { $$ = new LogFunction( $3 ); }
-        | T_EXP T_LBRACKET EXPR T_RBRACKET { $$ = new ExpFunction( $3 ); }
+TERM : FACTOR                       { $$ = $1; }
+        | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
+        | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
+        | FACTOR T_EXPONENT TERM    { $$ = new ExpOperator( $1 , $3 ); }
+
+FACTOR : T_NUMBER                           { $$ = new Number( $1 ); }
+        | T_LBRACKET EXPR T_RBRACKET        { $$ = $2; }
+        | T_ID                              { $$ = new Variable( *$1 );}
+        | T_LOG T_LBRACKET EXPR T_RBRACKET  { $$ = new LogFunction( $3 ); }
+        | T_EXP T_LBRACKET EXPR T_RBRACKET  { $$ = new ExpFunction( $3 ); }
         | T_SQRT T_LBRACKET EXPR T_RBRACKET { $$ = new SqrtFunction( $3 ); }
 %%
 

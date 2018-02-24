@@ -24,6 +24,8 @@ extern "C" int fileno(FILE *stream);
 [,]             { return T_COMMA; }
 [:]             { return T_COLON; }
 [;]             { return T_SEMICOLON; }
+[\"]             { return T_SPEACHMARK; }
+[']             { return T_APOSTROPHE; }
 
 "int"   	{ yylval.string=new std::string(yytext); return T_INT; }
 "double"	{ yylval.string=new std::string(yytext); return T_DOUBLE; }

@@ -11,23 +11,29 @@ class Body : public MainBody
     
         Body(CompilerPtr _statement, CompilerPtr _nextBody):
         statement(_statement), nextBody(_nextBody){}
+        Body():
+        statement(NULL), nextBody(NULL){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
-            if(nextBody!=NULL){
-                nextBody->print(dst);
+            if(statement!=NULL){
+                if(nextBody!=NULL){
+                    nextBody->print(dst,indent);
+                }
+                statement->print(dst,indent);
             }
-            statement->print(dst);
         }
 
         //translator 
-        virtual void translate(std::ostream &dst) const override{
-            if(nextBody!=NULL){
-                nextBody->translate(dst);
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            if(statement!=NULL){
+                if(nextBody!=NULL){
+                    nextBody->translate(dst,indent);
+                }
+                statement->translate(dst,indent);
             }
-            statement->translate(dst);
-        };
+        }
 };
 
 
