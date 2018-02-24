@@ -141,11 +141,11 @@ class FunctionStatement : public MainBody
 class If : public MainBody
 {
     public:
-        ExpressionPtr conditon;
+        ExpressionPtr condition;
         CompilerPtr body;
     
-        If(ExpressionPtr _conditon, CompilerPtr _body):
-        conditon(_conditon), body(_body){}
+        If(ExpressionPtr _condition, CompilerPtr _body):
+        condition(_condition), body(_body){}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -154,7 +154,7 @@ class If : public MainBody
                 dst<<"\t";
             }
             dst<<"if ";
-            conditon->print(dst);
+            condition->print(dst);
             dst<<" {"<<std::endl;
             indent++;
             body->print(dst,indent);
@@ -171,7 +171,7 @@ class If : public MainBody
                 dst<<"\t";
             }
             dst<<"if ";
-            conditon->print(dst);
+            condition->print(dst);
             dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -186,11 +186,11 @@ class If : public MainBody
 class ElseIf : public MainBody
 {
     public:
-        ExpressionPtr conditon;
+        ExpressionPtr condition;
         CompilerPtr body;
     
-        ElseIf(ExpressionPtr _conditon, CompilerPtr _body):
-        conditon(_conditon), body(_body){}
+        ElseIf(ExpressionPtr _condition, CompilerPtr _body):
+        condition(_condition), body(_body){}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -199,7 +199,7 @@ class ElseIf : public MainBody
                 dst<<"\t";
             }
             dst<<"else if (";
-            conditon->print(dst);
+            condition->print(dst);
             dst<<") {"<<std::endl;
             indent++;
             body->print(dst,indent);
@@ -216,7 +216,7 @@ class ElseIf : public MainBody
                 dst<<"\t";
             }
             dst<<"elif(";
-            conditon->print(dst);
+            condition->print(dst);
             dst<<") {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -258,6 +258,51 @@ class Else : public MainBody
                 dst<<"\t";
             }
             dst<<"else {"<<std::endl;
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+};
+
+class While : public MainBody
+{
+    public:
+        ExpressionPtr condition;
+        CompilerPtr body;
+    
+        While(ExpressionPtr _condition, CompilerPtr _body):
+        condition(_condition), body(_body){}
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"While ";
+            condition->print(dst);
+            dst<<" {"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"While ";
+            condition->print(dst);
+            dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
             indent--;
