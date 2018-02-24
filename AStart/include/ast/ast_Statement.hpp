@@ -138,13 +138,13 @@ class FunctionStatement : public MainBody
         }
 };
 
-class If : public MainBody
+class If_Statement : public MainBody
 {
     public:
         ExpressionPtr condition;
         CompilerPtr body;
     
-        If(ExpressionPtr _condition, CompilerPtr _body):
+        If_Statement(ExpressionPtr _condition, CompilerPtr _body):
         condition(_condition), body(_body){}
 
         //print tester
@@ -183,13 +183,13 @@ class If : public MainBody
         }
 };
 
-class ElseIf : public MainBody
+class ElIf_Statement : public MainBody
 {
     public:
         ExpressionPtr condition;
         CompilerPtr body;
     
-        ElseIf(ExpressionPtr _condition, CompilerPtr _body):
+        ElIf_Statement(ExpressionPtr _condition, CompilerPtr _body):
         condition(_condition), body(_body){}
 
         //print tester
@@ -228,12 +228,12 @@ class ElseIf : public MainBody
         }
 };
 
-class Else : public MainBody
+class Else_Statement : public MainBody
 {
     public:
         CompilerPtr body;
     
-        Else(CompilerPtr _body):
+        Else_Statement(CompilerPtr _body):
         body(_body){}
 
         //print tester
@@ -268,13 +268,13 @@ class Else : public MainBody
         }
 };
 
-class While : public MainBody
+class While_Statement : public MainBody
 {
     public:
         ExpressionPtr condition;
         CompilerPtr body;
     
-        While(ExpressionPtr _condition, CompilerPtr _body):
+        While_Statement(ExpressionPtr _condition, CompilerPtr _body):
         condition(_condition), body(_body){}
 
         //print tester

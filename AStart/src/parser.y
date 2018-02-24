@@ -28,11 +28,12 @@
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
 %token T_LOG T_EXP T_SQRT
 %token T_NUMBER T_ID 
-%token T_RETURN T_ELSE T_IF
+%token T_RETURN T_ELSE T_IF T_WHILE
 
 %type <compptr> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
-%type <compptr> STATEMENT RETURN_STATEMENT DECLARE_VAR ASSIGN_STATEMENT FUNCTION_STATEMENT
+%type <compptr> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
 %type <compptr> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
+%type <compptr> WHILE_STATEMENT
 %type <compptr> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <expr> EXPR EXPR_TOP TERM FACTOR CONDITION
 %type <number> T_NUMBER
@@ -51,38 +52,41 @@ ROOT : MAIN_BODY { g_root = $1; }
 MAIN_BODY : FUNCTION_LIST {$$ = $1; }
 
 FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
-    | DEC_FUNCTION                      {$$ = $1;}
+        | FUNCTION_LIST DEC_VARIABLE             {$$ = new Function_List($2,$1);}
+        | DEC_FUNCTION                              {$$ = $1;}
+        | DEC_VARIABLE
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
-    | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
-    | %empty                                        {$$ = new Argument();}
+     | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
+        | %empty                                        {$$ = new Argument();}
 
 ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA T_ID      {$$ = new ArgumentNoType(*$3, $1);}
-    | T_ID                                                      {$$ = new ArgumentNoType(*$1);}
-    | %empty                                                    {$$ = new ArgumentNoType();}
+        | T_ID                                                      {$$ = new ArgumentNoType(*$1);}
+        | %empty                                                    {$$ = new ArgumentNoType();}
 
 TYPE : T_INT      {$$=$1;}
-    | T_DOUBLE    {$$=$1;}
-    | T_STRING    {$$=$1;}
-    | T_VOID      {$$=$1;}
-    | T_BOOL      {$$=$1;}
+        | T_DOUBLE    {$$=$1;}
+        | T_STRING    {$$=$1;}
+        | T_VOID      {$$=$1;}
+        | T_BOOL      {$$=$1;}
 
 BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
-    | STATEMENT         {$$ = $1;}
-    | %empty          {$$ = new Body();}
+        | STATEMENT         {$$ = $1;}
+        | %empty          {$$ = new Body();}
     
 STATEMENT :  RETURN_STATEMENT       {$$=$1;}
-    | DECLARE_VAR                   {$$=$1;}
-    | FUNCTION_STATEMENT            {$$=$1;}
-    | ASSIGN_STATEMENT              {$$=$1;}
-    | IFANDORELSEORELIF             {$$=$1;}
+        | DEC_VARIABLE                   {$$=$1;}
+        | FUNCTION_STATEMENT            {$$=$1;}
+        | ASSIGN_STATEMENT              {$$=$1;}
+        | IFANDORELSEORELIF             {$$=$1;}
+        | WHILE_STATEMENT               {$$=$1;}
 
 RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
 
-DECLARE_VAR : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
-    | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
+DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
+        | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
 
 ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
@@ -94,11 +98,13 @@ IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  {$$=new IfElseList($1, $2);}
 IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     {$$=new IfElseList($1, $2);}
         | IF_STATEMENT                          {$$=$1;}
 
-IF_STATEMENT : T_IF CONDITION  T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new If($2,$4);}
+WHILE_STATEMENT : T_WHILE CONDITION T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new While_Statement($2,$4);}
 
-ELSE_IF_STATEMENT : T_ELSE T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new ElseIf($3,$5);}
+IF_STATEMENT : T_IF CONDITION  T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new If_Statement($2,$4);}
 
-ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else ($3);}
+ELSE_IF_STATEMENT : T_ELSE T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new ElIf_Statement($3,$5);}
+
+ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else_Statement ($3);}
 
 CONDITION :  CONDITION T_LEQUAL CONDITION   {$$ = new LEqual($1,$3);}
         | CONDITION T_LAND CONDITION        {$$ = new LAnd($1,$3);}

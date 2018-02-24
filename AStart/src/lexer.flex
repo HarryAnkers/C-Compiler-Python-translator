@@ -52,6 +52,7 @@ extern "C" int fileno(FILE *stream);
 "sqrt"            { return T_SQRT; }
 
 "return"            { return T_RETURN; }
+"while"            { return T_WHILE; }
 "if"            { return T_IF; }
 "else"            { return T_ELSE; }
 
