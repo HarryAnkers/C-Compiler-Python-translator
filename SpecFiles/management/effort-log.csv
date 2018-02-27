@@ -1,4 +1,15 @@
 Date,Effort,Developers,Milestones
-10/02/2018,Proposed plan of action,Both,
+10/02/2018,Proposed plan of action,Both,Developed Planning
 ,Looked for a starting place (lexer),,
 ,Learned some python,,
+13/02/2018,Planned a basic AST token and type structure,haa516,Planned  work
+22/02/2018,Implimented a AST off lab 2,haa516,
+,tried to get an AST structure and finish the flex file before doing any input output,haa516,finished flex translator for the most
+,,haa516,made a basic ast structure and added the ast files
+23/02/2018,Attempted first compile but faced with tons of errors,haa516,first working compile
+,fixed said errors and managed to use the print canonical file as reference to make an input output system to test,haa516,first working run
+,fully working reformatter hoping to do translator tommorow,haa516,made an input output work
+24/02/2018,Filled out the AST for things like arguments and if statements,haa516,made semi working python translator instead of reformater
+,filled out translator function for all AST nodes,haa516,added more ast info
+,Have semi working translator minus input,haa516,
+27/02/2018,Looked at how to get working with formative translator file,haa516,
