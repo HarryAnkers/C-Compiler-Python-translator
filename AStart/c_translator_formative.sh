@@ -3,11 +3,11 @@
 if [[ "$1" != "" ]] ; then
     compiler="$1"
 else
-    compiler="bin/translate_test"
+    compiler="bin/c_compiler"
 fi
 
 have_compiler=0
-if [[ ! -f bin/translate_test ]] ; then
+if [[ ! -f bin/c_compiler ]] ; then
     >&2 echo "Warning : cannot find compiler at path ${compiler}. Only checking C reference against python reference."
     have_compiler=1
 fi
@@ -28,7 +28,7 @@ for i in ${input_dir}/*.c ; do
     REF_C_OUT=$?
     
     # Run the reference python version
-    python ${input_dir}/$base.py
+    python3 ${input_dir}/$base.py
     REF_P_OUT=$?
     
     if [[ ${have_compiler} -eq 0 ]] ; then
@@ -37,7 +37,7 @@ for i in ${input_dir}/*.c ; do
         $compiler --translate $i -o ${working}/$base-got.py
         
         # Run the DUT python version
-        python ${working}/$base-got.py
+        python3 ${working}/$base-got.py
         GOT_P_OUT=$?
     fi
     
