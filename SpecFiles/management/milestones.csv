@@ -4,3 +4,13 @@ Convert one file to python,,,,,
 Convert 5 files to python,,,,,
 Pass all the given python tests,,,,,
 Convert one c file to mips,,,,,
+REDONE LIST BELOW,,,,,
+Basic AST,Planning,lot,haa516,22-Feb,able to do basic int main return
+One compile,AST Flex and Y all working on basic level,if planning is good not much,haa516,23-Feb,
+One run,need an input output system,shouldn’t be too hard,haa516,23-Feb,can do some form of input output
+Reformat capability,all print methods work,tedious,haa516,23-Feb,
+Translate capability,all translate methods work,tedious,haa516,24-Feb,
+finally finish connecting the lab 2 stuff and my stuff,free time on project,tedious but slightly unnecassery ,haa516,,
+get the .sh from formative to work,,hard but short,haa516,,
+pass one test,.sh works with our system,hopefully short,haa516,,
+pass all tests,our compiler translator works great,hopefully short,haa516,,
