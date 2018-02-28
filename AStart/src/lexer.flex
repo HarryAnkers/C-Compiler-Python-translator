@@ -6,9 +6,9 @@ extern "C" int fileno(FILE *stream);
 
 #include "parser.tab.hpp"
 %}
-
 %%
 
+"//".*          { ; }
 
 [[]             { return T_LSQBRACKET; }
 []]             { return T_RSQBRACKET; }

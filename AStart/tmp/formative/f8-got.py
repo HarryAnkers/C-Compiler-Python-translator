@@ -1,5 +1,11 @@
+x=0
+
+def f():
+	x=(x+1)
+	return x
+
 def main():
-	return (5+6)
+	return (f()+f())
 
 # Boilerplat
 if __name__ == "__main__":

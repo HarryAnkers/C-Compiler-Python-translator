@@ -25,7 +25,7 @@
 %token T_LAND T_LOR T_LNOT T_LEQUAL T_LNOTEQUAL T_LLESSEQUAL T_LMOREEQUAL T_LMORE T_LLESS
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_NUMBER T_ID 
+%token T_NUMBER T_ID T_COMMENT
 %token T_RETURN T_ELSE T_IF T_WHILE
 
 %type <node> TOP_LEVEL FUNCTION_LIST DEC_FUNCTION BODY
@@ -50,9 +50,9 @@ ROOT : TOP_LEVEL { g_root = $1; }
 TOP_LEVEL : FUNCTION_LIST {$$ = $1; }
 
 FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
-        | FUNCTION_LIST DEC_VARIABLE             {$$ = new Function_List($2,$1);}
-        | DEC_FUNCTION                              {$$ = $1;}
-        | DEC_VARIABLE
+        | FUNCTION_LIST DEC_VARIABLE            {$$ = new Function_List($2,$1);}
+        | DEC_FUNCTION                          {$$ = $1;}
+        | DEC_VARIABLE                          {$$ = $1;}
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 

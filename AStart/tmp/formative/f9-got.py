@@ -1,15 +1,15 @@
 def function(a,b):
 	if (a < b) :
-		a=( a-1 )
+		a=(a-1)
 		if (a > b) :
-			b=( b+3 )
+			b=(b+3)
 			if (a == b) :
-				return ( a*b )
+				return (a*b)
 		return b
 	return 13
 
 def main():
-	return ( ( ( function(0,0)+function(1,2) )+function(4,3) )+function(6,7) )
+	return (((function(0,0)+function(1,2))+function(4,3))+function(6,7))
 
 # Boilerplat
 if __name__ == "__main__":
