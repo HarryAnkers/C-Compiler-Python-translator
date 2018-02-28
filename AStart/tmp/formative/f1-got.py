@@ -1,5 +1,5 @@
 def main():
-	return ( 5 + 6 )
+	return ( 5+6 )
 
 # Boilerplat
 if __name__ == "__main__":

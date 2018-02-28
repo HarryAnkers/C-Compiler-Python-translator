@@ -117,8 +117,8 @@ class LMore : public ConditionOp
         LMore(node _condA, node _condB):
             ConditionOp(_condA,_condB){}
 
-        virtual const char *getCOp() const override{ return ">"; }
-        virtual const char *getPyOp() const override{ return ">"; }
+        virtual const char *getCOp() const override{ return "<"; }
+        virtual const char *getPyOp() const override{ return "<"; }
 };
 
 class LLess : public ConditionOp
@@ -127,8 +127,8 @@ class LLess : public ConditionOp
         LLess(node _condA, node _condB):
             ConditionOp(_condA,_condB){}
 
-        virtual const char *getCOp() const override{ return "<"; }
-        virtual const char *getPyOp() const override{ return "<"; }
+        virtual const char *getCOp() const override{ return ">"; }
+        virtual const char *getPyOp() const override{ return ">"; }
 };
 
 class LMoreEqual : public ConditionOp

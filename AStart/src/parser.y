@@ -135,7 +135,8 @@ FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
         | NUMBER                {$$ = $1; }
         | ID                    {$$ = $1; }
 
-NUMBER : T_NUMBER                       { $$ = new Number( $1 ); }
+NUMBER : T_NUMBER                       { $$ = new Number( $1 , 0 ); }
+        | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
 
 ID :  T_ID                        { $$ = new Variable( *$1 );}
 %%

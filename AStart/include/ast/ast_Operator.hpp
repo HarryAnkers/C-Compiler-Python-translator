@@ -21,23 +21,19 @@ public:
 
     virtual void print(std::ostream &dst, int &indent) const override
     {
-        dst<<"( ";
+        dst<<"(";
         left->print(dst,indent);
-        dst<<" ";
         dst<<getOpcode();
-        dst<<" ";
         right->print(dst,indent);
-        dst<<" )";
+        dst<<")";
     }
 
     virtual void translate(std::ostream &dst, int &indent) const {
-        dst<<"( ";
+        dst<<"(";
         left->translate(dst,indent);
-        dst<<" ";
         dst<<getOpcode();
-        dst<<" ";
         right->translate(dst,indent);
-        dst<<" )";
+        dst<<")";
     }
 
     //compiler 

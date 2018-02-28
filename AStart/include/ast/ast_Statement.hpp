@@ -183,14 +183,10 @@ class If_Statement : public ASTNode
             }
             dst<<"if ";
             condition->translate(dst,indent);
-            dst<<" {"<<std::endl;
+            dst<<" :"<<std::endl;
             indent++;
             body->translate(dst,indent);
             indent--;
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}"<<std::endl;
         }
 
         //compiler 
@@ -231,14 +227,10 @@ class ElIf_Statement : public ASTNode
             }
             dst<<"elif(";
             condition->translate(dst,indent);
-            dst<<") {"<<std::endl;
+            dst<<") :"<<std::endl;
             indent++;
             body->translate(dst,indent);
             indent--;
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}"<<std::endl;
         }
 
         //compiler 
@@ -274,14 +266,10 @@ class Else_Statement : public ASTNode
             for(int i=indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"else {"<<std::endl;
+            dst<<"else :"<<std::endl;
             indent++;
             body->translate(dst,indent);
             indent--;
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}"<<std::endl;
         }
 
         //compiler 
@@ -322,14 +310,10 @@ class While_Statement : public ASTNode
             }
             dst<<"While ";
             condition->translate(dst,indent);
-            dst<<" {"<<std::endl;
+            dst<<" :"<<std::endl;
             indent++;
             body->translate(dst,indent);
             indent--;
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}"<<std::endl;
         }
 
         //compiler 

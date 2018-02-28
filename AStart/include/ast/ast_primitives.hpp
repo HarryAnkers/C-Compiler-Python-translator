@@ -33,8 +33,8 @@ class Number
 private:
     double value;
 public:
-    Number(double _value)
-        : value(_value)
+    Number(double pos, double neg)
+        : value(pos-neg)
     {}
 
     double getValue() const
@@ -81,11 +81,7 @@ class FunctionStatementInExpr : public ASTNode
         id(_id), arguments(_arguments){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
-        {
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
+        virtual void print(std::ostream &dst, int &indent) const override{
             dst<<id<<"(";
             arguments->print(dst,indent);
             dst<<")";
@@ -93,9 +89,6 @@ class FunctionStatementInExpr : public ASTNode
 
         //translator 
         virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
-                dst<<"\t";
-            }
             dst<<id<<"(";
             arguments->translate(dst,indent);
             dst<<")";

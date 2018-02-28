@@ -52,7 +52,7 @@ extern "C" int fileno(FILE *stream);
 "if"            { return T_IF; }
 "else"            { return T_ELSE; }
 
-[-]?[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
+[0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
 ([A-Z]|[a-z])+          { yylval.string=new std::string(yytext); return T_ID; }
 

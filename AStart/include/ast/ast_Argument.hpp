@@ -24,7 +24,7 @@ class Argument : public ASTNode
             if(run){
                 if(nextArguments!=NULL){
                     nextArguments->print(dst, indent);
-                    dst<<", ";
+                    dst<<",";
                 }
                 dst<<argType<<" "<<argId;
             }
@@ -35,7 +35,7 @@ class Argument : public ASTNode
             if(run){
                 if(nextArguments!=NULL){
                     nextArguments->translate(dst, indent);
-                    dst<<", ";
+                    dst<<",";
                 }
                 dst<<argId;
             }

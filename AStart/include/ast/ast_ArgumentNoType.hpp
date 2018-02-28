@@ -22,7 +22,7 @@ class ArgumentNoType : public ASTNode
             if(arg!=NULL){
                 if(nextArguments!=NULL){
                     nextArguments->print(dst, indent);
-                    dst<<", ";
+                    dst<<",";
                 }
                 arg->print(dst,indent);
             }
@@ -33,7 +33,7 @@ class ArgumentNoType : public ASTNode
             if(arg!=NULL){
                 if(nextArguments!=NULL){
                     nextArguments->translate(dst, indent);
-                    dst<<", ";
+                    dst<<",";
                 }
                 arg->translate(dst,indent);
             }
