@@ -1,15 +1,14 @@
 #ifndef ast_Statement_hpp
 #define ast_Statement_hpp
 
-#include "ast_MainBody.hpp"
-#include "ast_expression.hpp"
+#include "ast_ASTNode.hpp"
 
-class ReturnStatement : public MainBody
+class ReturnStatement : public ASTNode
 {
     public:
-        ExpressionPtr expression;
+        node expression;
 
-        ReturnStatement(ExpressionPtr _expression):
+        ReturnStatement(node _expression):
         expression(_expression){}
 
         //print tester
@@ -29,18 +28,21 @@ class ReturnStatement : public MainBody
                 dst<<"\t";
             }
             dst<<"return ";
-            expression->print(dst);
+            expression->translate(dst);
             dst<<std::endl;
-        };
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class AssignStatement : public MainBody
+class AssignStatement : public ASTNode
 {
     public:
         std::string id;
-        ExpressionPtr expression;
+        node expression;
 
-        AssignStatement(std::string &_id, ExpressionPtr _expression):
+        AssignStatement(std::string &_id, node _expression):
         id(_id), expression(_expression){}
 
         //print tester
@@ -60,19 +62,22 @@ class AssignStatement : public MainBody
                 dst<<"\t";
             }
             dst<<id<<"=";
-            expression->print(dst);
+            expression->translate(dst);
             dst<<std::endl;
-        };
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class DeclareStatement : public MainBody
+class DeclareStatement : public ASTNode
 {
     public:
         std::string type;
         std::string id;
-        ExpressionPtr expression;
+        node expression;
 
-        DeclareStatement(std::string &_type, std::string &_id, ExpressionPtr _expression):
+        DeclareStatement(std::string &_type, std::string &_id, node _expression):
         type(_type), id(_id), expression(_expression){}
         DeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
@@ -99,21 +104,24 @@ class DeclareStatement : public MainBody
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->print(dst);
+                expression->translate(dst);
                 dst<<std::endl;
             } else { 
                 dst<<"=0"<<std::endl; 
             }
-        };
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class FunctionStatement : public MainBody
+class FunctionStatement : public ASTNode
 {
     public:
         std::string id;
-        CompilerPtr arguments;
+        node arguments;
 
-        FunctionStatement(std::string &_id, CompilerPtr _arguments):
+        FunctionStatement(std::string &_id, node _arguments):
         id(_id), arguments(_arguments){}
 
         //print tester
@@ -133,18 +141,21 @@ class FunctionStatement : public MainBody
                 dst<<"\t";
             }
             dst<<id<<"(";
-            arguments->print(dst,indent);
-            dst<<")";
+            arguments->translate(dst,indent);
+            dst<<");";
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class If_Statement : public MainBody
+class If_Statement : public ASTNode
 {
     public:
-        ExpressionPtr condition;
-        CompilerPtr body;
+        node condition;
+        node body;
     
-        If_Statement(ExpressionPtr _condition, CompilerPtr _body):
+        If_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
         //print tester
@@ -171,7 +182,7 @@ class If_Statement : public MainBody
                 dst<<"\t";
             }
             dst<<"if ";
-            condition->print(dst);
+            condition->translate(dst);
             dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -181,15 +192,18 @@ class If_Statement : public MainBody
             }
             dst<<"}"<<std::endl;
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class ElIf_Statement : public MainBody
+class ElIf_Statement : public ASTNode
 {
     public:
-        ExpressionPtr condition;
-        CompilerPtr body;
+        node condition;
+        node body;
     
-        ElIf_Statement(ExpressionPtr _condition, CompilerPtr _body):
+        ElIf_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
         //print tester
@@ -216,7 +230,7 @@ class ElIf_Statement : public MainBody
                 dst<<"\t";
             }
             dst<<"elif(";
-            condition->print(dst);
+            condition->translate(dst);
             dst<<") {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -226,14 +240,17 @@ class ElIf_Statement : public MainBody
             }
             dst<<"}"<<std::endl;
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class Else_Statement : public MainBody
+class Else_Statement : public ASTNode
 {
     public:
-        CompilerPtr body;
+        node body;
     
-        Else_Statement(CompilerPtr _body):
+        Else_Statement(node _body):
         body(_body){}
 
         //print tester
@@ -266,15 +283,18 @@ class Else_Statement : public MainBody
             }
             dst<<"}"<<std::endl;
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class While_Statement : public MainBody
+class While_Statement : public ASTNode
 {
     public:
-        ExpressionPtr condition;
-        CompilerPtr body;
+        node condition;
+        node body;
     
-        While_Statement(ExpressionPtr _condition, CompilerPtr _body):
+        While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
         //print tester
@@ -301,7 +321,7 @@ class While_Statement : public MainBody
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->print(dst);
+            condition->translate(dst);
             dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -311,6 +331,9 @@ class While_Statement : public MainBody
             }
             dst<<"}"<<std::endl;
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 #endif

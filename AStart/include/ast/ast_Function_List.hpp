@@ -1,15 +1,15 @@
 #ifndef ast_Function_List_hpp
 #define ast_Function_List_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
-class Function_List : public MainBody
+class Function_List : public ASTNode
 {
 public:
-    CompilerPtr function;
-    CompilerPtr nextFunction;
+    node function;
+    node nextFunction;
 
-    Function_List(CompilerPtr _function, CompilerPtr _nextFunction):
+    Function_List(node _function, node _nextFunction):
         function(_function), nextFunction(_nextFunction){}
 
     //print tester
@@ -30,6 +30,9 @@ public:
         }
         function->translate(dst, indent);
     }
+
+    //compiler
+    virtual void compile(std::ostream &dst) const {};
 };
 
 

@@ -1,15 +1,15 @@
 #ifndef ast_Body_hpp
 #define ast_Body_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
-class Body : public MainBody
+class Body : public ASTNode
 {
     public:
-        CompilerPtr statement;
-        CompilerPtr nextBody;
+        node statement;
+        node nextBody;
     
-        Body(CompilerPtr _statement, CompilerPtr _nextBody):
+        Body(node _statement, node _nextBody):
         statement(_statement), nextBody(_nextBody){}
         Body():
         statement(NULL), nextBody(NULL){}
@@ -37,6 +37,9 @@ class Body : public MainBody
                 statement->translate(dst,indent);
             }
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 

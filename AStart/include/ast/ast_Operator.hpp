@@ -1,31 +1,23 @@
-#ifndef ast_operators_hpp
-#define ast_operators_hpp
+#ifndef ast_Operators_hpp
+#define ast_Operators_hpp
 
-#include "ast_expression.hpp"
+#include "ast_ASTNode.hpp"
 
-#include <string>
-#include <iostream>
 #include <cmath>
 
 class Operator
-    : public Expression
+    : public ASTNode
 {
 protected:
-    ExpressionPtr left;
-    ExpressionPtr right;
+    node left;
+    node right;
 
-    Operator(ExpressionPtr _left, ExpressionPtr _right)
+    Operator(node _left, node _right)
         : left(_left)
         , right(_right)
     {}
 public:
     virtual const char *getOpcode() const =0;
-
-    ExpressionPtr getLeft() const
-    { return left; }
-
-    ExpressionPtr getRight() const
-    { return right; }
 
     virtual void print(std::ostream &dst) const override
     {
@@ -37,6 +29,19 @@ public:
         right->print(dst);
         dst<<" )";
     }
+
+    virtual void translate(std::ostream &dst) const {
+        dst<<"( ";
+        left->translate(dst);
+        dst<<" ";
+        dst<<getOpcode();
+        dst<<" ";
+        right->translate(dst);
+        dst<<" )";
+    }
+
+    //compiler 
+    virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 class AddOperator
@@ -46,18 +51,10 @@ protected:
     virtual const char *getOpcode() const override
     { return "+"; }
 public:
-    AddOperator(ExpressionPtr _left, ExpressionPtr _right)
+    AddOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
     
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override 
-    {
-        double vl=left->evaluate(bindings);
-        double vr=right->evaluate(bindings);
-        return vl+vr;
-    }
 };
 
 class SubOperator
@@ -67,18 +64,9 @@ protected:
     virtual const char *getOpcode() const override
     { return "-"; }
 public:
-    SubOperator(ExpressionPtr _left, ExpressionPtr _right)
+    SubOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override 
-    {
-        double vl=left->evaluate(bindings);
-        double vr=right->evaluate(bindings);
-        return vl-vr;
-    }
 };
 
 
@@ -89,18 +77,9 @@ protected:
     virtual const char *getOpcode() const override
     { return "*"; }
 public:
-    MulOperator(ExpressionPtr _left, ExpressionPtr _right)
+    MulOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=left->evaluate(bindings);
-        double vr=right->evaluate(bindings);
-        return vl*vr;
-    }
 };
 
 class DivOperator
@@ -110,18 +89,9 @@ protected:
     virtual const char *getOpcode() const override
     { return "/"; }
 public:
-    DivOperator(ExpressionPtr _left, ExpressionPtr _right)
+    DivOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=left->evaluate(bindings);
-        double vr=right->evaluate(bindings);
-        return vl/vr;
-    }
 };
 
 class ExpOperator
@@ -131,18 +101,9 @@ protected:
     virtual const char *getOpcode() const override
     { return "^"; }
 public:
-    ExpOperator(ExpressionPtr _left, ExpressionPtr _right)
+    ExpOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=left->evaluate(bindings);
-        double vr=right->evaluate(bindings);
-        return pow(vl,vr);
-    }
 };
 
 

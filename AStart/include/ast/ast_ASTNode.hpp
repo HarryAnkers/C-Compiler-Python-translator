@@ -1,5 +1,5 @@
-#ifndef ast_MainBody_hpp
-#define ast_MainBody_hpp
+#ifndef ast_ASTNode_hpp
+#define ast_ASTNode_hpp
 
 #include <string>
 #include <iostream>
@@ -7,21 +7,24 @@
 
 #include <memory>
 
-class MainBody;
+class ASTNode;
 
-typedef const MainBody *CompilerPtr;
+typedef const ASTNode *node;
 
-class MainBody
+class ASTNode
 {
 public:
-    virtual ~MainBody()
+    virtual ~ASTNode()
     {}
 
     //print tester
     virtual void print(std::ostream &dst, int &indent) const =0;
 
-    //translator 
+    //compiler 
     virtual void translate(std::ostream &dst, int &indent) const =0;
+
+    //compiler
+    virtual void compile(std::ostream &dst) const =0;
 };
 
 

@@ -1,76 +1,14 @@
-
 #ifndef ast_Conditions_hpp
 #define ast_Conditions_hpp
 
-#include "ast_MainBody.hpp"
-#include "ast_Expression.hpp"
+#include "ast_ASTNode.hpp"
 
-class LEqual : public Expression
+class LNot : public ASTNode
 {
     public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
+        node cond;
     
-        LEqual(ExpressionPtr _condA, ExpressionPtr _condB):
-        condA(_condA), condB(_condB){}
-
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<"==";
-            condB->print(dst);
-            dst<<")";
-        }
-};
-
-class LAnd : public Expression
-{
-    public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
-    
-        LAnd(ExpressionPtr _condA, ExpressionPtr _condB):
-        condA(_condA), condB(_condB){}
-
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<"&&";
-            condB->print(dst);
-            dst<<")";
-        }
-};
-
-class LOr : public Expression
-{
-    public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
-    
-        LOr(ExpressionPtr _condA, ExpressionPtr _condB):
-        condA(_condA), condB(_condB){}
-
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<"||";
-            condB->print(dst);
-            dst<<")";
-        }
-};
-
-class LNot : public Expression
-{
-    public:
-        ExpressionPtr cond;
-    
-        LNot(ExpressionPtr _cond):
+        LNot(node _cond):
         cond(_cond){}
 
         //print tester
@@ -80,106 +18,158 @@ class LNot : public Expression
             cond->print(dst);
             dst<<")";
         }
+
+        //translate
+        virtual void translate(std::ostream &dst) const override
+        {
+            dst<<"(!";
+            cond->translate(dst);
+            dst<<")";
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class LNotEqual : public Expression
+class ConditionOp : public ASTNode
 {
     public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
+        node condA;
+        node condB;
     
-        LNotEqual(ExpressionPtr _condA, ExpressionPtr _condB):
-        condA(_condA), condB(_condB){}
+        LEqual(node _condA, node _condB):
+        condA(_condA), condB(_condB){};
 
         //print tester
         virtual void print(std::ostream &dst) const override
         {
             dst<<"(";
-            condA->print(dst);
-            dst<<"!|";
-            condB->print(dst);
+            left->print(dst);
+            dst<<" ";
+            dst<<getCOp();
+            dst<<" ";
+            right->print(dst);
             dst<<")";
         }
-};
 
-class LMore : public Expression
-{
-    public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
-    
-        LMore(ExpressionPtr _condA, ExpressionPtr _condB):
-        condA(_condA), condB(_condB){}
-
-        //print tester
-        virtual void print(std::ostream &dst) const override
+        //translator
+        virtual void translate(std::ostream &dst) const override
         {
             dst<<"(";
-            condA->print(dst);
-            dst<<">";
-            condB->print(dst);
+            left->translate(dst);
+            dst<<" ";
+            dst<<getPyOp();
+            dst<<" ";
+            right->translate(dst);
             dst<<")";
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
-class LLess : public Expression
+class LEqual : public ConditionOp
 {
     public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
+        node condA;
+        node condB;
     
-        LLess(ExpressionPtr _condA, ExpressionPtr _condB):
+        LEqual(node _condA, node _condB):
         condA(_condA), condB(_condB){}
 
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<"<";
-            condB->print(dst);
-            dst<<")";
-        }
+        virtual const char *getCOp() const override{ return "=="; }
+        virtual const char *getPyOp() const override{ return "=="; }
 };
 
-class LMoreEqual : public Expression
+class LAnd : public ConditionOp
 {
     public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
+        node condA;
+        node condB;
     
-        LMoreEqual(ExpressionPtr _condA, ExpressionPtr _condB):
+        LAnd(node _condA, node _condB):
         condA(_condA), condB(_condB){}
 
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<">=";
-            condB->print(dst);
-            dst<<")";
-        }
+        virtual const char *getCOp() const override{ return "&&"; }
+        virtual const char *getPyOp() const override{ return "and"; }
 };
 
-class LLessEqual : public Expression
+class LOr : public ConditionOp
 {
     public:
-        ExpressionPtr condA;
-        ExpressionPtr condB;
+        node condA;
+        node condB;
     
-        LLessEqual(ExpressionPtr _condA, ExpressionPtr _condB):
+        LOr(node _condA, node _condB):
         condA(_condA), condB(_condB){}
 
-        //print tester
-        virtual void print(std::ostream &dst) const override
-        {
-            dst<<"(";
-            condA->print(dst);
-            dst<<"<=";
-            condB->print(dst);
-            dst<<")";
-        }
+        virtual const char *getCOp() const override{ return "||"; }
+        virtual const char *getPyOp() const override{ return "or"; }
+};
+
+class LNotEqual : public ConditionOp
+{
+    public:
+        node condA;
+        node condB;
+    
+        LNotEqual(node _condA, node _condB):
+        condA(_condA), condB(_condB){}
+
+        virtual const char *getCOp() const override{ return "!="; }
+        virtual const char *getPyOp() const override{ return "!="; }
+};
+
+class LMore : public ConditionOp
+{
+    public:
+        node condA;
+        node condB;
+    
+        LMore(node _condA, node _condB):
+        condA(_condA), condB(_condB){}
+
+        virtual const char *getCOp() const override{ return ">"; }
+        virtual const char *getPyOp() const override{ return ">"; }
+};
+
+class LLess : public ConditionOp
+{
+    public:
+        node condA;
+        node condB;
+    
+        LLess(node _condA, node _condB):
+        condA(_condA), condB(_condB){}
+
+        virtual const char *getCOp() const override{ return "<"; }
+        virtual const char *getPyOp() const override{ return "<"; }
+};
+
+class LMoreEqual : public ConditionOp
+{
+    public:
+        node condA;
+        node condB;
+    
+        LMoreEqual(node _condA, node _condB):
+        condA(_condA), condB(_condB){}
+
+        virtual const char *getCOp() const override{ return ">="; }
+        virtual const char *getPyOp() const override{ return ">="; }
+};
+
+class LLessEqual : public ConditionOp
+{
+    public:
+        node condA;
+        node condB;
+    
+        LLessEqual(node _condA, node _condB):
+        condA(_condA), condB(_condB){}
+
+        virtual const char *getCOp() const override{ return "<="; }
+        virtual const char *getPyOp() const override{ return "<="; }
 };
 
 #endif

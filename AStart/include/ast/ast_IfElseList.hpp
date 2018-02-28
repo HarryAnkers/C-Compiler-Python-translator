@@ -1,15 +1,15 @@
 #ifndef ast_IfElseList_hpp
 #define ast_IfElseList_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
-class IfElseList : public MainBody
+class IfElseList : public ASTNode
 {
     public:
-        CompilerPtr ifOrElse;
-        CompilerPtr nextStatement;
+        node ifOrElse;
+        node nextStatement;
     
-        IfElseList(CompilerPtr _ifOrElse, CompilerPtr _nextStatement):
+        IfElseList(node _ifOrElse, node _nextStatement):
         ifOrElse(_ifOrElse), nextStatement(_nextStatement){}
 
         //print tester
@@ -28,6 +28,9 @@ class IfElseList : public MainBody
                 nextStatement->translate(dst,indent);
             }
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 

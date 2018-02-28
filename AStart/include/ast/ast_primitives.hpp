@@ -1,13 +1,10 @@
-#ifndef ast_primitives_hpp
-#define ast_primitives_hpp
+#ifndef ast_Primitives_hpp
+#define ast_Primitives_hpp
 
-#include "ast_expression.hpp"
-
-#include <string>
-#include <iostream>
+#include "ast_ASTNode.hpp"
 
 class Variable
-    : public Expression
+    : public ASTNode
 {
 private:
     std::string id;
@@ -19,22 +16,19 @@ public:
     const std::string getId() const
     { return id; }
 
-    virtual void print(std::ostream &dst) const override
-    {
+    virtual void print(std::ostream &dst) const override{
         dst<<id;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        // If the binding does not exist, this will throw an error
-        return bindings.at(id);
-    }    
+    virtual void translate(std::ostream &dst) const override{
+        dst<<id;
+    }
+
+    virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 class Number
-    : public Expression
+    : public ASTNode
 {
 private:
     double value;
@@ -46,21 +40,19 @@ public:
     double getValue() const
     { return value; }
 
-    virtual void print(std::ostream &dst) const override
-    {
+    virtual void print(std::ostream &dst) const override{
         dst<<value;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        return value;
+    virtual void translate(std::ostream &dst) const override{
+        dst<<value;
     }
+
+    virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 class String
-    : public Expression
+    : public ASTNode
 {
 public:
     std::string value;
@@ -68,18 +60,19 @@ public:
         : value(_value)
     {}
 
-    virtual void print(std::ostream &dst) const override
-    {
+    virtual void print(std::ostream &dst) const override{
         dst<<value;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override {return -1;}
+    virtual void translate(std::ostream &dst) const override{
+        dst<<value;
+    }
+
+    virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 class Char
-    : public Expression
+    : public ASTNode
 {
 public:
     char value;
@@ -87,14 +80,15 @@ public:
         : value(_value)
     {}
 
-    virtual void print(std::ostream &dst) const override
-    {
+    virtual void print(std::ostream &dst) const override{
         dst<<value;
     }
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override {return -1;}
+    virtual void translate(std::ostream &dst) const override{
+        dst<<value;
+    }
+
+    virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 #endif

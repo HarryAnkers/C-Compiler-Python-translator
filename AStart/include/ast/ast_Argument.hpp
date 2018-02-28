@@ -1,20 +1,18 @@
 #ifndef ast_Argument_hpp
 #define ast_Argument_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
-class Argument : public MainBody
+class Argument : public ASTNode
 {
     public:
         std::string argType;
         std::string argId;
-        CompilerPtr nextArguments;
+        node nextArguments;
         bool run=true;
     
-        Argument(std::string &_argType, std::string &_argId, CompilerPtr _nextArguments):
+        Argument(std::string &_argType, std::string &_argId, node _nextArguments):
         argType(_argType), argId(_argId), nextArguments(_nextArguments){}
-        Argument(std::string &_argType, std::string &_argId):
-        argType(_argType), argId(_argId), nextArguments(NULL){}
         Argument():
         argType(""), argId(""), nextArguments(NULL){run=false;}
 
@@ -40,6 +38,9 @@ class Argument : public MainBody
                 dst<<argId;
             }
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 #endif

@@ -1,18 +1,18 @@
-#ifndef ast_Function_hpp
-#define ast_Function_hpp
+#ifndef ast_Dec_Function_hpp
+#define ast_Dec_Function_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
 
-class Function : public MainBody
+class Function : public ASTNode
 {
     public:
         std::string type;
         std::string id;
-        CompilerPtr arguments;
-        CompilerPtr body;
+        node arguments;
+        node body;
     
-        Function(const std::string &_type,const std::string &_id, CompilerPtr _arguments, CompilerPtr _body):
+        Function(const std::string &_type,const std::string &_id, node _arguments, node _body):
         type(_type), id(_id), arguments(_arguments), body(_body){}
 
         //print tester
@@ -36,6 +36,9 @@ class Function : public MainBody
             body->translate(dst,indent);
             indent--;
         }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 

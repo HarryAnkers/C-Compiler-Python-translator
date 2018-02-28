@@ -1,16 +1,16 @@
 #ifndef ast_ArgumentNoType_hpp
 #define ast_ArgumentNoType_hpp
 
-#include "ast_MainBody.hpp"
+#include "ast_ASTNode.hpp"
 
-class ArgumentNoType : public MainBody
+class ArgumentNoType : public ASTNode
 {
     public:
         std::string argId;
-        CompilerPtr nextArguments;
+        node nextArguments;
         bool run=true;
     
-        ArgumentNoType( std::string &_argId, CompilerPtr _nextArguments):
+        ArgumentNoType( std::string &_argId, node _nextArguments):
         argId(_argId), nextArguments(_nextArguments){}
         ArgumentNoType( std::string &_argId):
         argId(_argId), nextArguments(NULL){}
@@ -39,6 +39,9 @@ class ArgumentNoType : public MainBody
                 dst<<argId;
             }
         }
+        
+        //compiler 
+        virtual void compile(std::ostream &dst, int &indent) const override{}
 };
 
 #endif

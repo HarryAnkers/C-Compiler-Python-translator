@@ -33,6 +33,10 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "__locale": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "cmath": "cpp",
+        "string": "cpp",
+        "iostream": "cpp",
+        "ios": "cpp"
     }
 }
