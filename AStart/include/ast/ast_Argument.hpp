@@ -12,9 +12,11 @@ class Argument : public ASTNode
         bool run=true;
     
         Argument(std::string &_argType, std::string &_argId, node _nextArguments):
-        argType(_argType), argId(_argId), nextArguments(_nextArguments){}
+            argType(_argType), argId(_argId), nextArguments(_nextArguments){}
+        Argument(std::string &_argType, std::string &_argId):
+            argType(_argType), argId(_argId), nextArguments(NULL){}
         Argument():
-        argType(""), argId(""), nextArguments(NULL){run=false;}
+            argType(""), argId(""), nextArguments(NULL){run=false;}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -40,7 +42,7 @@ class Argument : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 #endif

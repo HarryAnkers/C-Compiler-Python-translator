@@ -18,7 +18,7 @@ class ReturnStatement : public ASTNode
                 dst<<"\t";
             }
             dst<<"return ";
-            expression->print(dst);
+            expression->print(dst,indent);
             dst<<";"<<std::endl;
         }
 
@@ -28,12 +28,12 @@ class ReturnStatement : public ASTNode
                 dst<<"\t";
             }
             dst<<"return ";
-            expression->translate(dst);
+            expression->translate(dst,indent);
             dst<<std::endl;
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class AssignStatement : public ASTNode
@@ -52,7 +52,7 @@ class AssignStatement : public ASTNode
                 dst<<"\t";
             }
             dst<<id<<"=";
-            expression->print(dst);
+            expression->print(dst,indent);
             dst<<";"<<std::endl;
         }
 
@@ -62,12 +62,12 @@ class AssignStatement : public ASTNode
                 dst<<"\t";
             }
             dst<<id<<"=";
-            expression->translate(dst);
+            expression->translate(dst,indent);
             dst<<std::endl;
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class DeclareStatement : public ASTNode
@@ -91,7 +91,7 @@ class DeclareStatement : public ASTNode
             dst<<type<<" "<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->print(dst);
+                expression->print(dst,indent);
             }
             dst<<";"<<std::endl;
         }
@@ -104,7 +104,7 @@ class DeclareStatement : public ASTNode
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->translate(dst);
+                expression->translate(dst,indent);
                 dst<<std::endl;
             } else { 
                 dst<<"=0"<<std::endl; 
@@ -112,7 +112,7 @@ class DeclareStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class FunctionStatement : public ASTNode
@@ -146,7 +146,7 @@ class FunctionStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class If_Statement : public ASTNode
@@ -165,7 +165,7 @@ class If_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"if ";
-            condition->print(dst);
+            condition->print(dst,indent);
             dst<<" {"<<std::endl;
             indent++;
             body->print(dst,indent);
@@ -182,7 +182,7 @@ class If_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"if ";
-            condition->translate(dst);
+            condition->translate(dst,indent);
             dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -194,7 +194,7 @@ class If_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class ElIf_Statement : public ASTNode
@@ -213,7 +213,7 @@ class ElIf_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"else if (";
-            condition->print(dst);
+            condition->print(dst,indent);
             dst<<") {"<<std::endl;
             indent++;
             body->print(dst,indent);
@@ -230,7 +230,7 @@ class ElIf_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"elif(";
-            condition->translate(dst);
+            condition->translate(dst,indent);
             dst<<") {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -242,7 +242,7 @@ class ElIf_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class Else_Statement : public ASTNode
@@ -285,7 +285,7 @@ class Else_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class While_Statement : public ASTNode
@@ -304,7 +304,7 @@ class While_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->print(dst);
+            condition->print(dst,indent);
             dst<<" {"<<std::endl;
             indent++;
             body->print(dst,indent);
@@ -321,7 +321,7 @@ class While_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->translate(dst);
+            condition->translate(dst,indent);
             dst<<" {"<<std::endl;
             indent++;
             body->translate(dst,indent);
@@ -333,7 +333,7 @@ class While_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 #endif

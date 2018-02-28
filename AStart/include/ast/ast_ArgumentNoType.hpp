@@ -6,40 +6,41 @@
 class ArgumentNoType : public ASTNode
 {
     public:
-        std::string argId;
+        node arg;
         node nextArguments;
-        bool run=true;
     
-        ArgumentNoType( std::string &_argId, node _nextArguments):
-        argId(_argId), nextArguments(_nextArguments){}
+        ArgumentNoType( node _arg, node _nextArguments):
+            arg(_arg), nextArguments(_nextArguments){}
+        ArgumentNoType( node _arg):
+            arg(_arg), nextArguments(NULL){}
         ArgumentNoType():
-        argId(""), nextArguments(NULL){run=false;}
+            arg(NULL), nextArguments(NULL){}
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
         {
-            if(run){
+            if(arg!=NULL){
                 if(nextArguments!=NULL){
                     nextArguments->print(dst, indent);
                     dst<<", ";
                 }
-                dst<<argId;
+                arg->print(dst,indent);
             }
         }
 
         //translator 
         virtual void translate(std::ostream &dst, int &indent) const override{
-            if(run){
+            if(arg!=NULL){
                 if(nextArguments!=NULL){
                     nextArguments->translate(dst, indent);
                     dst<<", ";
                 }
-                dst<<argId;
+                arg->translate(dst,indent);
             }
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 #endif

@@ -38,7 +38,7 @@ class Function : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 

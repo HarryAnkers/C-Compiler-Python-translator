@@ -28,15 +28,15 @@
 %token T_NUMBER T_ID 
 %token T_RETURN T_ELSE T_IF T_WHILE
 
-%type <node> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
+%type <node> TOP_LEVEL FUNCTION_LIST DEC_FUNCTION BODY
 %type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <node> EXPR EXPR_TOP TERM FACTOR CONDITION
+%type <node> NUMBER ID
 %type <number> T_NUMBER
-%type <string> T_ID 
-%type <string> T_LOG T_EXP T_SQRT
+%type <string> T_ID
 %type <string> TYPE T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 
 %start ROOT
@@ -44,10 +44,10 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : MAIN_BODY { g_root = $1; }
+ROOT : TOP_LEVEL { g_root = $1; }
 
 //choose main in main body so it gets priority
-MAIN_BODY : FUNCTION_LIST {$$ = $1; }
+TOP_LEVEL : FUNCTION_LIST {$$ = $1; }
 
 FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
         | FUNCTION_LIST DEC_VARIABLE             {$$ = new Function_List($2,$1);}
@@ -56,13 +56,15 @@ FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
-ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
-        | TYPE T_ID                                     {$$ = $1}
+ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         {$$ = new Argument(*$3, *$4, $1);}
+        | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
         | %empty                                        {$$ = new Argument();}
 
-ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA T_ID      {$$ = new ArgumentNoType(*$3, $1);}
-        | T_ID                                                      {$$ = $1}
-        | %empty                                                    {$$ = new ArgumentNoType();}
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA ID        {$$ = new ArgumentNoType($3, $1);}
+        | ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER                  {$$ = new ArgumentNoType($3, $1);}
+        | ID                                                    {$$ = new ArgumentNoType($1);}
+        | NUMBER                                                {$$ = new ArgumentNoType($1);}
+        | %empty                                                {$$ = new ArgumentNoType();}
 
 TYPE : T_INT      {$$=$1;}
         | T_DOUBLE    {$$=$1;}
@@ -81,12 +83,12 @@ STATEMENT :  RETURN_STATEMENT       {$$=$1;}
         | IFANDORELSEORELIF             {$$=$1;}
         | WHILE_STATEMENT               {$$=$1;}
 
-RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
+RETURN_STATEMENT : T_RETURN EXPR_TOP T_SEMICOLON {$$ = new ReturnStatement($2);}
 
-DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
+DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
         | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
 
-ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
+ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR_TOP T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
 FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
 
@@ -118,7 +120,6 @@ CONDITION :  CONDITION T_LEQUAL CONDITION   {$$ = new LEqual($1,$3);}
 
 EXPR_TOP : EXPR                             {$$=$1;}
         | T_SPEACHMARK T_ID T_SPEACHMARK    {$$= new String(*$2);}
-        | T_APOSTROPHE T_ID T_APOSTROPHE    {$$= new Char(*$2);}
 
 EXPR : TERM                                 { $$ = $1; }
         | EXPR T_PLUS TERM                  { $$ = new AddOperator( $1 , $3 ); }
@@ -129,10 +130,14 @@ TERM : FACTOR                       { $$ = $1; }
         | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
         | TERM T_EXPONENT FACTOR    { $$ = new ExpOperator( $1 , $3 ); }
 
-FACTOR : T_NUMBER                       { $$ = new Number( $1 ); }
-        | T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
-        | T_ID                          { $$ = new Variable( *$1 );}
-        | FUNCTION_STATEMENT             { $$ = new FunctionStatement( $1 );}
+FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
+        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
+        | NUMBER                {$$ = $1; }
+        | ID                    {$$ = $1; }
+
+NUMBER : T_NUMBER                       { $$ = new Number( $1 ); }
+
+ID :  T_ID                        { $$ = new Variable( *$1 );}
 %%
 
 const ASTNode *g_root; // Definition of variable (to match declaration earlier)

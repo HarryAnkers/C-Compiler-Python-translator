@@ -19,29 +19,29 @@ protected:
 public:
     virtual const char *getOpcode() const =0;
 
-    virtual void print(std::ostream &dst) const override
+    virtual void print(std::ostream &dst, int &indent) const override
     {
         dst<<"( ";
-        left->print(dst);
+        left->print(dst,indent);
         dst<<" ";
         dst<<getOpcode();
         dst<<" ";
-        right->print(dst);
+        right->print(dst,indent);
         dst<<" )";
     }
 
-    virtual void translate(std::ostream &dst) const {
+    virtual void translate(std::ostream &dst, int &indent) const {
         dst<<"( ";
-        left->translate(dst);
+        left->translate(dst,indent);
         dst<<" ";
         dst<<getOpcode();
         dst<<" ";
-        right->translate(dst);
+        right->translate(dst,indent);
         dst<<" )";
     }
 
     //compiler 
-    virtual void compile(std::ostream &dst, int &indent) const override{}
+    virtual void compile(std::ostream &dst) const override{}
 };
 
 class AddOperator

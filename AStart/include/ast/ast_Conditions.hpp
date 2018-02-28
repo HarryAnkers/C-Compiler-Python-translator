@@ -12,23 +12,23 @@ class LNot : public ASTNode
         cond(_cond){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
             dst<<"(!";
-            cond->print(dst);
+            cond->print(dst,indent);
             dst<<")";
         }
 
         //translate
-        virtual void translate(std::ostream &dst) const override
+        virtual void translate(std::ostream &dst, int &indent) const override
         {
             dst<<"(!";
-            cond->translate(dst);
+            cond->translate(dst,indent);
             dst<<")";
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class ConditionOp : public ASTNode
@@ -36,46 +36,46 @@ class ConditionOp : public ASTNode
     public:
         node condA;
         node condB;
-    
-        LEqual(node _condA, node _condB):
-        condA(_condA), condB(_condB){};
+
+        virtual const char *getPyOp() const =0;
+        virtual const char *getCOp() const =0;
+
+        ConditionOp(node _condA, node _condB):
+            condA(_condA),condB(_condB){}
 
         //print tester
-        virtual void print(std::ostream &dst) const override
+        virtual void print(std::ostream &dst, int &indent) const override
         {
             dst<<"(";
-            left->print(dst);
+            condA->print(dst,indent);
             dst<<" ";
             dst<<getCOp();
             dst<<" ";
-            right->print(dst);
+            condB->print(dst,indent);
             dst<<")";
         }
 
         //translator
-        virtual void translate(std::ostream &dst) const override
+        virtual void translate(std::ostream &dst, int &indent) const override
         {
             dst<<"(";
-            left->translate(dst);
+            condA->translate(dst,indent);
             dst<<" ";
             dst<<getPyOp();
             dst<<" ";
-            right->translate(dst);
+            condB->translate(dst,indent);
             dst<<")";
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, int &indent) const override{}
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 class LEqual : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LEqual(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "=="; }
         virtual const char *getPyOp() const override{ return "=="; }
@@ -84,11 +84,8 @@ class LEqual : public ConditionOp
 class LAnd : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LAnd(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "&&"; }
         virtual const char *getPyOp() const override{ return "and"; }
@@ -97,11 +94,8 @@ class LAnd : public ConditionOp
 class LOr : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LOr(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "||"; }
         virtual const char *getPyOp() const override{ return "or"; }
@@ -110,11 +104,8 @@ class LOr : public ConditionOp
 class LNotEqual : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LNotEqual(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "!="; }
         virtual const char *getPyOp() const override{ return "!="; }
@@ -123,11 +114,8 @@ class LNotEqual : public ConditionOp
 class LMore : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LMore(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return ">"; }
         virtual const char *getPyOp() const override{ return ">"; }
@@ -136,11 +124,8 @@ class LMore : public ConditionOp
 class LLess : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LLess(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "<"; }
         virtual const char *getPyOp() const override{ return "<"; }
@@ -149,11 +134,8 @@ class LLess : public ConditionOp
 class LMoreEqual : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LMoreEqual(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return ">="; }
         virtual const char *getPyOp() const override{ return ">="; }
@@ -162,11 +144,8 @@ class LMoreEqual : public ConditionOp
 class LLessEqual : public ConditionOp
 {
     public:
-        node condA;
-        node condB;
-    
         LLessEqual(node _condA, node _condB):
-        condA(_condA), condB(_condB){}
+            ConditionOp(_condA,_condB){}
 
         virtual const char *getCOp() const override{ return "<="; }
         virtual const char *getPyOp() const override{ return "<="; }

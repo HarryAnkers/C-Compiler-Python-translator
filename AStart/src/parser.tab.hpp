@@ -46,7 +46,7 @@ extern int yydebug;
 
   #include <cassert>
 
-  extern const MainBody *g_root; // A way of getting the AST out
+  extern const ASTNode *g_root; // A way of getting the AST out
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -95,15 +95,12 @@ extern int yydebug;
     T_PLUS = 289,
     T_MINUS = 290,
     T_EXPONENT = 291,
-    T_LOG = 292,
-    T_EXP = 293,
-    T_SQRT = 294,
-    T_NUMBER = 295,
-    T_ID = 296,
-    T_RETURN = 297,
-    T_ELSE = 298,
-    T_IF = 299,
-    T_WHILE = 300
+    T_NUMBER = 292,
+    T_ID = 293,
+    T_RETURN = 294,
+    T_ELSE = 295,
+    T_IF = 296,
+    T_WHILE = 297
   };
 #endif
 
@@ -114,12 +111,11 @@ union YYSTYPE
 {
 #line 17 "src/parser.y" /* yacc.c:1909  */
 
-  const MainBody *compptr;
-  const Expression *expr;
+  const ASTNode *node;
   double number;
   std::string *string;
 
-#line 123 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 119 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

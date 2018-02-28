@@ -16,15 +16,15 @@ public:
     const std::string getId() const
     { return id; }
 
-    virtual void print(std::ostream &dst) const override{
+    virtual void print(std::ostream &dst, int &indent) const override{
         dst<<id;
     }
 
-    virtual void translate(std::ostream &dst) const override{
+    virtual void translate(std::ostream &dst, int &indent) const override{
         dst<<id;
     }
 
-    virtual void compile(std::ostream &dst, int &indent) const override{}
+    virtual void compile(std::ostream &dst) const override{}
 };
 
 class Number
@@ -40,15 +40,15 @@ public:
     double getValue() const
     { return value; }
 
-    virtual void print(std::ostream &dst) const override{
+    virtual void print(std::ostream &dst, int &indent) const override{
         dst<<value;
     }
 
-    virtual void translate(std::ostream &dst) const override{
+    virtual void translate(std::ostream &dst, int &indent) const override{
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst, int &indent) const override{}
+    virtual void compile(std::ostream &dst) const override{}
 };
 
 class String
@@ -60,35 +60,49 @@ public:
         : value(_value)
     {}
 
-    virtual void print(std::ostream &dst) const override{
+    virtual void print(std::ostream &dst, int &indent) const override{
         dst<<value;
     }
 
-    virtual void translate(std::ostream &dst) const override{
+    virtual void translate(std::ostream &dst, int &indent) const override{
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst, int &indent) const override{}
+    virtual void compile(std::ostream &dst) const override{}
 };
 
-class Char
-    : public ASTNode
+class FunctionStatementInExpr : public ASTNode
 {
-public:
-    char value;
-    Char(char _value)
-        : value(_value)
-    {}
+    public:
+        std::string id;
+        node arguments;
 
-    virtual void print(std::ostream &dst) const override{
-        dst<<value;
-    }
+        FunctionStatementInExpr(std::string &_id, node _arguments):
+        id(_id), arguments(_arguments){}
 
-    virtual void translate(std::ostream &dst) const override{
-        dst<<value;
-    }
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<id<<"(";
+            arguments->print(dst,indent);
+            dst<<")";
+        }
 
-    virtual void compile(std::ostream &dst, int &indent) const override{}
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<id<<"(";
+            arguments->translate(dst,indent);
+            dst<<")";
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst) const override{}
 };
 
 #endif

@@ -1,7 +1,8 @@
+def f(x):
+	return 10
+
 def main():
-	z=0
-	z=7
-	return z
+	return ( 	f(11) + 7 )
 
 # Boilerplat
 if __name__ == "__main__":
