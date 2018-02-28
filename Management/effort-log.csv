@@ -13,3 +13,5 @@ Date,Effort,Developers,Milestones
 ,filled out translator function for all AST nodes,haa516,added more ast info
 ,Have semi working translator minus input,haa516,
 27/02/2018,Looked at how to get working with formative translator file,haa516,
+,Made the c_compiler function and file so the .sh will work,der115,testbench for translator works
+28/02/2018,Cleaned and fixed code (now passes 8/9 tests),haa516,passed 8/9 tests and now all use node class
