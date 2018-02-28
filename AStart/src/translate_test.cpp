@@ -2,7 +2,7 @@
 
 int main()
 {
-    const MainBody *ast=parseAST();
+    const ASTNode *ast=parseAST();
     
     int i=0;
     ast->translate(std::cout,i);

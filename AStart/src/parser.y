@@ -3,7 +3,7 @@
 
   #include <cassert>
 
-  extern const MainBody *g_root; // A way of getting the AST out
+  extern const ASTNode *g_root; // A way of getting the AST out
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -15,8 +15,7 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
-  const MainBody *compptr;
-  const Expression *expr;
+  const ASTNode *node;
   double number;
   std::string *string;
 }
@@ -26,16 +25,15 @@
 %token T_LAND T_LOR T_LNOT T_LEQUAL T_LNOTEQUAL T_LLESSEQUAL T_LMOREEQUAL T_LMORE T_LLESS
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_LOG T_EXP T_SQRT
 %token T_NUMBER T_ID 
 %token T_RETURN T_ELSE T_IF T_WHILE
 
-%type <compptr> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
-%type <compptr> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
-%type <compptr> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
-%type <compptr> WHILE_STATEMENT
-%type <compptr> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
-%type <expr> EXPR EXPR_TOP TERM FACTOR CONDITION
+%type <node> MAIN_BODY FUNCTION_LIST DEC_FUNCTION BODY
+%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
+%type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
+%type <node> WHILE_STATEMENT
+%type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
+%type <node> EXPR EXPR_TOP TERM FACTOR CONDITION
 %type <number> T_NUMBER
 %type <string> T_ID 
 %type <string> T_LOG T_EXP T_SQRT
@@ -59,11 +57,11 @@ FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID     {$$ = new Argument(*$3, *$4, $1);}
-     | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
+        | TYPE T_ID                                     {$$ = $1}
         | %empty                                        {$$ = new Argument();}
 
 ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA T_ID      {$$ = new ArgumentNoType(*$3, $1);}
-        | T_ID                                                      {$$ = new ArgumentNoType(*$1);}
+        | T_ID                                                      {$$ = $1}
         | %empty                                                    {$$ = new ArgumentNoType();}
 
 TYPE : T_INT      {$$=$1;}
@@ -115,7 +113,7 @@ CONDITION :  CONDITION T_LEQUAL CONDITION   {$$ = new LEqual($1,$3);}
         | CONDITION T_LLESS CONDITION       {$$ = new LLess($1,$3);}
         | CONDITION T_LMOREEQUAL CONDITION  {$$ = new LMoreEqual($1,$3);}
         | CONDITION T_LLESSEQUAL CONDITION  {$$ = new LLessEqual($1,$3);}
-        | EXPR                              {$$ = $1;}
+        | EXPR_TOP                          {$$ = $1;}
         | T_LBRACKET CONDITION T_RBRACKET   {$$ = $2;}
 
 EXPR_TOP : EXPR                             {$$=$1;}
@@ -129,19 +127,17 @@ EXPR : TERM                                 { $$ = $1; }
 TERM : FACTOR                       { $$ = $1; }
         | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
         | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
-        | FACTOR T_EXPONENT TERM    { $$ = new ExpOperator( $1 , $3 ); }
+        | TERM T_EXPONENT FACTOR    { $$ = new ExpOperator( $1 , $3 ); }
 
-FACTOR : T_NUMBER                           { $$ = new Number( $1 ); }
-        | T_LBRACKET EXPR T_RBRACKET        { $$ = $2; }
-        | T_ID                              { $$ = new Variable( *$1 );}
-        | T_LOG T_LBRACKET EXPR T_RBRACKET  { $$ = new LogFunction( $3 ); }
-        | T_EXP T_LBRACKET EXPR T_RBRACKET  { $$ = new ExpFunction( $3 ); }
-        | T_SQRT T_LBRACKET EXPR T_RBRACKET { $$ = new SqrtFunction( $3 ); }
+FACTOR : T_NUMBER                       { $$ = new Number( $1 ); }
+        | T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
+        | T_ID                          { $$ = new Variable( *$1 );}
+        | FUNCTION_STATEMENT             { $$ = new FunctionStatement( $1 );}
 %%
 
-const MainBody *g_root; // Definition of variable (to match declaration earlier)
+const ASTNode *g_root; // Definition of variable (to match declaration earlier)
 
-const MainBody *parseAST()
+const ASTNode *parseAST()
 {
   g_root=0;
   yyparse();

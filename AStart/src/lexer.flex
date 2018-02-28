@@ -47,10 +47,6 @@ extern "C" int fileno(FILE *stream);
 [-]             { return T_MINUS; }
 [\^]             { return T_EXPONENT; }
 
-"log"             { return T_LOG;   }
-"exp"             { return T_EXP; }
-"sqrt"            { return T_SQRT; }
-
 "return"            { return T_RETURN; }
 "while"            { return T_WHILE; }
 "if"            { return T_IF; }

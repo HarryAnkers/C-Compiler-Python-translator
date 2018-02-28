@@ -12,8 +12,6 @@ class ArgumentNoType : public ASTNode
     
         ArgumentNoType( std::string &_argId, node _nextArguments):
         argId(_argId), nextArguments(_nextArguments){}
-        ArgumentNoType( std::string &_argId):
-        argId(_argId), nextArguments(NULL){}
         ArgumentNoType():
         argId(""), nextArguments(NULL){run=false;}
 
@@ -39,7 +37,7 @@ class ArgumentNoType : public ASTNode
                 dst<<argId;
             }
         }
-        
+
         //compiler 
         virtual void compile(std::ostream &dst, int &indent) const override{}
 };
