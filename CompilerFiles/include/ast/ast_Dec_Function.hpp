@@ -3,7 +3,6 @@
 
 #include "ast_ASTNode.hpp"
 
-
 class Function : public ASTNode
 {
     public:
@@ -33,6 +32,12 @@ class Function : public ASTNode
             arguments->translate(dst,indent);
             dst<<"):"<<std::endl;
             indent++;
+            for(unsigned int i=0;i<globalVar.size();i++){
+                for(int i=indent;i!=0;i--){
+                    dst<<"\t";
+                }
+                dst<<"global "<<globalVar[i]<<std::endl;
+            }
             body->translate(dst,indent);
             indent--;
         }

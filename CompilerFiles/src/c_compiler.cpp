@@ -1,15 +1,19 @@
 #include "ast.hpp"
 
+std::vector <std::string> globalVar;
+
 int main(int argc = 4, char *argv[] = NULL)
 {
   int i = 0;
 
   std::cout<< "START " << std::endl;          
   freopen (argv[2],"r",stdin);
- 
+
   const ASTNode *ast=parseAST();
-  std::cout<< std::endl;    
+  std::vector <std::string> globalVar;
   
+  std::cout<< std::endl;    
+
   freopen (argv[4],"w",stdout);
   std::string test = argv[1];
   if (test == "--translate") {

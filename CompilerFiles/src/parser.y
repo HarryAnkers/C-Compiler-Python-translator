@@ -31,7 +31,7 @@
 %type <node> TOP_LEVEL FUNCTION_LIST DEC_FUNCTION BODY
 %type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
-%type <node> WHILE_STATEMENT
+%type <node> WHILE_STATEMENT GLO_DEC_VARIABLE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <node> EXPR EXPR_TOP TERM FACTOR CONDITION
 %type <node> NUMBER ID
@@ -50,9 +50,9 @@ ROOT : TOP_LEVEL { g_root = $1; }
 TOP_LEVEL : FUNCTION_LIST {$$ = $1; }
 
 FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
-        | FUNCTION_LIST DEC_VARIABLE            {$$ = new Function_List($2,$1);}
+        | FUNCTION_LIST GLO_DEC_VARIABLE            {$$ = new Function_List($2,$1);}
         | DEC_FUNCTION                          {$$ = $1;}
-        | DEC_VARIABLE                          {$$ = $1;}
+        | GLO_DEC_VARIABLE                          {$$ = $1;}
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
 
@@ -87,6 +87,9 @@ RETURN_STATEMENT : T_RETURN EXPR_TOP T_SEMICOLON {$$ = new ReturnStatement($2);}
 
 DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
         | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
+
+GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON      {$$ = new GlobalDeclareStatement(*$1, *$2, $4);}  
+        | TYPE T_ID T_SEMICOLON                                 {$$ = new GlobalDeclareStatement(*$1, *$2);}
 
 ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR_TOP T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 

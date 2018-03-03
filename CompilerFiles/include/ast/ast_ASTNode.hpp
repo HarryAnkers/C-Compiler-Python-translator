@@ -7,6 +7,8 @@
 
 #include <memory>
 
+extern std::vector <std::string> globalVar;
+
 class ASTNode;
 
 typedef const ASTNode *node;

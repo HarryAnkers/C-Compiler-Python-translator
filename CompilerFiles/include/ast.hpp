@@ -1,6 +1,9 @@
 #ifndef ast_hpp
 #define ast_hpp
 
+#include <vector>
+#include <string>
+
 #include "ast/ast_ASTNode.hpp"
 #include "ast/ast_Function_List.hpp"
 #include "ast/ast_Dec_Function.hpp"

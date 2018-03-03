@@ -115,6 +115,51 @@ class DeclareStatement : public ASTNode
         virtual void compile(std::ostream &dst) const override{}
 };
 
+class GlobalDeclareStatement : public ASTNode
+{
+    public:
+        std::string type;
+        std::string id;
+        node expression;
+
+        GlobalDeclareStatement(std::string &_type, std::string &_id, node _expression):
+        type(_type), id(_id), expression(_expression){ globalVar.push_back(id); }
+        GlobalDeclareStatement(std::string &_type, std::string &_id):
+        type(_type), id(_id), expression(NULL){ globalVar.push_back(id); }
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<type<<" "<<id;
+            if(expression!=NULL){
+                dst<<"=";
+                expression->print(dst,indent);
+            }
+            dst<<";"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<id;
+            if(expression!=NULL){
+                dst<<"=";
+                expression->translate(dst,indent);
+                dst<<std::endl;
+            } else { 
+                dst<<"=0"<<std::endl; 
+            }
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst) const override{}
+};
+
 class FunctionStatement : public ASTNode
 {
     public:
@@ -301,6 +346,51 @@ class While_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"While ";
+            condition->translate(dst,indent);
+            dst<<" :"<<std::endl;
+            indent++;
+            body->translate(dst,indent);
+            indent--;
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst) const override{}
+};
+
+class Do_While_Statement : public ASTNode
+{
+    public:
+        node condition;
+        node body;
+    
+        Do_While_Statement(node _condition, node _body):
+        condition(_condition), body(_body){}
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"do";
+            dst<<" {"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"} while ";
+            condition->print(dst,indent);
+            dst<<std::endl;
         }
 
         //translator 
