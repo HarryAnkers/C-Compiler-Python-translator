@@ -1,7 +1,7 @@
 Date,Effort,Developers,Milestones
 10/02/2018,Proposed plan of action,Both,Developed Planning
-,Looked for a starting place (lexer),,
-,Learned some python,,
+,Looked for a starting place (lexer),Both,
+,Learned some python,Both,
 13/02/2018,Planned a basic AST token and type structure,haa516,Planned  work
 22/02/2018,Implimented a AST off lab 2,haa516,
 ,tried to get an AST structure and finish the flex file before doing any input output,haa516,finished flex translator for the most
@@ -15,3 +15,4 @@ Date,Effort,Developers,Milestones
 27/02/2018,Looked at how to get working with formative translator file,haa516,
 ,Made the c_compiler function and file so the .sh will work,der115,testbench for translator works
 28/02/2018,Cleaned and fixed code (now passes 8/9 tests),haa516,passed 8/9 tests and now all use node class
+03/03/2018,Fixed globals and now pass all test,haa516,passed all tests
