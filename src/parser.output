@@ -1,0 +1,2128 @@
+Terminals unused in grammar
+
+   T_LSQBRACKET
+   T_RSQBRACKET
+   T_LTRIBRACKET
+   T_RTRIBRACKET
+   T_DOT
+   T_COLON
+   T_APOSTROPHE
+   T_COMMENT
+
+
+State 45 conflicts: 9 shift/reduce
+State 96 conflicts: 1 shift/reduce
+State 97 conflicts: 8 shift/reduce
+State 98 conflicts: 9 shift/reduce
+State 107 conflicts: 9 shift/reduce
+State 110 conflicts: 9 shift/reduce
+State 116 conflicts: 8 shift/reduce
+State 117 conflicts: 8 shift/reduce
+State 118 conflicts: 8 shift/reduce
+State 119 conflicts: 8 shift/reduce
+State 120 conflicts: 8 shift/reduce
+State 121 conflicts: 8 shift/reduce
+State 122 conflicts: 8 shift/reduce
+State 123 conflicts: 8 shift/reduce
+State 133 conflicts: 9 shift/reduce
+
+
+Grammar
+
+    0 $accept: ROOT $end
+
+    1 ROOT: TOP_LEVEL
+
+    2 TOP_LEVEL: FUNCTION_LIST
+
+    3 FUNCTION_LIST: FUNCTION_LIST DEC_FUNCTION
+    4              | FUNCTION_LIST GLO_DEC_VARIABLE
+    5              | DEC_FUNCTION
+    6              | GLO_DEC_VARIABLE
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+
+    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID
+    9              | TYPE T_ID
+   10              | %empty
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA ID
+   12                      | ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER
+   13                      | ID
+   14                      | NUMBER
+   15                      | %empty
+
+   16 TYPE: T_INT
+   17     | T_DOUBLE
+   18     | T_STRING
+   19     | T_VOID
+   20     | T_BOOL
+
+   21 BODY: BODY STATEMENT
+   22     | STATEMENT
+   23     | %empty
+
+   24 STATEMENT: RETURN_STATEMENT
+   25          | DEC_VARIABLE
+   26          | FUNCTION_STATEMENT
+   27          | ASSIGN_STATEMENT
+   28          | IFANDORELSEORELIF
+   29          | WHILE_STATEMENT
+
+   30 RETURN_STATEMENT: T_RETURN EXPR_TOP T_SEMICOLON
+
+   31 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON
+   32             | TYPE T_ID T_SEMICOLON
+
+   33 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON
+   34                 | TYPE T_ID T_SEMICOLON
+
+   35 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR_TOP T_SEMICOLON
+
+   36 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+
+   37 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT
+   38                  | IFANDORELIF
+
+   39 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT
+   40            | IF_STATEMENT
+
+   41 WHILE_STATEMENT: T_WHILE CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+   42 IF_STATEMENT: T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+   44 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET
+
+   45 CONDITION: CONDITION T_LEQUAL CONDITION
+   46          | CONDITION T_LAND CONDITION
+   47          | CONDITION T_LOR CONDITION
+   48          | T_LNOT CONDITION
+   49          | CONDITION T_LNOTEQUAL CONDITION
+   50          | CONDITION T_LMORE CONDITION
+   51          | CONDITION T_LLESS CONDITION
+   52          | CONDITION T_LMOREEQUAL CONDITION
+   53          | CONDITION T_LLESSEQUAL CONDITION
+   54          | EXPR_TOP
+   55          | T_LBRACKET CONDITION T_RBRACKET
+
+   56 EXPR_TOP: EXPR
+   57         | T_SPEACHMARK T_ID T_SPEACHMARK
+
+   58 EXPR: TERM
+   59     | EXPR T_PLUS TERM
+   60     | EXPR T_MINUS TERM
+
+   61 TERM: FACTOR
+   62     | TERM T_TIMES FACTOR
+   63     | TERM T_DIVIDE FACTOR
+   64     | TERM T_EXPONENT FACTOR
+
+   65 FACTOR: T_LBRACKET EXPR T_RBRACKET
+   66       | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   67       | NUMBER
+   68       | ID
+
+   69 NUMBER: T_NUMBER
+   70       | T_MINUS T_NUMBER
+
+   71 ID: T_ID
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+T_LSQBRACKET (258)
+T_RSQBRACKET (259)
+T_LCUBRACKET (260) 7 41 42 43 44
+T_RCUBRACKET (261) 7 41 42 43 44
+T_LTRIBRACKET (262)
+T_RTRIBRACKET (263)
+T_LBRACKET (264) 7 36 55 65 66
+T_RBRACKET (265) 7 36 55 65 66
+T_ASSIGN (266) 31 33 35
+T_DOT (267)
+T_COMMA (268) 8 11 12
+T_COLON (269)
+T_SEMICOLON (270) 30 31 32 33 34 35 36
+T_SPEACHMARK (271) 57
+T_APOSTROPHE (272)
+T_LAND (273) 46
+T_LOR (274) 47
+T_LNOT (275) 48
+T_LEQUAL (276) 45
+T_LNOTEQUAL (277) 49
+T_LLESSEQUAL (278) 53
+T_LMOREEQUAL (279) 52
+T_LMORE (280) 50
+T_LLESS (281) 51
+T_INT (282) 16
+T_DOUBLE (283) 17
+T_STRING (284) 18
+T_BOOL (285) 20
+T_VOID (286) 19
+T_TIMES (287) 62
+T_DIVIDE (288) 63
+T_PLUS (289) 59
+T_MINUS (290) 60 70
+T_EXPONENT (291) 64
+T_NUMBER (292) 69 70
+T_ID (293) 7 8 9 31 32 33 34 35 36 57 66 71
+T_COMMENT (294)
+T_RETURN (295) 30
+T_ELSE (296) 43 44
+T_IF (297) 42 43
+T_WHILE (298) 41
+
+
+Nonterminals, with rules where they appear
+
+$accept (44)
+    on left: 0
+ROOT (45)
+    on left: 1, on right: 0
+TOP_LEVEL (46)
+    on left: 2, on right: 1
+FUNCTION_LIST (47)
+    on left: 3 4 5 6, on right: 2 3 4
+DEC_FUNCTION (48)
+    on left: 7, on right: 3 5
+ARGUMENT_LIST (49)
+    on left: 8 9 10, on right: 7 8
+ARGUMENT_LIST_NO_TYPE (50)
+    on left: 11 12 13 14 15, on right: 11 12 36 66
+TYPE (51)
+    on left: 16 17 18 19 20, on right: 7 8 9 31 32 33 34
+BODY (52)
+    on left: 21 22 23, on right: 7 21 41 42 43 44
+STATEMENT (53)
+    on left: 24 25 26 27 28 29, on right: 21 22
+RETURN_STATEMENT (54)
+    on left: 30, on right: 24
+DEC_VARIABLE (55)
+    on left: 31 32, on right: 25
+GLO_DEC_VARIABLE (56)
+    on left: 33 34, on right: 4 6
+ASSIGN_STATEMENT (57)
+    on left: 35, on right: 27
+FUNCTION_STATEMENT (58)
+    on left: 36, on right: 26
+IFANDORELSEORELIF (59)
+    on left: 37 38, on right: 28
+IFANDORELIF (60)
+    on left: 39 40, on right: 37 38 39
+WHILE_STATEMENT (61)
+    on left: 41, on right: 29
+IF_STATEMENT (62)
+    on left: 42, on right: 40
+ELSE_IF_STATEMENT (63)
+    on left: 43, on right: 39
+ELSE_STATEMENT (64)
+    on left: 44, on right: 37
+CONDITION (65)
+    on left: 45 46 47 48 49 50 51 52 53 54 55, on right: 41 42 43 45
+    46 47 48 49 50 51 52 53 55
+EXPR_TOP (66)
+    on left: 56 57, on right: 30 31 33 35 54
+EXPR (67)
+    on left: 58 59 60, on right: 56 59 60 65
+TERM (68)
+    on left: 61 62 63 64, on right: 58 59 60 62 63 64
+FACTOR (69)
+    on left: 65 66 67 68, on right: 61 62 63 64
+NUMBER (70)
+    on left: 69 70, on right: 12 14 67
+ID (71)
+    on left: 71, on right: 11 13 68
+
+
+State 0
+
+    0 $accept: . ROOT $end
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    ROOT              go to state 6
+    TOP_LEVEL         go to state 7
+    FUNCTION_LIST     go to state 8
+    DEC_FUNCTION      go to state 9
+    TYPE              go to state 10
+    GLO_DEC_VARIABLE  go to state 11
+
+
+State 1
+
+   16 TYPE: T_INT .
+
+    $default  reduce using rule 16 (TYPE)
+
+
+State 2
+
+   17 TYPE: T_DOUBLE .
+
+    $default  reduce using rule 17 (TYPE)
+
+
+State 3
+
+   18 TYPE: T_STRING .
+
+    $default  reduce using rule 18 (TYPE)
+
+
+State 4
+
+   20 TYPE: T_BOOL .
+
+    $default  reduce using rule 20 (TYPE)
+
+
+State 5
+
+   19 TYPE: T_VOID .
+
+    $default  reduce using rule 19 (TYPE)
+
+
+State 6
+
+    0 $accept: ROOT . $end
+
+    $end  shift, and go to state 12
+
+
+State 7
+
+    1 ROOT: TOP_LEVEL .
+
+    $default  reduce using rule 1 (ROOT)
+
+
+State 8
+
+    2 TOP_LEVEL: FUNCTION_LIST .
+    3 FUNCTION_LIST: FUNCTION_LIST . DEC_FUNCTION
+    4              | FUNCTION_LIST . GLO_DEC_VARIABLE
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    $default  reduce using rule 2 (TOP_LEVEL)
+
+    DEC_FUNCTION      go to state 13
+    TYPE              go to state 10
+    GLO_DEC_VARIABLE  go to state 14
+
+
+State 9
+
+    5 FUNCTION_LIST: DEC_FUNCTION .
+
+    $default  reduce using rule 5 (FUNCTION_LIST)
+
+
+State 10
+
+    7 DEC_FUNCTION: TYPE . T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+   33 GLO_DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR_TOP T_SEMICOLON
+   34                 | TYPE . T_ID T_SEMICOLON
+
+    T_ID  shift, and go to state 15
+
+
+State 11
+
+    6 FUNCTION_LIST: GLO_DEC_VARIABLE .
+
+    $default  reduce using rule 6 (FUNCTION_LIST)
+
+
+State 12
+
+    0 $accept: ROOT $end .
+
+    $default  accept
+
+
+State 13
+
+    3 FUNCTION_LIST: FUNCTION_LIST DEC_FUNCTION .
+
+    $default  reduce using rule 3 (FUNCTION_LIST)
+
+
+State 14
+
+    4 FUNCTION_LIST: FUNCTION_LIST GLO_DEC_VARIABLE .
+
+    $default  reduce using rule 4 (FUNCTION_LIST)
+
+
+State 15
+
+    7 DEC_FUNCTION: TYPE T_ID . T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+   33 GLO_DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR_TOP T_SEMICOLON
+   34                 | TYPE T_ID . T_SEMICOLON
+
+    T_LBRACKET   shift, and go to state 16
+    T_ASSIGN     shift, and go to state 17
+    T_SEMICOLON  shift, and go to state 18
+
+
+State 16
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET . ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    $default  reduce using rule 10 (ARGUMENT_LIST)
+
+    ARGUMENT_LIST  go to state 19
+    TYPE           go to state 20
+
+
+State 17
+
+   33 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR_TOP T_SEMICOLON
+
+    T_LBRACKET    shift, and go to state 21
+    T_SPEACHMARK  shift, and go to state 22
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    EXPR_TOP  go to state 26
+    EXPR      go to state 27
+    TERM      go to state 28
+    FACTOR    go to state 29
+    NUMBER    go to state 30
+    ID        go to state 31
+
+
+State 18
+
+   34 GLO_DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
+
+    $default  reduce using rule 34 (GLO_DEC_VARIABLE)
+
+
+State 19
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST . T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
+    8 ARGUMENT_LIST: ARGUMENT_LIST . T_COMMA TYPE T_ID
+
+    T_RBRACKET  shift, and go to state 32
+    T_COMMA     shift, and go to state 33
+
+
+State 20
+
+    9 ARGUMENT_LIST: TYPE . T_ID
+
+    T_ID  shift, and go to state 34
+
+
+State 21
+
+   65 FACTOR: T_LBRACKET . EXPR T_RBRACKET
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    EXPR    go to state 35
+    TERM    go to state 28
+    FACTOR  go to state 29
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 22
+
+   57 EXPR_TOP: T_SPEACHMARK . T_ID T_SPEACHMARK
+
+    T_ID  shift, and go to state 36
+
+
+State 23
+
+   70 NUMBER: T_MINUS . T_NUMBER
+
+    T_NUMBER  shift, and go to state 37
+
+
+State 24
+
+   69 NUMBER: T_NUMBER .
+
+    $default  reduce using rule 69 (NUMBER)
+
+
+State 25
+
+   66 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   71 ID: T_ID .
+
+    T_LBRACKET  shift, and go to state 38
+
+    $default  reduce using rule 71 (ID)
+
+
+State 26
+
+   33 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 39
+
+
+State 27
+
+   56 EXPR_TOP: EXPR .
+   59 EXPR: EXPR . T_PLUS TERM
+   60     | EXPR . T_MINUS TERM
+
+    T_PLUS   shift, and go to state 40
+    T_MINUS  shift, and go to state 41
+
+    $default  reduce using rule 56 (EXPR_TOP)
+
+
+State 28
+
+   58 EXPR: TERM .
+   62 TERM: TERM . T_TIMES FACTOR
+   63     | TERM . T_DIVIDE FACTOR
+   64     | TERM . T_EXPONENT FACTOR
+
+    T_TIMES     shift, and go to state 42
+    T_DIVIDE    shift, and go to state 43
+    T_EXPONENT  shift, and go to state 44
+
+    $default  reduce using rule 58 (EXPR)
+
+
+State 29
+
+   61 TERM: FACTOR .
+
+    $default  reduce using rule 61 (TERM)
+
+
+State 30
+
+   67 FACTOR: NUMBER .
+
+    $default  reduce using rule 67 (FACTOR)
+
+
+State 31
+
+   68 FACTOR: ID .
+
+    $default  reduce using rule 68 (FACTOR)
+
+
+State 32
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LCUBRACKET  shift, and go to state 45
+
+
+State 33
+
+    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA . TYPE T_ID
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+
+    TYPE  go to state 46
+
+
+State 34
+
+    9 ARGUMENT_LIST: TYPE T_ID .
+
+    $default  reduce using rule 9 (ARGUMENT_LIST)
+
+
+State 35
+
+   59 EXPR: EXPR . T_PLUS TERM
+   60     | EXPR . T_MINUS TERM
+   65 FACTOR: T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 47
+    T_PLUS      shift, and go to state 40
+    T_MINUS     shift, and go to state 41
+
+
+State 36
+
+   57 EXPR_TOP: T_SPEACHMARK T_ID . T_SPEACHMARK
+
+    T_SPEACHMARK  shift, and go to state 48
+
+
+State 37
+
+   70 NUMBER: T_MINUS T_NUMBER .
+
+    $default  reduce using rule 70 (NUMBER)
+
+
+State 38
+
+   66 FACTOR: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
+
+    T_MINUS   shift, and go to state 23
+    T_NUMBER  shift, and go to state 24
+    T_ID      shift, and go to state 49
+
+    $default  reduce using rule 15 (ARGUMENT_LIST_NO_TYPE)
+
+    ARGUMENT_LIST_NO_TYPE  go to state 50
+    NUMBER                 go to state 51
+    ID                     go to state 52
+
+
+State 39
+
+   33 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON .
+
+    $default  reduce using rule 33 (GLO_DEC_VARIABLE)
+
+
+State 40
+
+   59 EXPR: EXPR T_PLUS . TERM
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    TERM    go to state 53
+    FACTOR  go to state 29
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 41
+
+   60 EXPR: EXPR T_MINUS . TERM
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    TERM    go to state 54
+    FACTOR  go to state 29
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 42
+
+   62 TERM: TERM T_TIMES . FACTOR
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    FACTOR  go to state 55
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 43
+
+   63 TERM: TERM T_DIVIDE . FACTOR
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    FACTOR  go to state 56
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 44
+
+   64 TERM: TERM T_EXPONENT . FACTOR
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 23
+    T_NUMBER    shift, and go to state 24
+    T_ID        shift, and go to state 25
+
+    FACTOR  go to state 57
+    NUMBER  go to state 30
+    ID      go to state 31
+
+
+State 45
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 58
+    T_RETURN  shift, and go to state 59
+    T_IF      shift, and go to state 60
+    T_WHILE   shift, and go to state 61
+
+    T_INT     [reduce using rule 23 (BODY)]
+    T_DOUBLE  [reduce using rule 23 (BODY)]
+    T_STRING  [reduce using rule 23 (BODY)]
+    T_BOOL    [reduce using rule 23 (BODY)]
+    T_VOID    [reduce using rule 23 (BODY)]
+    T_ID      [reduce using rule 23 (BODY)]
+    T_RETURN  [reduce using rule 23 (BODY)]
+    T_IF      [reduce using rule 23 (BODY)]
+    T_WHILE   [reduce using rule 23 (BODY)]
+    $default  reduce using rule 23 (BODY)
+
+    TYPE                go to state 62
+    BODY                go to state 63
+    STATEMENT           go to state 64
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 46
+
+    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE . T_ID
+
+    T_ID  shift, and go to state 73
+
+
+State 47
+
+   65 FACTOR: T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 65 (FACTOR)
+
+
+State 48
+
+   57 EXPR_TOP: T_SPEACHMARK T_ID T_SPEACHMARK .
+
+    $default  reduce using rule 57 (EXPR_TOP)
+
+
+State 49
+
+   71 ID: T_ID .
+
+    $default  reduce using rule 71 (ID)
+
+
+State 50
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA ID
+   12                      | ARGUMENT_LIST_NO_TYPE . T_COMMA NUMBER
+   66 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 74
+    T_COMMA     shift, and go to state 75
+
+
+State 51
+
+   14 ARGUMENT_LIST_NO_TYPE: NUMBER .
+
+    $default  reduce using rule 14 (ARGUMENT_LIST_NO_TYPE)
+
+
+State 52
+
+   13 ARGUMENT_LIST_NO_TYPE: ID .
+
+    $default  reduce using rule 13 (ARGUMENT_LIST_NO_TYPE)
+
+
+State 53
+
+   59 EXPR: EXPR T_PLUS TERM .
+   62 TERM: TERM . T_TIMES FACTOR
+   63     | TERM . T_DIVIDE FACTOR
+   64     | TERM . T_EXPONENT FACTOR
+
+    T_TIMES     shift, and go to state 42
+    T_DIVIDE    shift, and go to state 43
+    T_EXPONENT  shift, and go to state 44
+
+    $default  reduce using rule 59 (EXPR)
+
+
+State 54
+
+   60 EXPR: EXPR T_MINUS TERM .
+   62 TERM: TERM . T_TIMES FACTOR
+   63     | TERM . T_DIVIDE FACTOR
+   64     | TERM . T_EXPONENT FACTOR
+
+    T_TIMES     shift, and go to state 42
+    T_DIVIDE    shift, and go to state 43
+    T_EXPONENT  shift, and go to state 44
+
+    $default  reduce using rule 60 (EXPR)
+
+
+State 55
+
+   62 TERM: TERM T_TIMES FACTOR .
+
+    $default  reduce using rule 62 (TERM)
+
+
+State 56
+
+   63 TERM: TERM T_DIVIDE FACTOR .
+
+    $default  reduce using rule 63 (TERM)
+
+
+State 57
+
+   64 TERM: TERM T_EXPONENT FACTOR .
+
+    $default  reduce using rule 64 (TERM)
+
+
+State 58
+
+   35 ASSIGN_STATEMENT: T_ID . T_ASSIGN EXPR_TOP T_SEMICOLON
+   36 FUNCTION_STATEMENT: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+
+    T_LBRACKET  shift, and go to state 76
+    T_ASSIGN    shift, and go to state 77
+
+
+State 59
+
+   30 RETURN_STATEMENT: T_RETURN . EXPR_TOP T_SEMICOLON
+
+    T_LBRACKET    shift, and go to state 21
+    T_SPEACHMARK  shift, and go to state 22
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    EXPR_TOP  go to state 78
+    EXPR      go to state 27
+    TERM      go to state 28
+    FACTOR    go to state 29
+    NUMBER    go to state 30
+    ID        go to state 31
+
+
+State 60
+
+   42 IF_STATEMENT: T_IF . CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 81
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 61
+
+   41 WHILE_STATEMENT: T_WHILE . CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 83
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 62
+
+   31 DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR_TOP T_SEMICOLON
+   32             | TYPE . T_ID T_SEMICOLON
+
+    T_ID  shift, and go to state 84
+
+
+State 63
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
+   21 BODY: BODY . STATEMENT
+
+    T_RCUBRACKET  shift, and go to state 85
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_BOOL        shift, and go to state 4
+    T_VOID        shift, and go to state 5
+    T_ID          shift, and go to state 58
+    T_RETURN      shift, and go to state 59
+    T_IF          shift, and go to state 60
+    T_WHILE       shift, and go to state 61
+
+    TYPE                go to state 62
+    STATEMENT           go to state 86
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 64
+
+   22 BODY: STATEMENT .
+
+    $default  reduce using rule 22 (BODY)
+
+
+State 65
+
+   24 STATEMENT: RETURN_STATEMENT .
+
+    $default  reduce using rule 24 (STATEMENT)
+
+
+State 66
+
+   25 STATEMENT: DEC_VARIABLE .
+
+    $default  reduce using rule 25 (STATEMENT)
+
+
+State 67
+
+   27 STATEMENT: ASSIGN_STATEMENT .
+
+    $default  reduce using rule 27 (STATEMENT)
+
+
+State 68
+
+   26 STATEMENT: FUNCTION_STATEMENT .
+
+    $default  reduce using rule 26 (STATEMENT)
+
+
+State 69
+
+   28 STATEMENT: IFANDORELSEORELIF .
+
+    $default  reduce using rule 28 (STATEMENT)
+
+
+State 70
+
+   37 IFANDORELSEORELIF: IFANDORELIF . ELSE_STATEMENT
+   38                  | IFANDORELIF .
+   39 IFANDORELIF: IFANDORELIF . ELSE_IF_STATEMENT
+
+    T_ELSE  shift, and go to state 87
+
+    $default  reduce using rule 38 (IFANDORELSEORELIF)
+
+    ELSE_IF_STATEMENT  go to state 88
+    ELSE_STATEMENT     go to state 89
+
+
+State 71
+
+   29 STATEMENT: WHILE_STATEMENT .
+
+    $default  reduce using rule 29 (STATEMENT)
+
+
+State 72
+
+   40 IFANDORELIF: IF_STATEMENT .
+
+    $default  reduce using rule 40 (IFANDORELIF)
+
+
+State 73
+
+    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID .
+
+    $default  reduce using rule 8 (ARGUMENT_LIST)
+
+
+State 74
+
+   66 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
+
+    $default  reduce using rule 66 (FACTOR)
+
+
+State 75
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA . ID
+   12                      | ARGUMENT_LIST_NO_TYPE T_COMMA . NUMBER
+
+    T_MINUS   shift, and go to state 23
+    T_NUMBER  shift, and go to state 24
+    T_ID      shift, and go to state 49
+
+    NUMBER  go to state 90
+    ID      go to state 91
+
+
+State 76
+
+   36 FUNCTION_STATEMENT: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+
+    T_MINUS   shift, and go to state 23
+    T_NUMBER  shift, and go to state 24
+    T_ID      shift, and go to state 49
+
+    $default  reduce using rule 15 (ARGUMENT_LIST_NO_TYPE)
+
+    ARGUMENT_LIST_NO_TYPE  go to state 92
+    NUMBER                 go to state 51
+    ID                     go to state 52
+
+
+State 77
+
+   35 ASSIGN_STATEMENT: T_ID T_ASSIGN . EXPR_TOP T_SEMICOLON
+
+    T_LBRACKET    shift, and go to state 21
+    T_SPEACHMARK  shift, and go to state 22
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    EXPR_TOP  go to state 93
+    EXPR      go to state 27
+    TERM      go to state 28
+    FACTOR    go to state 29
+    NUMBER    go to state 30
+    ID        go to state 31
+
+
+State 78
+
+   30 RETURN_STATEMENT: T_RETURN EXPR_TOP . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 94
+
+
+State 79
+
+   55 CONDITION: T_LBRACKET . CONDITION T_RBRACKET
+   65 FACTOR: T_LBRACKET . EXPR T_RBRACKET
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 95
+    EXPR_TOP   go to state 82
+    EXPR       go to state 96
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 80
+
+   48 CONDITION: T_LNOT . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 97
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 81
+
+   42 IF_STATEMENT: T_IF CONDITION . T_LCUBRACKET BODY T_RCUBRACKET
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LCUBRACKET  shift, and go to state 98
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+
+State 82
+
+   54 CONDITION: EXPR_TOP .
+
+    $default  reduce using rule 54 (CONDITION)
+
+
+State 83
+
+   41 WHILE_STATEMENT: T_WHILE CONDITION . T_LCUBRACKET BODY T_RCUBRACKET
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LCUBRACKET  shift, and go to state 107
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+
+State 84
+
+   31 DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR_TOP T_SEMICOLON
+   32             | TYPE T_ID . T_SEMICOLON
+
+    T_ASSIGN     shift, and go to state 108
+    T_SEMICOLON  shift, and go to state 109
+
+
+State 85
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 7 (DEC_FUNCTION)
+
+
+State 86
+
+   21 BODY: BODY STATEMENT .
+
+    $default  reduce using rule 21 (BODY)
+
+
+State 87
+
+   43 ELSE_IF_STATEMENT: T_ELSE . T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+   44 ELSE_STATEMENT: T_ELSE . T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LCUBRACKET  shift, and go to state 110
+    T_IF          shift, and go to state 111
+
+
+State 88
+
+   39 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT .
+
+    $default  reduce using rule 39 (IFANDORELIF)
+
+
+State 89
+
+   37 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT .
+
+    $default  reduce using rule 37 (IFANDORELSEORELIF)
+
+
+State 90
+
+   12 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER .
+
+    $default  reduce using rule 12 (ARGUMENT_LIST_NO_TYPE)
+
+
+State 91
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA ID .
+
+    $default  reduce using rule 11 (ARGUMENT_LIST_NO_TYPE)
+
+
+State 92
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA ID
+   12                      | ARGUMENT_LIST_NO_TYPE . T_COMMA NUMBER
+   36 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET T_SEMICOLON
+
+    T_RBRACKET  shift, and go to state 112
+    T_COMMA     shift, and go to state 75
+
+
+State 93
+
+   35 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR_TOP . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 113
+
+
+State 94
+
+   30 RETURN_STATEMENT: T_RETURN EXPR_TOP T_SEMICOLON .
+
+    $default  reduce using rule 30 (RETURN_STATEMENT)
+
+
+State 95
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+   55          | T_LBRACKET CONDITION . T_RBRACKET
+
+    T_RBRACKET    shift, and go to state 114
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+
+State 96
+
+   56 EXPR_TOP: EXPR .
+   59 EXPR: EXPR . T_PLUS TERM
+   60     | EXPR . T_MINUS TERM
+   65 FACTOR: T_LBRACKET EXPR . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 47
+    T_PLUS      shift, and go to state 40
+    T_MINUS     shift, and go to state 41
+
+    T_RBRACKET  [reduce using rule 56 (EXPR_TOP)]
+    $default    reduce using rule 56 (EXPR_TOP)
+
+
+State 97
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   48          | T_LNOT CONDITION .
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 48 (CONDITION)]
+    T_LOR         [reduce using rule 48 (CONDITION)]
+    T_LEQUAL      [reduce using rule 48 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 48 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 48 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 48 (CONDITION)]
+    T_LMORE       [reduce using rule 48 (CONDITION)]
+    T_LLESS       [reduce using rule 48 (CONDITION)]
+    $default      reduce using rule 48 (CONDITION)
+
+
+State 98
+
+   42 IF_STATEMENT: T_IF CONDITION T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 58
+    T_RETURN  shift, and go to state 59
+    T_IF      shift, and go to state 60
+    T_WHILE   shift, and go to state 61
+
+    T_INT     [reduce using rule 23 (BODY)]
+    T_DOUBLE  [reduce using rule 23 (BODY)]
+    T_STRING  [reduce using rule 23 (BODY)]
+    T_BOOL    [reduce using rule 23 (BODY)]
+    T_VOID    [reduce using rule 23 (BODY)]
+    T_ID      [reduce using rule 23 (BODY)]
+    T_RETURN  [reduce using rule 23 (BODY)]
+    T_IF      [reduce using rule 23 (BODY)]
+    T_WHILE   [reduce using rule 23 (BODY)]
+    $default  reduce using rule 23 (BODY)
+
+    TYPE                go to state 62
+    BODY                go to state 115
+    STATEMENT           go to state 64
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 99
+
+   46 CONDITION: CONDITION T_LAND . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 116
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 100
+
+   47 CONDITION: CONDITION T_LOR . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 117
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 101
+
+   45 CONDITION: CONDITION T_LEQUAL . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 118
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 102
+
+   49 CONDITION: CONDITION T_LNOTEQUAL . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 119
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 103
+
+   53 CONDITION: CONDITION T_LLESSEQUAL . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 120
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 104
+
+   52 CONDITION: CONDITION T_LMOREEQUAL . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 121
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 105
+
+   50 CONDITION: CONDITION T_LMORE . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 122
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 106
+
+   51 CONDITION: CONDITION T_LLESS . CONDITION
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 123
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 107
+
+   41 WHILE_STATEMENT: T_WHILE CONDITION T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 58
+    T_RETURN  shift, and go to state 59
+    T_IF      shift, and go to state 60
+    T_WHILE   shift, and go to state 61
+
+    T_INT     [reduce using rule 23 (BODY)]
+    T_DOUBLE  [reduce using rule 23 (BODY)]
+    T_STRING  [reduce using rule 23 (BODY)]
+    T_BOOL    [reduce using rule 23 (BODY)]
+    T_VOID    [reduce using rule 23 (BODY)]
+    T_ID      [reduce using rule 23 (BODY)]
+    T_RETURN  [reduce using rule 23 (BODY)]
+    T_IF      [reduce using rule 23 (BODY)]
+    T_WHILE   [reduce using rule 23 (BODY)]
+    $default  reduce using rule 23 (BODY)
+
+    TYPE                go to state 62
+    BODY                go to state 124
+    STATEMENT           go to state 64
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 108
+
+   31 DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR_TOP T_SEMICOLON
+
+    T_LBRACKET    shift, and go to state 21
+    T_SPEACHMARK  shift, and go to state 22
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    EXPR_TOP  go to state 125
+    EXPR      go to state 27
+    TERM      go to state 28
+    FACTOR    go to state 29
+    NUMBER    go to state 30
+    ID        go to state 31
+
+
+State 109
+
+   32 DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
+
+    $default  reduce using rule 32 (DEC_VARIABLE)
+
+
+State 110
+
+   44 ELSE_STATEMENT: T_ELSE T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 58
+    T_RETURN  shift, and go to state 59
+    T_IF      shift, and go to state 60
+    T_WHILE   shift, and go to state 61
+
+    T_INT     [reduce using rule 23 (BODY)]
+    T_DOUBLE  [reduce using rule 23 (BODY)]
+    T_STRING  [reduce using rule 23 (BODY)]
+    T_BOOL    [reduce using rule 23 (BODY)]
+    T_VOID    [reduce using rule 23 (BODY)]
+    T_ID      [reduce using rule 23 (BODY)]
+    T_RETURN  [reduce using rule 23 (BODY)]
+    T_IF      [reduce using rule 23 (BODY)]
+    T_WHILE   [reduce using rule 23 (BODY)]
+    $default  reduce using rule 23 (BODY)
+
+    TYPE                go to state 62
+    BODY                go to state 126
+    STATEMENT           go to state 64
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 111
+
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF . CONDITION T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LBRACKET    shift, and go to state 79
+    T_SPEACHMARK  shift, and go to state 22
+    T_LNOT        shift, and go to state 80
+    T_MINUS       shift, and go to state 23
+    T_NUMBER      shift, and go to state 24
+    T_ID          shift, and go to state 25
+
+    CONDITION  go to state 127
+    EXPR_TOP   go to state 82
+    EXPR       go to state 27
+    TERM       go to state 28
+    FACTOR     go to state 29
+    NUMBER     go to state 30
+    ID         go to state 31
+
+
+State 112
+
+   36 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 128
+
+
+State 113
+
+   35 ASSIGN_STATEMENT: T_ID T_ASSIGN EXPR_TOP T_SEMICOLON .
+
+    $default  reduce using rule 35 (ASSIGN_STATEMENT)
+
+
+State 114
+
+   55 CONDITION: T_LBRACKET CONDITION T_RBRACKET .
+
+    $default  reduce using rule 55 (CONDITION)
+
+
+State 115
+
+   21 BODY: BODY . STATEMENT
+   42 IF_STATEMENT: T_IF CONDITION T_LCUBRACKET BODY . T_RCUBRACKET
+
+    T_RCUBRACKET  shift, and go to state 129
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_BOOL        shift, and go to state 4
+    T_VOID        shift, and go to state 5
+    T_ID          shift, and go to state 58
+    T_RETURN      shift, and go to state 59
+    T_IF          shift, and go to state 60
+    T_WHILE       shift, and go to state 61
+
+    TYPE                go to state 62
+    STATEMENT           go to state 86
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 116
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   46          | CONDITION T_LAND CONDITION .
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 46 (CONDITION)]
+    T_LOR         [reduce using rule 46 (CONDITION)]
+    T_LEQUAL      [reduce using rule 46 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 46 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 46 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 46 (CONDITION)]
+    T_LMORE       [reduce using rule 46 (CONDITION)]
+    T_LLESS       [reduce using rule 46 (CONDITION)]
+    $default      reduce using rule 46 (CONDITION)
+
+
+State 117
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   47          | CONDITION T_LOR CONDITION .
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 47 (CONDITION)]
+    T_LOR         [reduce using rule 47 (CONDITION)]
+    T_LEQUAL      [reduce using rule 47 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 47 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 47 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 47 (CONDITION)]
+    T_LMORE       [reduce using rule 47 (CONDITION)]
+    T_LLESS       [reduce using rule 47 (CONDITION)]
+    $default      reduce using rule 47 (CONDITION)
+
+
+State 118
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   45          | CONDITION T_LEQUAL CONDITION .
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 45 (CONDITION)]
+    T_LOR         [reduce using rule 45 (CONDITION)]
+    T_LEQUAL      [reduce using rule 45 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 45 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 45 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 45 (CONDITION)]
+    T_LMORE       [reduce using rule 45 (CONDITION)]
+    T_LLESS       [reduce using rule 45 (CONDITION)]
+    $default      reduce using rule 45 (CONDITION)
+
+
+State 119
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   49          | CONDITION T_LNOTEQUAL CONDITION .
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 49 (CONDITION)]
+    T_LOR         [reduce using rule 49 (CONDITION)]
+    T_LEQUAL      [reduce using rule 49 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 49 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 49 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 49 (CONDITION)]
+    T_LMORE       [reduce using rule 49 (CONDITION)]
+    T_LLESS       [reduce using rule 49 (CONDITION)]
+    $default      reduce using rule 49 (CONDITION)
+
+
+State 120
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+   53          | CONDITION T_LLESSEQUAL CONDITION .
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 53 (CONDITION)]
+    T_LOR         [reduce using rule 53 (CONDITION)]
+    T_LEQUAL      [reduce using rule 53 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 53 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 53 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 53 (CONDITION)]
+    T_LMORE       [reduce using rule 53 (CONDITION)]
+    T_LLESS       [reduce using rule 53 (CONDITION)]
+    $default      reduce using rule 53 (CONDITION)
+
+
+State 121
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   52          | CONDITION T_LMOREEQUAL CONDITION .
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 52 (CONDITION)]
+    T_LOR         [reduce using rule 52 (CONDITION)]
+    T_LEQUAL      [reduce using rule 52 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 52 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 52 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 52 (CONDITION)]
+    T_LMORE       [reduce using rule 52 (CONDITION)]
+    T_LLESS       [reduce using rule 52 (CONDITION)]
+    $default      reduce using rule 52 (CONDITION)
+
+
+State 122
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   50          | CONDITION T_LMORE CONDITION .
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 50 (CONDITION)]
+    T_LOR         [reduce using rule 50 (CONDITION)]
+    T_LEQUAL      [reduce using rule 50 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 50 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 50 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 50 (CONDITION)]
+    T_LMORE       [reduce using rule 50 (CONDITION)]
+    T_LLESS       [reduce using rule 50 (CONDITION)]
+    $default      reduce using rule 50 (CONDITION)
+
+
+State 123
+
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   51          | CONDITION T_LLESS CONDITION .
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+    T_LAND        [reduce using rule 51 (CONDITION)]
+    T_LOR         [reduce using rule 51 (CONDITION)]
+    T_LEQUAL      [reduce using rule 51 (CONDITION)]
+    T_LNOTEQUAL   [reduce using rule 51 (CONDITION)]
+    T_LLESSEQUAL  [reduce using rule 51 (CONDITION)]
+    T_LMOREEQUAL  [reduce using rule 51 (CONDITION)]
+    T_LMORE       [reduce using rule 51 (CONDITION)]
+    T_LLESS       [reduce using rule 51 (CONDITION)]
+    $default      reduce using rule 51 (CONDITION)
+
+
+State 124
+
+   21 BODY: BODY . STATEMENT
+   41 WHILE_STATEMENT: T_WHILE CONDITION T_LCUBRACKET BODY . T_RCUBRACKET
+
+    T_RCUBRACKET  shift, and go to state 130
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_BOOL        shift, and go to state 4
+    T_VOID        shift, and go to state 5
+    T_ID          shift, and go to state 58
+    T_RETURN      shift, and go to state 59
+    T_IF          shift, and go to state 60
+    T_WHILE       shift, and go to state 61
+
+    TYPE                go to state 62
+    STATEMENT           go to state 86
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 125
+
+   31 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 131
+
+
+State 126
+
+   21 BODY: BODY . STATEMENT
+   44 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY . T_RCUBRACKET
+
+    T_RCUBRACKET  shift, and go to state 132
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_BOOL        shift, and go to state 4
+    T_VOID        shift, and go to state 5
+    T_ID          shift, and go to state 58
+    T_RETURN      shift, and go to state 59
+    T_IF          shift, and go to state 60
+    T_WHILE       shift, and go to state 61
+
+    TYPE                go to state 62
+    STATEMENT           go to state 86
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 127
+
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF CONDITION . T_LCUBRACKET BODY T_RCUBRACKET
+   45 CONDITION: CONDITION . T_LEQUAL CONDITION
+   46          | CONDITION . T_LAND CONDITION
+   47          | CONDITION . T_LOR CONDITION
+   49          | CONDITION . T_LNOTEQUAL CONDITION
+   50          | CONDITION . T_LMORE CONDITION
+   51          | CONDITION . T_LLESS CONDITION
+   52          | CONDITION . T_LMOREEQUAL CONDITION
+   53          | CONDITION . T_LLESSEQUAL CONDITION
+
+    T_LCUBRACKET  shift, and go to state 133
+    T_LAND        shift, and go to state 99
+    T_LOR         shift, and go to state 100
+    T_LEQUAL      shift, and go to state 101
+    T_LNOTEQUAL   shift, and go to state 102
+    T_LLESSEQUAL  shift, and go to state 103
+    T_LMOREEQUAL  shift, and go to state 104
+    T_LMORE       shift, and go to state 105
+    T_LLESS       shift, and go to state 106
+
+
+State 128
+
+   36 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON .
+
+    $default  reduce using rule 36 (FUNCTION_STATEMENT)
+
+
+State 129
+
+   42 IF_STATEMENT: T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 42 (IF_STATEMENT)
+
+
+State 130
+
+   41 WHILE_STATEMENT: T_WHILE CONDITION T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 41 (WHILE_STATEMENT)
+
+
+State 131
+
+   31 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON .
+
+    $default  reduce using rule 31 (DEC_VARIABLE)
+
+
+State 132
+
+   44 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 44 (ELSE_STATEMENT)
+
+
+State 133
+
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF CONDITION T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_INT     shift, and go to state 1
+    T_DOUBLE  shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_BOOL    shift, and go to state 4
+    T_VOID    shift, and go to state 5
+    T_ID      shift, and go to state 58
+    T_RETURN  shift, and go to state 59
+    T_IF      shift, and go to state 60
+    T_WHILE   shift, and go to state 61
+
+    T_INT     [reduce using rule 23 (BODY)]
+    T_DOUBLE  [reduce using rule 23 (BODY)]
+    T_STRING  [reduce using rule 23 (BODY)]
+    T_BOOL    [reduce using rule 23 (BODY)]
+    T_VOID    [reduce using rule 23 (BODY)]
+    T_ID      [reduce using rule 23 (BODY)]
+    T_RETURN  [reduce using rule 23 (BODY)]
+    T_IF      [reduce using rule 23 (BODY)]
+    T_WHILE   [reduce using rule 23 (BODY)]
+    $default  reduce using rule 23 (BODY)
+
+    TYPE                go to state 62
+    BODY                go to state 134
+    STATEMENT           go to state 64
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 134
+
+   21 BODY: BODY . STATEMENT
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF CONDITION T_LCUBRACKET BODY . T_RCUBRACKET
+
+    T_RCUBRACKET  shift, and go to state 135
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_BOOL        shift, and go to state 4
+    T_VOID        shift, and go to state 5
+    T_ID          shift, and go to state 58
+    T_RETURN      shift, and go to state 59
+    T_IF          shift, and go to state 60
+    T_WHILE       shift, and go to state 61
+
+    TYPE                go to state 62
+    STATEMENT           go to state 86
+    RETURN_STATEMENT    go to state 65
+    DEC_VARIABLE        go to state 66
+    ASSIGN_STATEMENT    go to state 67
+    FUNCTION_STATEMENT  go to state 68
+    IFANDORELSEORELIF   go to state 69
+    IFANDORELIF         go to state 70
+    WHILE_STATEMENT     go to state 71
+    IF_STATEMENT        go to state 72
+
+
+State 135
+
+   43 ELSE_IF_STATEMENT: T_ELSE T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 43 (ELSE_IF_STATEMENT)
