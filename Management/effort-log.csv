@@ -16,3 +16,4 @@ Date,Effort,Developers,Milestones
 ,Made the c_compiler function and file so the .sh will work,der115,testbench for translator works
 28/02/2018,Cleaned and fixed code (now passes 8/9 tests),haa516,passed 8/9 tests and now all use node class
 03/03/2018,Fixed globals and now pass all test,haa516,passed all tests
+12/03/2018,Made some notes to plan how to perform a stack,haa516,Planning
