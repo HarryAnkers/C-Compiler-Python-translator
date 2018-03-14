@@ -4,8 +4,6 @@ std::vector <std::string> globalVar;
 
 int main(int argc = 4, char *argv[] = NULL)
 {
-  int i = 0;
-
   std::cout<< "START " << std::endl;          
   freopen (argv[2],"r",stdin);
 
@@ -18,7 +16,7 @@ int main(int argc = 4, char *argv[] = NULL)
   std::string test = argv[1];
   if (test == "--translate") {
     //std::cout<< "The Python Equivalent: " << std::endl;
-    ast->translate(std::cout, i);
+    ast->translate(std::cout);
     std::cout<<std::endl;
   }
   std::cout<<"# Boilerplat"<<std::endl;

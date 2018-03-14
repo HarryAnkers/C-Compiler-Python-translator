@@ -6,8 +6,7 @@ int main()
 {
     const ASTNode *ast=parseAST();
     
-    int i=0;
-    ast->translate(std::cout,i);
+    ast->translate(std::cout);
     std::cout<<std::endl;
     std::cout<<"# Boilerplat"<<std::endl;
     std::cout<<"if __name__ == \"__main__\":"<<std::endl;

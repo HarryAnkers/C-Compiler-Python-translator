@@ -28,7 +28,7 @@ public:
         dst<<")";
     }
 
-    virtual void translate(std::ostream &dst, int &indent) const {
+    virtual void translate(std::ostream &dst, int &indent) const override{
         dst<<"(";
         left->translate(dst,indent);
         dst<<getOpcode();

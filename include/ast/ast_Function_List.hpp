@@ -32,7 +32,7 @@ public:
     }
 
     //compiler
-    virtual void compile(std::ostream &dst, CompilerState &state) const {};
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{};
 };
 
 

@@ -12,8 +12,11 @@ extern std::vector <std::string> globalVar;
 class CompilerState
 {
 public:
-    ~CompilerState()
-    {}
+    CompilerState(){
+        labelId=0;
+    }
+    ~CompilerState(){}
+    int labelId;
 
 };
 
@@ -35,6 +38,22 @@ public:
 
     //compiler
     virtual void compile(std::ostream &dst, CompilerState &state) const =0;
+
+    //these are all for first time called from cpp files
+    void translate(std::ostream &dst) const{
+        int indent=0;
+        translate(dst, indent);
+    }
+
+    void print(std::ostream &dst) const{
+        int indent=0;
+        print(dst, indent);
+    }
+
+    void compile(std::ostream &dst) const{
+        CompilerState state;
+        compile(dst, state);
+    }
 };
 
 
