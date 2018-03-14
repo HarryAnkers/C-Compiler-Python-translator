@@ -24,7 +24,7 @@ public:
         dst<<id;
     }
 
-    virtual void compile(std::ostream &dst) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class Number
@@ -48,7 +48,7 @@ public:
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class String
@@ -68,7 +68,7 @@ public:
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class FunctionStatementInExpr : public ASTNode
@@ -95,7 +95,7 @@ class FunctionStatementInExpr : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 #endif

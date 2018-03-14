@@ -28,7 +28,7 @@ class LNot : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class ConditionOp : public ASTNode
@@ -68,7 +68,7 @@ class ConditionOp : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class LEqual : public ConditionOp

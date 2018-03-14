@@ -33,7 +33,7 @@ class ReturnStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class AssignStatement : public ASTNode
@@ -67,7 +67,7 @@ class AssignStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class DeclareStatement : public ASTNode
@@ -112,7 +112,7 @@ class DeclareStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class GlobalDeclareStatement : public ASTNode
@@ -157,7 +157,7 @@ class GlobalDeclareStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class FunctionStatement : public ASTNode
@@ -191,7 +191,7 @@ class FunctionStatement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class If_Statement : public ASTNode
@@ -235,7 +235,7 @@ class If_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class ElIf_Statement : public ASTNode
@@ -279,7 +279,7 @@ class ElIf_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class Else_Statement : public ASTNode
@@ -318,7 +318,7 @@ class Else_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class While_Statement : public ASTNode
@@ -362,7 +362,7 @@ class While_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 class Do_While_Statement : public ASTNode
@@ -407,7 +407,7 @@ class Do_While_Statement : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 #endif

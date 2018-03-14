@@ -39,7 +39,7 @@ class Body : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
 
