@@ -1,13 +1,15 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
-all : bin/print_test bin/translate_test bin/c_compiler
+all : bin/print_test bin/translate_test bin/c_compiler bin/compile_test
 
 test : bin/print_test
 
 translate : bin/translate_test
 
 compile : bin/c_compiler
+
+compile_test : bin/compile_test
 
 src/parser.tab.cpp src/parser.tab.hpp : src/parser.y
 	bison -v -d src/parser.y -o src/parser.tab.cpp
@@ -26,6 +28,10 @@ bin/print_test : src/print_test.o src/parser.tab.o src/lexer.yy.o src/parser.tab
 bin/translate_test : src/translate_test.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/translate_test $^
+
+bin/compile_test : src/compile_test.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
+	mkdir -p bin
+	g++ $(CPPFLAGS) -o bin/compile_test $^
 
 clean :
 	rm src/*.o

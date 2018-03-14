@@ -32,7 +32,13 @@ public:
     }
 
     //compiler
-    virtual void compile(std::ostream &dst, CompilerState &state) const override{};
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        if(nextFunction!=NULL){
+            nextFunction->compile(dst, state);
+            dst<<std::endl;
+        }
+        function->compile(dst, state);
+    };
 };
 
 

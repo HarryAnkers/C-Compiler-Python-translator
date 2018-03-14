@@ -44,7 +44,19 @@ class Function : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-
+            dst<<"f"<<state.labelId<<":"<<std::endl;
+            state.labelId++;
+            //need function to count how many variables are used
+            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<"-"<<std::endl;
+            dst<<"sw "<<"$fp"<<","<<"4($sp)"<<std::endl;
+            dst<<"move "<<"$fp"<<"$sp"<<std::endl;
+            //then stores arguments
+            //do work
+            
+            //below needs to be put into the return
+            dst<<"lw "<<"$fp"<<","<<"4($sp)"<<std::endl;
+            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<""<<std::endl;
+            dst<<"j "<<"31"<<std::endl;
         }
 };
 
