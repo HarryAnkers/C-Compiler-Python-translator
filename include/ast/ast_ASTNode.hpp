@@ -9,6 +9,14 @@
 
 extern std::vector <std::string> globalVar;
 
+class CompilerState
+{
+public:
+    ~CompilerState()
+    {}
+
+};
+
 class ASTNode;
 
 typedef const ASTNode *node;
@@ -26,7 +34,7 @@ public:
     virtual void translate(std::ostream &dst, int &indent) const =0;
 
     //compiler
-    virtual void compile(std::ostream &dst) const =0;
+    virtual void compile(std::ostream &dst, CompilerState &state) const =0;
 };
 
 
