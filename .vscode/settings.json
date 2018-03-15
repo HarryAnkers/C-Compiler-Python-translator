@@ -37,6 +37,7 @@
         "cmath": "cpp",
         "string": "cpp",
         "iostream": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "__split_buffer": "cpp"
     }
 }

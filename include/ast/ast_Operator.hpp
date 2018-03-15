@@ -19,20 +19,20 @@ protected:
 public:
     virtual const char *getOpcode() const =0;
 
-    virtual void print(std::ostream &dst, int &indent) const override
+    virtual void print(std::ostream &dst, PrintTransState &state) const override
     {
         dst<<"(";
-        left->print(dst,indent);
+        left->print(dst, state);
         dst<<getOpcode();
-        right->print(dst,indent);
+        right->print(dst, state);
         dst<<")";
     }
 
-    virtual void translate(std::ostream &dst, int &indent) const override{
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
         dst<<"(";
-        left->translate(dst,indent);
+        left->translate(dst, state);
         dst<<getOpcode();
-        right->translate(dst,indent);
+        right->translate(dst, state);
         dst<<")";
     }
 

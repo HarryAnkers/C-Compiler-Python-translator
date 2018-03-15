@@ -17,25 +17,25 @@ class ArgumentNoType : public ASTNode
             arg(NULL), nextArguments(NULL){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             if(arg!=NULL){
                 if(nextArguments!=NULL){
-                    nextArguments->print(dst, indent);
+                    nextArguments->print(dst, state);
                     dst<<",";
                 }
-                arg->print(dst,indent);
+                arg->print(dst, state);
             }
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             if(arg!=NULL){
                 if(nextArguments!=NULL){
-                    nextArguments->translate(dst, indent);
+                    nextArguments->translate(dst, state);
                     dst<<",";
                 }
-                arg->translate(dst,indent);
+                arg->translate(dst, state);
             }
         }
 

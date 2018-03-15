@@ -15,26 +15,26 @@ class Body : public ASTNode
         statement(NULL), nextBody(NULL){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             if(statement!=NULL){
                 if(nextBody!=NULL){
-                    nextBody->print(dst,indent);
+                    nextBody->print(dst, state);
                 }
-                statement->print(dst,indent);
+                statement->print(dst, state);
             }
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             
             if(statement!=NULL){
                 
                 if(nextBody!=NULL){
-                    nextBody->translate(dst,indent);
+                    nextBody->translate(dst, state);
                 }
 
-                statement->translate(dst,indent);
+                statement->translate(dst, state);
             }
         }
 

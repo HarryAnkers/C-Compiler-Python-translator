@@ -12,18 +12,18 @@ class LNot : public ASTNode
         cond(_cond){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             dst<<"(!";
-            cond->print(dst,indent);
+            cond->print(dst, state);
             dst<<")";
         }
 
         //translate
-        virtual void translate(std::ostream &dst, int &indent) const override
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override
         {
             dst<<"(!";
-            cond->translate(dst,indent);
+            cond->translate(dst, state);
             dst<<")";
         }
 
@@ -44,26 +44,26 @@ class ConditionOp : public ASTNode
             condA(_condA),condB(_condB){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             dst<<"(";
-            condA->print(dst,indent);
+            condA->print(dst, state);
             dst<<" ";
             dst<<getCOp();
             dst<<" ";
-            condB->print(dst,indent);
+            condB->print(dst, state);
             dst<<")";
         }
 
         //translator
-        virtual void translate(std::ostream &dst, int &indent) const override
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override
         {
             dst<<"(";
-            condA->translate(dst,indent);
+            condA->translate(dst, state);
             dst<<" ";
             dst<<getPyOp();
             dst<<" ";
-            condB->translate(dst,indent);
+            condB->translate(dst, state);
             dst<<")";
         }
 

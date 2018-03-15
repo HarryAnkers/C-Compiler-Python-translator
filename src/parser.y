@@ -28,7 +28,7 @@
 %token T_NUMBER T_ID T_COMMENT
 %token T_RETURN T_ELSE T_IF T_WHILE
 
-%type <node> TOP_LEVEL FUNCTION_LIST DEC_FUNCTION BODY
+%type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
 %type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
@@ -47,10 +47,10 @@
 ROOT : TOP_LEVEL { g_root = $1; }
 
 //choose main in main body so it gets priority
-TOP_LEVEL : FUNCTION_LIST {$$ = $1; }
+TOP_LEVEL : TOP_LIST {$$ = $1; }
 
-FUNCTION_LIST : FUNCTION_LIST DEC_FUNCTION      {$$ = new Function_List($2,$1);}
-        | FUNCTION_LIST GLO_DEC_VARIABLE            {$$ = new Function_List($2,$1);}
+TOP_LIST : TOP_LIST DEC_FUNCTION      {$$ = new Top_List($2,$1);}
+        | TOP_LIST GLO_DEC_VARIABLE            {$$ = new Top_List($2,$1);}
         | DEC_FUNCTION                          {$$ = $1;}
         | GLO_DEC_VARIABLE                          {$$ = $1;}
 

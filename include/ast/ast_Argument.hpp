@@ -19,11 +19,11 @@ class Argument : public ASTNode
             argType(""), argId(""), nextArguments(NULL){run=false;}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             if(run){
                 if(nextArguments!=NULL){
-                    nextArguments->print(dst, indent);
+                    nextArguments->print(dst, state);
                     dst<<",";
                 }
                 dst<<argType<<" "<<argId;
@@ -31,10 +31,10 @@ class Argument : public ASTNode
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             if(run){
                 if(nextArguments!=NULL){
-                    nextArguments->translate(dst, indent);
+                    nextArguments->translate(dst, state);
                     dst<<",";
                 }
                 dst<<argId;

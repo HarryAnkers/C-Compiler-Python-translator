@@ -16,11 +16,11 @@ public:
     const std::string getId() const
     { return id; }
 
-    virtual void print(std::ostream &dst, int &indent) const override{
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
         dst<<id;
     }
 
-    virtual void translate(std::ostream &dst, int &indent) const override{
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
         dst<<id;
     }
 
@@ -40,11 +40,11 @@ public:
     double getValue() const
     { return value; }
 
-    virtual void print(std::ostream &dst, int &indent) const override{
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
         dst<<value;
     }
 
-    virtual void translate(std::ostream &dst, int &indent) const override{
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
         dst<<value;
     }
 
@@ -60,11 +60,11 @@ public:
         : value(_value)
     {}
 
-    virtual void print(std::ostream &dst, int &indent) const override{
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
         dst<<value;
     }
 
-    virtual void translate(std::ostream &dst, int &indent) const override{
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
         dst<<value;
     }
 
@@ -81,16 +81,16 @@ class FunctionStatementInExpr : public ASTNode
         id(_id), arguments(_arguments){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override{
+        virtual void print(std::ostream &dst, PrintTransState &state) const override{
             dst<<id<<"(";
-            arguments->print(dst,indent);
+            arguments->print(dst, state);
             dst<<")";
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             dst<<id<<"(";
-            arguments->translate(dst,indent);
+            arguments->translate(dst, state);
             dst<<")";
         }
 

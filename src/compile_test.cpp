@@ -1,7 +1,5 @@
 #include "ast.hpp"
 
-std::vector <std::string> globalVar;
-
 int main()
 {
     const ASTNode *ast=parseAST();

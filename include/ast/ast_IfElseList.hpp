@@ -13,19 +13,19 @@ class IfElseList : public ASTNode
         ifOrElse(_ifOrElse), nextStatement(_nextStatement){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            ifOrElse->print(dst,indent);
+            ifOrElse->print(dst, state);
             if(nextStatement!=NULL){
-                nextStatement->print(dst,indent);
+                nextStatement->print(dst, state);
             }
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            ifOrElse->translate(dst,indent);
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            ifOrElse->translate(dst, state);
             if(nextStatement!=NULL){
-                nextStatement->translate(dst,indent);
+                nextStatement->translate(dst, state);
             }
         }
 

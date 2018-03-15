@@ -2,10 +2,6 @@ x=0
 
 def main():
 	global x
-	global y
-	global z
-	global a
-	global b
 	x=(x+1)
 	return x
 
@@ -17,8 +13,6 @@ def func():
 	global x
 	global y
 	global z
-	global a
-	global b
 	x=(x+y)
 	return x
 

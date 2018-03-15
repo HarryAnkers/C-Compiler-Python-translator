@@ -15,31 +15,31 @@ class Function : public ASTNode
         type(_type), id(_id), arguments(_arguments), body(_body){}
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
             dst<<type<<" "<<id<<"(";
-            arguments->print(dst,indent);
+            arguments->print(dst, state);
             dst<<"){"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             dst<<"def "<<id<<"(";
-            arguments->translate(dst,indent);
+            arguments->translate(dst, state);
             dst<<"):"<<std::endl;
-            indent++;
-            for(unsigned int i=0;i<globalVar.size();i++){
-                for(int i=indent;i!=0;i--){
+            state.indent++;
+            for(unsigned int i=0;i<state.gloVariables.size();i++){
+                for(int i=state.indent;i!=0;i--){
                     dst<<"\t";
                 }
-                dst<<"global "<<globalVar[i]<<std::endl;
+                dst<<"global "<<state.gloVariables[i]<<std::endl;
             }
-            body->translate(dst,indent);
-            indent--;
+            body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 

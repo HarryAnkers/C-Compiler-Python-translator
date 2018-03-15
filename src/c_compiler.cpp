@@ -1,14 +1,11 @@
 #include "ast.hpp"
 
-std::vector <std::string> globalVar;
-
 int main(int argc = 4, char *argv[] = NULL)
 {
   std::cout<< "START " << std::endl;          
   freopen (argv[2],"r",stdin);
 
   const ASTNode *ast=parseAST();
-  std::vector <std::string> globalVar;
   
   std::cout<< std::endl;    
 

@@ -7,25 +7,42 @@
 
 #include <memory>
 
-extern std::vector <std::string> globalVar;
-
 class VariableBind
 {
 public:
-    std::string Id;
+    std::string id;
     std::string type;
     int relativeToStack;
+
+    VariableBind(std::string _id, std::string _type, int _relativeToStack):
+        id(_id),type(_type),relativeToStack(_relativeToStack){}
+
+    ~VariableBind(){}
 };
 
 class CompilerState
 {
 public:
-    CompilerState(){
-        labelId=0;
-    }
-    ~CompilerState(){}
     int labelId;
+    std::vector<VariableBind> varVector;
+    int currentScope;
 
+    CompilerState():
+        labelId(0), currentScope(0) {}
+
+    ~CompilerState(){}
+};
+
+class PrintTransState
+{
+public:
+    int indent;
+    std::vector<std::string> gloVariables;
+
+    PrintTransState():
+        indent(0) {}
+
+    ~PrintTransState(){}
 };
 
 class ASTNode;
@@ -39,23 +56,23 @@ public:
     {}
 
     //print tester
-    virtual void print(std::ostream &dst, int &indent) const =0;
+    virtual void print(std::ostream &dst, PrintTransState &state) const =0;
 
     //compiler 
-    virtual void translate(std::ostream &dst, int &indent) const =0;
+    virtual void translate(std::ostream &dst, PrintTransState &state) const =0;
 
     //compiler
     virtual void compile(std::ostream &dst, CompilerState &state) const =0;
 
     //these are all for first time called from cpp files
     void translate(std::ostream &dst) const{
-        int indent=0;
-        translate(dst, indent);
+        PrintTransState state;
+        translate(dst, state);
     }
 
     void print(std::ostream &dst) const{
-        int indent=0;
-        print(dst, indent);
+        PrintTransState state;
+        print(dst, state);
     }
 
     void compile(std::ostream &dst) const{

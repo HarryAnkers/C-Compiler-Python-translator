@@ -1,34 +1,34 @@
-#ifndef ast_Function_List_hpp
-#define ast_Function_List_hpp
+#ifndef ast_Top_List_hpp
+#define ast_Top_List_hpp
 
 #include "ast_ASTNode.hpp"
 
-class Function_List : public ASTNode
+class Top_List : public ASTNode
 {
 public:
     node function;
     node nextFunction;
 
-    Function_List(node _function, node _nextFunction):
+    Top_List(node _function, node _nextFunction):
         function(_function), nextFunction(_nextFunction){}
 
     //print tester
-    virtual void print(std::ostream &dst, int &indent) const override
+    virtual void print(std::ostream &dst, PrintTransState &state) const override
     {
         if(nextFunction!=NULL){
-            nextFunction->print(dst, indent);
+            nextFunction->print(dst, state);
             dst<<std::endl;
         }
-        function->print(dst, indent);
+        function->print(dst, state);
     }
 
     //translator 
-    virtual void translate(std::ostream &dst, int &indent) const override{
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
         if(nextFunction!=NULL){
-            nextFunction->translate(dst, indent);
+            nextFunction->translate(dst, state);
             dst<<std::endl;
         }
-        function->translate(dst, indent);
+        function->translate(dst, state);
     }
 
     //compiler

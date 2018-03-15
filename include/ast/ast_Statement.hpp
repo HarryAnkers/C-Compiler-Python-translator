@@ -14,23 +14,23 @@ class ReturnStatement : public ASTNode
         std::string statementType="return";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"return ";
-            expression->print(dst,indent);
+            expression->print(dst, state);
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"return ";
-            expression->translate(dst,indent);
+            expression->translate(dst, state);
             dst<<std::endl;
         }
 
@@ -50,23 +50,23 @@ class AssignStatement : public ASTNode
         std::string statementType="assign";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id<<"=";
-            expression->print(dst,indent);
+            expression->print(dst, state);
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id<<"=";
-            expression->translate(dst,indent);
+            expression->translate(dst, state);
             dst<<std::endl;
         }
 
@@ -89,28 +89,28 @@ class DeclareStatement : public ASTNode
         std::string statementType="declare";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<type<<" "<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->print(dst,indent);
+                expression->print(dst, state);
             }
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->translate(dst,indent);
+                expression->translate(dst, state);
                 dst<<std::endl;
             } else { 
                 dst<<"=0"<<std::endl; 
@@ -129,35 +129,36 @@ class GlobalDeclareStatement : public ASTNode
         node expression;
 
         GlobalDeclareStatement(std::string &_type, std::string &_id, node _expression):
-        type(_type), id(_id), expression(_expression){ globalVar.push_back(id); }
+        type(_type), id(_id), expression(_expression){}
         GlobalDeclareStatement(std::string &_type, std::string &_id):
-        type(_type), id(_id), expression(NULL){ globalVar.push_back(id); }
+        type(_type), id(_id), expression(NULL){}
 
         std::string statementType="global_declare";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<type<<" "<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->print(dst,indent);
+                expression->print(dst, state);
             }
             dst<<";"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            state.gloVariables.push_back(id);
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
-                expression->translate(dst,indent);
+                expression->translate(dst, state);
                 dst<<std::endl;
             } else { 
                 dst<<"=0"<<std::endl; 
@@ -180,23 +181,23 @@ class FunctionStatement : public ASTNode
         std::string statementType="function";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id<<"(";
-            arguments->print(dst,indent);
+            arguments->print(dst, state);
             dst<<");";
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<id<<"(";
-            arguments->translate(dst,indent);
+            arguments->translate(dst, state);
             dst<<");";
         }
 
@@ -215,24 +216,24 @@ class NewScope : public ASTNode
         std::string statementType="new_scope";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"{"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            body->translate(dst,indent);
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            body->translate(dst, state);
         }
 
         //compiler 
@@ -251,34 +252,34 @@ class If_Statement : public ASTNode
         std::string statementType="if";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"if ";
-            condition->print(dst,indent);
+            condition->print(dst, state);
             dst<<" {"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"if ";
-            condition->translate(dst,indent);
+            condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            indent++;
-            body->translate(dst,indent);
-            indent--;
+            state.indent++;
+            body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -297,34 +298,34 @@ class ElIf_Statement : public ASTNode
         std::string statementType="elif";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"else if (";
-            condition->print(dst,indent);
+            condition->print(dst, state);
             dst<<") {"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"elif(";
-            condition->translate(dst,indent);
+            condition->translate(dst, state);
             dst<<") :"<<std::endl;
-            indent++;
-            body->translate(dst,indent);
-            indent--;
+            state.indent++;
+            body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -342,30 +343,30 @@ class Else_Statement : public ASTNode
         std::string statementType="else";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"else {"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"else :"<<std::endl;
-            indent++;
-            body->translate(dst,indent);
-            indent--;
+            state.indent++;
+            body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -384,34 +385,34 @@ class While_Statement : public ASTNode
         std::string statementType="while";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->print(dst,indent);
+            condition->print(dst, state);
             dst<<" {"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"}"<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->translate(dst,indent);
+            condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            indent++;
-            body->translate(dst,indent);
-            indent--;
+            state.indent++;
+            body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -430,35 +431,35 @@ class Do_While_Statement : public ASTNode
         std::string statementType="do_while";
 
         //print tester
-        virtual void print(std::ostream &dst, int &indent) const override
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=indent;i!=0;i--){
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"do";
             dst<<" {"<<std::endl;
-            indent++;
-            body->print(dst,indent);
-            indent--;
-            for(int i=indent;i!=0;i--){
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"} while ";
-            condition->print(dst,indent);
+            condition->print(dst, state);
             dst<<std::endl;
         }
 
         //translator 
-        virtual void translate(std::ostream &dst, int &indent) const override{
-            /*for(int i=indent;i!=0;i--){
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            /*for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"While ";
-            condition->translate(dst,indent);
+            condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            indent++;
-            body->translate(dst,indent);
-            indent--;*/
+            state.indent++;
+            body->translate(dst, state);
+            state.indent--;*/
             //not sure how to do this
         }
 

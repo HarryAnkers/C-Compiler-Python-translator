@@ -511,7 +511,7 @@ static const char *const yytname[] =
   "T_LMORE", "T_LLESS", "T_INT", "T_DOUBLE", "T_STRING", "T_BOOL",
   "T_VOID", "T_TIMES", "T_DIVIDE", "T_PLUS", "T_MINUS", "T_EXPONENT",
   "T_NUMBER", "T_ID", "T_COMMENT", "T_RETURN", "T_ELSE", "T_IF", "T_WHILE",
-  "$accept", "ROOT", "TOP_LEVEL", "FUNCTION_LIST", "DEC_FUNCTION",
+  "$accept", "ROOT", "TOP_LEVEL", "TOP_LIST", "DEC_FUNCTION",
   "ARGUMENT_LIST", "ARGUMENT_LIST_NO_TYPE", "TYPE", "BODY", "STATEMENT",
   "NEW_SCOPE", "RETURN_STATEMENT", "DEC_VARIABLE", "GLO_DEC_VARIABLE",
   "ASSIGN_STATEMENT", "FUNCTION_STATEMENT", "IFANDORELSEORELIF",
@@ -1405,13 +1405,13 @@ yyreduce:
 
   case 4:
 #line 52 "src/parser.y" /* yacc.c:1646  */
-    {(yyval.node) = new Function_List((yyvsp[0].node),(yyvsp[-1].node));}
+    {(yyval.node) = new Top_List((yyvsp[0].node),(yyvsp[-1].node));}
 #line 1410 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 53 "src/parser.y" /* yacc.c:1646  */
-    {(yyval.node) = new Function_List((yyvsp[0].node),(yyvsp[-1].node));}
+    {(yyval.node) = new Top_List((yyvsp[0].node),(yyvsp[-1].node));}
 #line 1416 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
