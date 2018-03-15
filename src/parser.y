@@ -70,7 +70,6 @@ TYPE : T_INT      {$$=$1;}
         | T_DOUBLE    {$$=$1;}
         | T_STRING    {$$=$1;}
         | T_VOID      {$$=$1;}
-        | T_BOOL      {$$=$1;}
 
 BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
         | STATEMENT         {$$ = $1;}

@@ -9,6 +9,14 @@
 
 extern std::vector <std::string> globalVar;
 
+class VariableBind
+{
+public:
+    String Id;
+    String type;
+    int relativeToStack;
+};
+
 class CompilerState
 {
 public:

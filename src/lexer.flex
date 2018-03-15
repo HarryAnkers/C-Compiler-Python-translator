@@ -38,7 +38,6 @@ extern "C" int fileno(FILE *stream);
 "int"   	{ yylval.string=new std::string(yytext); return T_INT; }
 "double"	{ yylval.string=new std::string(yytext); return T_DOUBLE; }
 "string"	{ yylval.string=new std::string(yytext); return T_STRING; }
-"bool"		{ yylval.string=new std::string(yytext); return T_BOOL; }
 "void"		{ yylval.string=new std::string(yytext); return T_VOID; }
 
 [*]             { return T_TIMES; }
