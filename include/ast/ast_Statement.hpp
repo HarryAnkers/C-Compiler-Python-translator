@@ -3,13 +3,7 @@
 
 #include "ast_ASTNode.hpp"
 
-class Statement : public ASTNode
-{
-    public:
-        std::string statementType;
-};
-
-class ReturnStatement : public Statement
+class ReturnStatement : public ASTNode
 {
     public:
         node expression;
@@ -17,7 +11,7 @@ class ReturnStatement : public Statement
         ReturnStatement(node _expression):
         expression(_expression){}
 
-        statementType="return";
+        std::string statementType="return";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -44,7 +38,7 @@ class ReturnStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class AssignStatement : public Statement
+class AssignStatement : public ASTNode
 {
     public:
         std::string id;
@@ -53,7 +47,7 @@ class AssignStatement : public Statement
         AssignStatement(std::string &_id, node _expression):
         id(_id), expression(_expression){}
 
-        statementType="assign";
+        std::string statementType="assign";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -80,7 +74,7 @@ class AssignStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class DeclareStatement : public Statement
+class DeclareStatement : public ASTNode
 {
     public:
         std::string type;
@@ -92,7 +86,7 @@ class DeclareStatement : public Statement
         DeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
 
-        statementType="declare";
+        std::string statementType="declare";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -127,7 +121,7 @@ class DeclareStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class GlobalDeclareStatement : public Statement
+class GlobalDeclareStatement : public ASTNode
 {
     public:
         std::string type;
@@ -139,7 +133,7 @@ class GlobalDeclareStatement : public Statement
         GlobalDeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){ globalVar.push_back(id); }
 
-        statementType="global_declare";
+        std::string statementType="global_declare";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -174,7 +168,7 @@ class GlobalDeclareStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class FunctionStatement : public Statement
+class FunctionStatement : public ASTNode
 {
     public:
         std::string id;
@@ -183,7 +177,7 @@ class FunctionStatement : public Statement
         FunctionStatement(std::string &_id, node _arguments):
         id(_id), arguments(_arguments){}
 
-        statementType="function";
+        std::string statementType="function";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -210,7 +204,42 @@ class FunctionStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class If_Statement : public Statement
+class NewScope : public ASTNode
+{
+    public:
+        node body;
+
+        NewScope(node _body): 
+            body(_body){}
+
+        std::string statementType="new_scope";
+
+        //print tester
+        virtual void print(std::ostream &dst, int &indent) const override
+        {
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"{"<<std::endl;
+            indent++;
+            body->print(dst,indent);
+            indent--;
+            for(int i=indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}"<<std::endl;
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, int &indent) const override{
+            body->translate(dst,indent);
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+};
+
+class If_Statement : public ASTNode
 {
     public:
         node condition;
@@ -219,7 +248,7 @@ class If_Statement : public Statement
         If_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        statementType="if";
+        std::string statementType="if";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -256,7 +285,7 @@ class If_Statement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class ElIf_Statement : public Statement
+class ElIf_Statement : public ASTNode
 {
     public:
         node condition;
@@ -265,7 +294,7 @@ class ElIf_Statement : public Statement
         ElIf_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        statementType="elif";
+        std::string statementType="elif";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -302,7 +331,7 @@ class ElIf_Statement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class Else_Statement : public Statement
+class Else_Statement : public ASTNode
 {
     public:
         node body;
@@ -310,7 +339,7 @@ class Else_Statement : public Statement
         Else_Statement(node _body):
         body(_body){}
 
-        statementType="else";
+        std::string statementType="else";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -343,7 +372,7 @@ class Else_Statement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class While_Statement : public Statement
+class While_Statement : public ASTNode
 {
     public:
         node condition;
@@ -352,7 +381,7 @@ class While_Statement : public Statement
         While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        statementType="while";
+        std::string statementType="while";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -389,7 +418,7 @@ class While_Statement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class Do_While_Statement : public Statement
+class Do_While_Statement : public ASTNode
 {
     public:
         node condition;
@@ -398,7 +427,7 @@ class Do_While_Statement : public Statement
         Do_While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        statementType="do_while";
+        std::string statementType="do_while";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override

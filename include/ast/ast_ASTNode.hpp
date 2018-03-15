@@ -12,8 +12,8 @@ extern std::vector <std::string> globalVar;
 class VariableBind
 {
 public:
-    String Id;
-    String type;
+    std::string Id;
+    std::string type;
     int relativeToStack;
 };
 

@@ -1,6 +1,6 @@
 def main():
     x=0
-    condition=true
+    condition=1
     if condition :
         x=x+1
     return 0

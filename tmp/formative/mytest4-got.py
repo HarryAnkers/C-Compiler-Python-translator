@@ -1,8 +1,10 @@
 def main():
 	x=0
+	condition=1
+	conditionB=1
 	if condition :
 		x=(x+1)
-	elif(conditonB) :
+	elif(conditionB) :
 		x=(x+2)
 	return 0
 

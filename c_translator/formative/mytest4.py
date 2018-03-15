@@ -1,10 +1,10 @@
 def main():
     x=0
-    condition=true
-    conditionB=true
+    condition=1
+    conditionB=1
     if condition :
         x=x+1
-    elif conditonB :
+    elif condiitonB :
         x=x+2
     return 0
 

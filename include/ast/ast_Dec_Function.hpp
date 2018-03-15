@@ -60,7 +60,8 @@ class Function : public ASTNode
         }
 
         int count(){
-            
+            //needs to be filled out
+            return -1;
         }
 };
 

@@ -1,6 +1,6 @@
 int main(){
     int x;
-    bool condition=true;
+    int condition=1;
     if(condition){
         x=x+1;
     }
