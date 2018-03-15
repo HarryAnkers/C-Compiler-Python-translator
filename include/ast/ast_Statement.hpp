@@ -3,13 +3,21 @@
 
 #include "ast_ASTNode.hpp"
 
-class ReturnStatement : public ASTNode
+class Statement : public ASTNode
+{
+    public:
+        std::string statementType;
+};
+
+class ReturnStatement : public Statement
 {
     public:
         node expression;
 
         ReturnStatement(node _expression):
         expression(_expression){}
+
+        statementType="return";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -36,7 +44,7 @@ class ReturnStatement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class AssignStatement : public ASTNode
+class AssignStatement : public Statement
 {
     public:
         std::string id;
@@ -45,6 +53,8 @@ class AssignStatement : public ASTNode
         AssignStatement(std::string &_id, node _expression):
         id(_id), expression(_expression){}
 
+        statementType="assign";
+
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
         {
@@ -70,7 +80,7 @@ class AssignStatement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class DeclareStatement : public ASTNode
+class DeclareStatement : public Statement
 {
     public:
         std::string type;
@@ -82,6 +92,8 @@ class DeclareStatement : public ASTNode
         DeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
 
+        statementType="declare";
+
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
         {
@@ -115,7 +127,7 @@ class DeclareStatement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class GlobalDeclareStatement : public ASTNode
+class GlobalDeclareStatement : public Statement
 {
     public:
         std::string type;
@@ -127,6 +139,8 @@ class GlobalDeclareStatement : public ASTNode
         GlobalDeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){ globalVar.push_back(id); }
 
+        statementType="global_declare";
+
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
         {
@@ -160,7 +174,7 @@ class GlobalDeclareStatement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class FunctionStatement : public ASTNode
+class FunctionStatement : public Statement
 {
     public:
         std::string id;
@@ -168,6 +182,8 @@ class FunctionStatement : public ASTNode
 
         FunctionStatement(std::string &_id, node _arguments):
         id(_id), arguments(_arguments){}
+
+        statementType="function";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -194,7 +210,7 @@ class FunctionStatement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class If_Statement : public ASTNode
+class If_Statement : public Statement
 {
     public:
         node condition;
@@ -202,6 +218,8 @@ class If_Statement : public ASTNode
     
         If_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
+
+        statementType="if";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -238,7 +256,7 @@ class If_Statement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class ElIf_Statement : public ASTNode
+class ElIf_Statement : public Statement
 {
     public:
         node condition;
@@ -246,6 +264,8 @@ class ElIf_Statement : public ASTNode
     
         ElIf_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
+
+        statementType="elif";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -282,13 +302,15 @@ class ElIf_Statement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class Else_Statement : public ASTNode
+class Else_Statement : public Statement
 {
     public:
         node body;
     
         Else_Statement(node _body):
         body(_body){}
+
+        statementType="else";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -321,7 +343,7 @@ class Else_Statement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class While_Statement : public ASTNode
+class While_Statement : public Statement
 {
     public:
         node condition;
@@ -329,6 +351,8 @@ class While_Statement : public ASTNode
     
         While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
+
+        statementType="while";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -365,7 +389,7 @@ class While_Statement : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
-class Do_While_Statement : public ASTNode
+class Do_While_Statement : public Statement
 {
     public:
         node condition;
@@ -373,6 +397,8 @@ class Do_While_Statement : public ASTNode
     
         Do_While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
+
+        statementType="do_while";
 
         //print tester
         virtual void print(std::ostream &dst, int &indent) const override
@@ -395,7 +421,7 @@ class Do_While_Statement : public ASTNode
 
         //translator 
         virtual void translate(std::ostream &dst, int &indent) const override{
-            for(int i=indent;i!=0;i--){
+            /*for(int i=indent;i!=0;i--){
                 dst<<"\t";
             }
             dst<<"While ";
@@ -403,7 +429,8 @@ class Do_While_Statement : public ASTNode
             dst<<" :"<<std::endl;
             indent++;
             body->translate(dst,indent);
-            indent--;
+            indent--;*/
+            //not sure how to do this
         }
 
         //compiler 

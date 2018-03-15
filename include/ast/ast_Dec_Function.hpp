@@ -58,6 +58,10 @@ class Function : public ASTNode
             dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<""<<std::endl;
             dst<<"j "<<"31"<<std::endl;
         }
+
+        int count(){
+            
+        }
 };
 
 
