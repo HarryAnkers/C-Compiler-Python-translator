@@ -45,10 +45,9 @@ class Body : public ASTNode
             if(statement!=NULL){
                 
                 if(nextBody!=NULL){
-                    //nextBody->count(cnt);
+                    nextBody->count(cnt);
                 }
-
-                //statement->count(cnt);
+                statement->count(cnt);
             }
         }
 };

@@ -90,18 +90,19 @@ extern int yydebug;
     T_STRING = 284,
     T_BOOL = 285,
     T_VOID = 286,
-    T_TIMES = 287,
-    T_DIVIDE = 288,
-    T_PLUS = 289,
-    T_MINUS = 290,
-    T_EXPONENT = 291,
-    T_NUMBER = 292,
-    T_ID = 293,
-    T_COMMENT = 294,
-    T_RETURN = 295,
-    T_ELSE = 296,
-    T_IF = 297,
-    T_WHILE = 298
+    T_LONG = 287,
+    T_TIMES = 288,
+    T_DIVIDE = 289,
+    T_PLUS = 290,
+    T_MINUS = 291,
+    T_EXPONENT = 292,
+    T_NUMBER = 293,
+    T_ID = 294,
+    T_COMMENT = 295,
+    T_RETURN = 296,
+    T_ELSE = 297,
+    T_IF = 298,
+    T_WHILE = 299
   };
 #endif
 
@@ -116,7 +117,7 @@ union YYSTYPE
   double number;
   std::string *string;
 
-#line 120 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 121 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

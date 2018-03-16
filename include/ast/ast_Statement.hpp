@@ -4,11 +4,18 @@
 #include "ast_ASTNode.hpp"
 
 class Statement : public ASTNode{
-    virtual std::string getStateType()=0;
+    virtual std::string getStateType() const {return "";};
+    virtual std::string getVarType() const {return "";};
 
     void count(int &cnt) const {
-        if(1){
-            cnt++;
+        std::string type = getStateType();
+        if(!type.compare("declare")){
+            type = getVarType();
+            if(!type.compare("int")){
+                cnt++;
+            } else if(!type.compare("long")){
+                cnt=cnt+2;
+            }
         }
     }
 };
@@ -21,7 +28,7 @@ class ReturnStatement : public Statement
         ReturnStatement(node _expression):
         expression(_expression){}
 
-        virtual std::string getStateType() override { return "return"; }
+        virtual std::string getStateType() const override { return "return"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -57,7 +64,7 @@ class AssignStatement : public Statement
         AssignStatement(std::string &_id, node _expression):
         id(_id), expression(_expression){}
 
-        virtual std::string getStateType() override { return "assign"; }
+        virtual std::string getStateType() const override { return "assign"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -96,7 +103,8 @@ class DeclareStatement : public Statement
         DeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
 
-        virtual std::string getStateType() override { return "declare"; }
+        virtual std::string getStateType() const override { return "declare"; }
+        virtual std::string getVarType() const override { return type; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -128,7 +136,9 @@ class DeclareStatement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.varVector.push_back(VariableBind(id, type, state.currentScope));
+        }
 };
 
 class GlobalDeclareStatement : public Statement
@@ -143,7 +153,7 @@ class GlobalDeclareStatement : public Statement
         GlobalDeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
 
-        virtual std::string getStateType() override { return "global_declare"; }
+        virtual std::string getStateType() const override { return "global_declare"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -188,7 +198,7 @@ class FunctionStatement : public Statement
         FunctionStatement(std::string &_id, node _arguments):
         id(_id), arguments(_arguments){}
 
-        virtual std::string getStateType() override { return "function"; }
+        virtual std::string getStateType() const override { return "function"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -223,7 +233,7 @@ class NewScope : public Statement
         NewScope(node _body): 
             body(_body){}
 
-        virtual std::string getStateType() override { return "new_scope"; }
+        virtual std::string getStateType() const override { return "new_scope"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -259,7 +269,7 @@ class If_Statement : public Statement
         If_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        virtual std::string getStateType() override { return "if"; }
+        virtual std::string getStateType() const override { return "if"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -305,7 +315,7 @@ class ElIf_Statement : public Statement
         ElIf_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        virtual std::string getStateType() override { return "elif"; }
+        virtual std::string getStateType() const override { return "elif"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -350,7 +360,7 @@ class Else_Statement : public Statement
         Else_Statement(node _body):
         body(_body){}
 
-        virtual std::string getStateType() override { return "else"; }
+        virtual std::string getStateType() const override { return "else"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -392,7 +402,7 @@ class While_Statement : public Statement
         While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        virtual std::string getStateType() override { return "while"; }
+        virtual std::string getStateType() const override { return "while"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -438,7 +448,7 @@ class Do_While_Statement : public Statement
         Do_While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
 
-        virtual std::string getStateType() override { return "do_while"; }
+        virtual std::string getStateType() const override { return "do_while"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override

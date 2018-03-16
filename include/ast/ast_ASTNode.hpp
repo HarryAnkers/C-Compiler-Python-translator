@@ -12,10 +12,10 @@ class VariableBind
 public:
     std::string id;
     std::string type;
-    int relativeToStack;
+    int scope;
 
-    VariableBind(std::string _id, std::string _type, int _relativeToStack):
-        id(_id),type(_type),relativeToStack(_relativeToStack){}
+    VariableBind(std::string _id, std::string _type, int _scope):
+        id(_id),type(_type),scope(_scope){}
 
     ~VariableBind(){}
 };
@@ -63,6 +63,9 @@ public:
 
     //compiler
     virtual void compile(std::ostream &dst, CompilerState &state) const =0;
+
+    //for counting elements in tree
+    virtual void count(int &varCount) const{}
 
     //these are all for first time called from cpp files
     void translate(std::ostream &dst) const{

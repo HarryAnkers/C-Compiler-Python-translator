@@ -43,6 +43,19 @@ class Argument : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+
+        virtual void count(int &cnt) const override{
+            if(run){
+                if(nextArguments!=NULL){
+                    nextArguments->count(cnt);
+                }
+            }
+            if(!argType.compare("int")){
+                cnt++;
+            } else if(!argType.compare("long")){
+                cnt=cnt+2;
+            }
+        }
 };
 
 #endif

@@ -39,6 +39,7 @@
         "iostream": "cpp",
         "ios": "cpp",
         "__split_buffer": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "ostream": "cpp"
     }
 }
