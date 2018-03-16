@@ -225,6 +225,7 @@ class FunctionStatement : public Statement
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
 };
 
+
 class NewScope : public Statement
 {
     public:

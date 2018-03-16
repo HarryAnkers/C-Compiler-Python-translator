@@ -49,7 +49,6 @@ class Body : public ASTNode
 
         void count(int &cnt) const {
             if(statement!=NULL){
-                
                 if(nextBody!=NULL){
                     nextBody->count(cnt);
                 }
