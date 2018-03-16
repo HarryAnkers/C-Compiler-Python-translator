@@ -40,6 +40,17 @@ class Body : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+
+        void count(int &cnt) const {
+            if(statement!=NULL){
+                
+                if(nextBody!=NULL){
+                    //nextBody->count(cnt);
+                }
+
+                //statement->count(cnt);
+            }
+        }
 };
 
 

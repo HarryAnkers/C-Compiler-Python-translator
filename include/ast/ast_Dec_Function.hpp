@@ -44,10 +44,14 @@ class Function : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int varCount = 0;
+            count(varCount);
+            varCount = varCount * 4;
+
             dst<<"f"<<state.labelId<<":"<<std::endl;
             state.labelId++;
             //need function to count how many variables are used
-            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<"-"<<std::endl;
+            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<(-1*varCount)<<std::endl;
             dst<<"sw "<<"$fp"<<","<<"4($sp)"<<std::endl;
             dst<<"move "<<"$fp"<<"$sp"<<std::endl;
             //then stores arguments
@@ -55,13 +59,13 @@ class Function : public ASTNode
             
             //below needs to be put into the return
             dst<<"lw "<<"$fp"<<","<<"4($sp)"<<std::endl;
-            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<""<<std::endl;
+            dst<<"addiu "<<"$sp"<<","<<"$sp"<<","<<varCount<<std::endl;
             dst<<"j "<<"31"<<std::endl;
         }
 
-        int count(){
-            //needs to be filled out
-            return -1;
+        void count(int &cnt) const{
+            cnt = 0;
+            //body->count(cnt);
         }
 };
 
