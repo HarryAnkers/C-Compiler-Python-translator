@@ -27,7 +27,6 @@ class Body : public ASTNode
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            
             if(statement!=NULL){
                 
                 if(nextBody!=NULL){
@@ -39,7 +38,14 @@ class Body : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            if(statement!=NULL){
+                if(nextBody!=NULL){
+                    nextBody->compile(dst, state);
+                }
+                statement->compile(dst, state);
+            }
+        }
 
         void count(int &cnt) const {
             if(statement!=NULL){

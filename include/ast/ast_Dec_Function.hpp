@@ -55,9 +55,16 @@ class Function : public ASTNode
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*varCount)<<std::endl;
             dst<<"sw "<<"$fp"<<" , "<<"4($sp)"<<std::endl;
             dst<<"move "<<"$fp"<<" "<<"$sp"<<std::endl;
-            //then stores arguments
-            //do work
             
+            state.currentScope++;
+
+            //then stores arguments
+
+            //do work
+            body->compile(dst, state);
+
+            state.popScope();
+
             //below needs to be put into the return
             dst<<"lw "<<"$fp"<<" , "<<"4($sp)"<<std::endl;
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<varCount<<std::endl;

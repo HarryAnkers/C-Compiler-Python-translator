@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <map>
-
+#include <vector>
 #include <memory>
 
 class VariableBind
@@ -18,6 +18,11 @@ public:
         id(_id),type(_type),scope(_scope){}
 
     ~VariableBind(){}
+
+    friend std::ostream& operator<< (std::ostream &o, VariableBind b){
+    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope;
+    return o;
+  }
 };
 
 class CompilerState
@@ -29,8 +34,21 @@ public:
 
     CompilerState():
         labelId(0), currentScope(0) {}
-
     ~CompilerState(){}
+
+    void popScope(){
+        bool stop = false;
+        int i = 0;
+        while((stop == false) && (i >= 0)){
+            i=varVector.size()-1;
+            if(varVector[i].scope==currentScope){
+                varVector.pop_back();
+            } else {
+                stop = true;
+                currentScope--;
+            }
+        }
+    }
 };
 
 class PrintTransState

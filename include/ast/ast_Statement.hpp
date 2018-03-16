@@ -257,7 +257,11 @@ class NewScope : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+            body->compile(dst, state);
+            state.popScope();
+        }
 };
 
 class If_Statement : public Statement
