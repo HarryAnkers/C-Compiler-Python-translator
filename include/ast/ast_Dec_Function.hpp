@@ -59,6 +59,7 @@ class Function : public ASTNode
             state.adjustStack(varCount);
             state.currentScope++;
             //then stores arguments
+            arguments->compile(dst, state);
 
             //do work
             body->compile(dst, state);

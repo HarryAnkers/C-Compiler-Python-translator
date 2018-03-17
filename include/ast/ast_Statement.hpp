@@ -137,7 +137,16 @@ class DeclareStatement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.varVector.push_back(VariableBind(id, type, state.currentScope,state.currentOffset()));
+            int offset=state.offset();
+            state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
+            if(expression!=NULL){
+                expression
+            } else {
+                int regNo = state.getTempReg(1);
+                dst<<"li "<<"$"<<regNo<<" , "<<"0"<<std::endl;
+	            dst<<"sw "<<"$"<<regNo<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[regNo]=0;
+            }
         }
 };
 

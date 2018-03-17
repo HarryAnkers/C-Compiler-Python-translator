@@ -36,7 +36,7 @@ public:
     int currentOffset;
 
     CompilerState():
-        labelId(0), currentScope(0), currentOffset(0) {
+        labelId(0), currentScope(0), currentOffset(-4) {
             for(int i=0;i<32;i++){
                 registers[i]=0;
             }
@@ -49,23 +49,45 @@ public:
         }
     }
 
-    int currentOffset(){
+    int offset(){
         currentOffset+=4;
         return currentOffset;
+    }
+
+    int getTempReg(int x){
+        for(int i=2;i<4;i++){
+            if(registers[i]!=0){
+                registers[i]=x
+                return i;
+            }
+        } for(int i=8;i<16;i++){
+            if(registers[i]!=0){
+                registers[i]=x
+                return i;
+            }
+        }
+
+        //NEED TO FIX THIS BUT WILL WORK FOR NOW
+
+        std::cout<<"no free registers"<<std::endl;
     }
 
     void popScope(){
         bool stop = false;
         int i = 0;
-        while((stop == false) && (i >= 0)){
-            i=varVector.size()-1;
-            if(varVector[i].scope==currentScope){
-                varVector.pop_back();
-            } else {
-                stop = true;
+        if(varVector.size()!=0){
+            while((stop == false) && (i >= 0)){
+                i=varVector.size()-1;
+                if(varVector[i].scope==currentScope){
+                    varVector.pop_back();
+                } else {
+                    stop = true;
+                }
             }
+            std::cout<<"pre adjust"<<std::endl;
+            adjustStack(-1*((i*4)+8));
+            std::cout<<"adjust"<<std::endl;
         }
-        adjustStack(-1*((i*4)+8));
     }
 };
 
