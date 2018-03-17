@@ -13,14 +13,15 @@ public:
     std::string id;
     std::string type;
     int scope;
+    int relativeStack;
 
-    VariableBind(std::string _id, std::string _type, int _scope):
-        id(_id),type(_type),scope(_scope){}
+    VariableBind(std::string _id, std::string _type, int _scope, int _relativeStack):
+        id(_id),type(_type),scope(_scope), relativeStack(_relativeStack){}
 
     ~VariableBind(){}
 
     friend std::ostream& operator<< (std::ostream &o, VariableBind b){
-    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope;
+    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope << ", relativeStack: " << b.relativeStack;
     return o;
   }
 };
@@ -31,10 +32,27 @@ public:
     int labelId;
     std::vector<VariableBind> varVector;
     int currentScope;
+    int registers[32];
+    int currentOffset;
 
     CompilerState():
-        labelId(0), currentScope(0) {}
+        labelId(0), currentScope(0), currentOffset(0) {
+            for(int i=0;i<32;i++){
+                registers[i]=0;
+            }
+        }
     ~CompilerState(){}
+
+    void adjustStack(int offset){
+        for(int i=varVector.size()-1;i>=0;i--){
+            varVector[i].relativeStack=+offset;
+        }
+    }
+
+    int currentOffset(){
+        currentOffset+=4;
+        return currentOffset;
+    }
 
     void popScope(){
         bool stop = false;
@@ -45,9 +63,9 @@ public:
                 varVector.pop_back();
             } else {
                 stop = true;
-                currentScope--;
             }
         }
+        adjustStack(-1*((i*4)+8));
     }
 };
 

@@ -137,7 +137,7 @@ class DeclareStatement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.varVector.push_back(VariableBind(id, type, state.currentScope));
+            state.varVector.push_back(VariableBind(id, type, state.currentScope,state.currentOffset()));
         }
 };
 

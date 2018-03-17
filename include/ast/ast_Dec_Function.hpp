@@ -47,28 +47,30 @@ class Function : public ASTNode
             int varCount = 0;
             bodyCount(varCount);
             argsCount(varCount);
-            varCount = varCount * 4;
+            varCount = varCount * 4 + 8;
 
             dst<<"f"<<state.labelId<<":"<<std::endl;
             state.labelId++;
             //need function to count how many variables are used
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*varCount)<<std::endl;
-            dst<<"sw "<<"$fp"<<" , "<<"4($sp)"<<std::endl;
+            dst<<"sw "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
             dst<<"move "<<"$fp"<<" "<<"$sp"<<std::endl;
             
+            state.adjustStack(varCount);
             state.currentScope++;
-
             //then stores arguments
 
             //do work
             body->compile(dst, state);
 
             state.popScope();
+            state.currentScope--;
 
             //below needs to be put into the return
-            dst<<"lw "<<"$fp"<<" , "<<"4($sp)"<<std::endl;
+            dst<<"lw "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<varCount<<std::endl;
             dst<<"j "<<"31"<<std::endl;
+            dst<<"nop"<<std::endl;
         }
 
         void bodyCount(int &cnt) const{
