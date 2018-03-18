@@ -10,9 +10,9 @@ class Body : public ASTNode
         node nextBody;
     
         Body(node _statement, node _nextBody):
-        statement(_statement), nextBody(_nextBody){}
+            statement(_statement), nextBody(_nextBody){}
         Body():
-        statement(NULL), nextBody(NULL){}
+            statement(NULL), nextBody(NULL){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -28,11 +28,9 @@ class Body : public ASTNode
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             if(statement!=NULL){
-                
                 if(nextBody!=NULL){
                     nextBody->translate(dst, state);
                 }
-
                 statement->translate(dst, state);
             }
         }
