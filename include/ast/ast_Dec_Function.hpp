@@ -72,6 +72,13 @@ class Function : public ASTNode
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<varCount<<std::endl;
             dst<<"j "<<"31"<<std::endl;
             dst<<"nop"<<std::endl;
+
+            std::cout<<std::endl<<" registers that are still being used :"<<std::endl;
+            for(int i=0; i<32;i++){
+                if(state.registers[i]!=0){
+                    std::cout<<"regNo - "<<i<<std::endl;
+                }
+            }
         }
 
         void bodyCount(int &cnt) const{

@@ -18,6 +18,8 @@ protected:
     {}
 public:
     virtual const char *getOpcode() const =0;
+    virtual const char *getSignInst() const =0;
+    virtual const char *getUnsignInst() const =0;
 
     virtual void print(std::ostream &dst, PrintTransState &state) const override
     {
@@ -37,7 +39,16 @@ public:
     }
 
     //compiler 
-    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        int reg2 = state.getTempReg(0);
+        left->compile(dst, state);
+        int reg3 = state.getTempReg(0);
+        right->compile(dst, state);
+        state.registers[reg2]=0;
+        state.registers[reg3]=0;
+        int reg1 = state.getTempReg(1);
+        dst<<getSignInst()<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+    }
 };
 
 class AddOperator
@@ -46,6 +57,12 @@ class AddOperator
 protected:
     virtual const char *getOpcode() const override
     { return "+"; }
+
+    virtual const char *getSignInst() const override
+    { return "add"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "addu"; }
 public:
     AddOperator(node _left, node _right)
         : Operator(_left, _right)
@@ -59,6 +76,12 @@ class SubOperator
 protected:
     virtual const char *getOpcode() const override
     { return "-"; }
+
+    virtual const char *getSignInst() const override
+    { return "sub"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "subu"; }
 public:
     SubOperator(node _left, node _right)
         : Operator(_left, _right)
@@ -72,6 +95,12 @@ class MulOperator
 protected:
     virtual const char *getOpcode() const override
     { return "*"; }
+
+    virtual const char *getSignInst() const override
+    { return "mult"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "multu"; }
 public:
     MulOperator(node _left, node _right)
         : Operator(_left, _right)
@@ -84,6 +113,12 @@ class DivOperator
 protected:
     virtual const char *getOpcode() const override
     { return "/"; }
+
+    virtual const char *getSignInst() const override
+    { return "div"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "divu"; }
 public:
     DivOperator(node _left, node _right)
         : Operator(_left, _right)
@@ -96,6 +131,13 @@ class ExpOperator
 protected:
     virtual const char *getOpcode() const override
     { return "^"; }
+
+    //need to impliment the below
+    virtual const char *getSignInst() const override
+    { return "NOT IMPIMENTED"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "NOT IMPIMENTED"; }
 public:
     ExpOperator(node _left, node _right)
         : Operator(_left, _right)

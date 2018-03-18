@@ -24,7 +24,16 @@ public:
         dst<<id;
     }
 
-    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        for(int i = state.varVector.size()-1;i>=0;i--){
+            if(!state.varVector[i].id.compare(id)){
+                int regNo = state.getTempReg(1);
+                dst<<"lw "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                return;
+            }
+        }
+        throw std::invalid_argument( "variable used was not found (previously declared)" );
+    }
 };
 
 class Number
@@ -48,7 +57,10 @@ public:
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        int regNo = state.getTempReg(1);
+        dst<<"li "<<"$"<<regNo<<" , "<<value<<std::endl;
+    }
 };
 
 class String

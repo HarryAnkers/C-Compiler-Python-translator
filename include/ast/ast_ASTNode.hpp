@@ -13,15 +13,15 @@ public:
     std::string id;
     std::string type;
     int scope;
-    int relativeStack;
+    int stackOffset;
 
-    VariableBind(std::string _id, std::string _type, int _scope, int _relativeStack):
-        id(_id),type(_type),scope(_scope), relativeStack(_relativeStack){}
+    VariableBind(std::string _id, std::string _type, int _scope, int _stackOffset):
+        id(_id),type(_type),scope(_scope), stackOffset(_stackOffset){}
 
     ~VariableBind(){}
 
     friend std::ostream& operator<< (std::ostream &o, VariableBind b){
-    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope << ", relativeStack: " << b.relativeStack;
+    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope << ", stackOffset: " << b.stackOffset;
     return o;
   }
 };
@@ -45,7 +45,7 @@ public:
 
     void adjustStack(int offset){
         for(int i=varVector.size()-1;i>=0;i--){
-            varVector[i].relativeStack=+offset;
+            varVector[i].stackOffset=+offset;
         }
     }
 
@@ -56,13 +56,13 @@ public:
 
     int getTempReg(int x){
         for(int i=2;i<4;i++){
-            if(registers[i]!=0){
-                registers[i]=x
+            if(registers[i]==0){
+                registers[i]=x;
                 return i;
             }
         } for(int i=8;i<16;i++){
-            if(registers[i]!=0){
-                registers[i]=x
+            if(registers[i]==0){
+                registers[i]=x;
                 return i;
             }
         }
@@ -70,6 +70,7 @@ public:
         //NEED TO FIX THIS BUT WILL WORK FOR NOW
 
         std::cout<<"no free registers"<<std::endl;
+        return -1;
     }
 
     void popScope(){
@@ -84,9 +85,7 @@ public:
                     stop = true;
                 }
             }
-            std::cout<<"pre adjust"<<std::endl;
             adjustStack(-1*((i*4)+8));
-            std::cout<<"adjust"<<std::endl;
         }
     }
 };

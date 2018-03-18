@@ -118,7 +118,7 @@ class DeclareStatement : public Statement
                 expression->print(dst, state);
             }
             dst<<";"<<std::endl;
-        }
+        }xs
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
@@ -140,7 +140,10 @@ class DeclareStatement : public Statement
             int offset=state.offset();
             state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
             if(expression!=NULL){
-                expression
+                int regNo = state.getTempReg(0);
+                expression->compile(dst,state);
+                dst<<"sw "<<"$"<<regNo<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[regNo]=0;
             } else {
                 int regNo = state.getTempReg(1);
                 dst<<"li "<<"$"<<regNo<<" , "<<"0"<<std::endl;
