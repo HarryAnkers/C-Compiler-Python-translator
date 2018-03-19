@@ -51,7 +51,7 @@ public:
     }
 
     int label(){
-        state.labelId++;
+        labelId++;
         return labelId-1;
     }
 

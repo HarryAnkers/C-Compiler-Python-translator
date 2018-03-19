@@ -118,7 +118,7 @@ class DeclareStatement : public Statement
                 expression->print(dst, state);
             }
             dst<<";"<<std::endl;
-        }xs
+        }
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
@@ -322,8 +322,8 @@ class If_Statement : public Statement
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             int reg1 = state.getTempReg(0);
-            condition->compile();
-            state.exitId=labelId+1;
+            condition->compile(dst,state);
+            state.exitId=state.labelId+1;
             dst<<"beq"<<" "<<reg1<<" , "<<"$0"<<" , "<<"$L"<<state.labelId+1<<std::endl;
             dst<<"nop"<<std::endl;
 
@@ -374,7 +374,7 @@ class ElIf_Statement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            condition->compile();
+            condition->compile(dst,state);
         }
 };
 
