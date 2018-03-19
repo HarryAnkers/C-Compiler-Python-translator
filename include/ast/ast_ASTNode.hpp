@@ -21,9 +21,9 @@ public:
     ~VariableBind(){}
 
     friend std::ostream& operator<< (std::ostream &o, VariableBind b){
-    o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope << ", stackOffset: " << b.stackOffset;
-    return o;
-  }
+        o << "element: "<<b.id<<", type: "<< b.type << ", scope: " << b.scope << ", stackOffset: " << b.stackOffset;
+        return o;
+    }
 };
 
 class CompilerState
@@ -31,13 +31,14 @@ class CompilerState
 public:
     int labelId;
     std::vector<VariableBind> varVector;
+    std::vector<int> ifVector;
     int currentScope;
     int registers[32];
     int currentOffset;
-    int exitId;
+    int returnId;
 
     CompilerState():
-        labelId(0), currentScope(0), currentOffset(-4) {
+        labelId(0), currentScope(0), currentOffset(-4), returnId(0) {
             for(int i=0;i<32;i++){
                 registers[i]=0;
             }
@@ -93,6 +94,16 @@ public:
             }
             adjustStack(-1*((i*4)+8));
         }
+    }
+
+    friend std::ostream& operator<< (std::ostream &o, CompilerState b){
+        o<<std::endl<<" registers that are still being used :"<<std::endl;
+        for(int i=0; i<32;i++){
+            if(b.registers[i]!=0){
+                o<<"regNo - "<<i<<std::endl;
+            }
+        }
+        return o;
     }
 };
 

@@ -30,7 +30,15 @@ class IfElseList : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            ifOrElse->compile(dst, state);
+            if(nextStatement!=NULL){
+                nextStatement->compile(dst, state);
+            } else {
+                dst<<"$L"<<state.ifVector[state.ifVector.size()-1]<<":"<<std::endl;
+                state.varVector.pop_back();
+            }
+        }
 };
 
 

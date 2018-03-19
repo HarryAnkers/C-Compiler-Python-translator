@@ -58,8 +58,8 @@ public:
     }
 
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
-        int regNo = state.getTempReg(1);
-        dst<<"li "<<"$"<<regNo<<" , "<<value<<std::endl;
+        int reg1 = state.getTempReg(1);
+        dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<value<<std::endl;
     }
 };
 

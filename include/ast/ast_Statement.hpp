@@ -52,7 +52,13 @@ class ReturnStatement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(0);
+            expression->compile(dst,state);
+            dst<<"add"<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
+            state.registers[reg1]=0;
+            dst<<"b"<<" "<<"$E"<<state.returnId;
+        }
 };
 
 class AssignStatement : public Statement
@@ -140,15 +146,15 @@ class DeclareStatement : public Statement
             int offset=state.offset();
             state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
             if(expression!=NULL){
-                int regNo = state.getTempReg(0);
+                int reg1 = state.getTempReg(0);
                 expression->compile(dst,state);
-                dst<<"sw "<<"$"<<regNo<<" , "<<offset<<"($fp)"<<std::endl;
-                state.registers[regNo]=0;
+                dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[reg1]=0;
             } else {
-                int regNo = state.getTempReg(1);
-                dst<<"li "<<"$"<<regNo<<" , "<<"0"<<std::endl;
-	            dst<<"sw "<<"$"<<regNo<<" , "<<offset<<"($fp)"<<std::endl;
-                state.registers[regNo]=0;
+                int reg1 = state.getTempReg(1);
+                dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+	            dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[reg1]=0;
             }
         }
 };
@@ -198,7 +204,13 @@ class GlobalDeclareStatement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(1);
+                dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+	            dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[reg1]=0;
+                //NOT SURE IF CORRECT
+        }
 };
 
 class FunctionStatement : public Statement
@@ -274,6 +286,7 @@ class NewScope : public Statement
             state.currentScope++;
             body->compile(dst, state);
             state.popScope();
+            state.currentScope--;
         }
 };
 
@@ -321,12 +334,23 @@ class If_Statement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.ifVector.push_back(state.label());
+            state.currentScope++;
+
             int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
-            state.exitId=state.labelId+1;
-            dst<<"beq"<<" "<<reg1<<" , "<<"$0"<<" , "<<"$L"<<state.labelId+1<<std::endl;
+            state.registers[reg1]=0;
+            
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
 
+            body->compile(dst,state);
+            state.popScope();
+            state.currentScope--;
+
+            dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
+
+            dst<<"$L"<<state.label()<<std::endl;
         }
 };
 
@@ -374,7 +398,22 @@ class ElIf_Statement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+
+            int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
+            state.registers[reg1]=0;
+            
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            body->compile(dst,state);
+            state.popScope();
+            state.currentScope--;
+
+            dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
+
+            dst<<"$L"<<state.label()<<std::endl;
         }
 };
 
@@ -416,7 +455,12 @@ class Else_Statement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+            body->compile(dst,state);
+            state.popScope();
+            state.currentScope--;
+        }
 };
 
 class While_Statement : public Statement
@@ -462,17 +506,38 @@ class While_Statement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+
+            int loopLabel = state.label();
+            int exitLabel = state.label();
+            dst<<"$L"<<loopLabel<<":"<<std::endl;
+
+            int reg1 = state.getTempReg(0);
+            condition->compile(dst,state);
+            state.registers[reg1]=0;
+            
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            body->compile(dst,state);
+            state.popScope();
+            state.currentScope--;
+
+            dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+            dst<<"$L"<<exitLabel<<":"<<std::endl;
+        }
 };
 
 class Do_While_Statement : public Statement
 {
     public:
-        node condition;
         node body;
+        node condition;
     
-        Do_While_Statement(node _condition, node _body):
-        condition(_condition), body(_body){}
+        Do_While_Statement(node _body, node _condition):
+        body(_body), condition(_condition){}
 
         virtual std::string getStateType() const override { return "do_while"; }
 
@@ -492,7 +557,7 @@ class Do_While_Statement : public Statement
             }
             dst<<"} while ";
             condition->print(dst, state);
-            dst<<std::endl;
+            dst<<";"<<std::endl;
         }
 
         //translator 
@@ -510,7 +575,28 @@ class Do_While_Statement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+            
+            int loopLabel = state.label();
+            int exitLabel = state.label();
+            dst<<"$L"<<loopLabel<<":"<<std::endl;
+
+            body->compile(dst,state);
+            state.popScope();
+            state.currentScope--;
+
+            int reg1 = state.getTempReg(0);
+            condition->compile(dst,state);
+            state.registers[reg1]=0;
+            
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+            dst<<"$L"<<exitLabel<<":"<<std::endl;
+        }
 };
 
 #endif

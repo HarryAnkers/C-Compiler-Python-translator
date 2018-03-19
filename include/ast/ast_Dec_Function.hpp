@@ -49,11 +49,12 @@ class Function : public ASTNode
             argsCount(varCount);
             varCount = varCount * 4 + 8;
 
-            dst<<"f"<<state.label()<<":"<<std::endl;
+            dst<<"F"<<state.label()<<":"<<std::endl;
+            state.returnId=state.label();
             //need function to count how many variables are used
-            dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*varCount)<<std::endl;
-            dst<<"sw "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
-            dst<<"move "<<"$fp"<<" "<<"$sp"<<std::endl;
+            dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*varCount)<<std::endl;
+            dst<<"sw"<<" "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
+            dst<<"move"<<" "<<"$fp"<<" "<<"$sp"<<std::endl;
             
             state.adjustStack(varCount);
             state.currentScope++;
@@ -67,17 +68,13 @@ class Function : public ASTNode
             state.currentScope--;
 
             //below needs to be put into the return
-            dst<<"lw "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
-            dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<varCount<<std::endl;
-            dst<<"j "<<"31"<<std::endl;
+            dst<<"E"<<state.returnId<<":"<<std::endl;
+            dst<<"lw"<<" "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;
+            dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<varCount<<std::endl;
+            dst<<"j"<<" "<<"31"<<std::endl;
             dst<<"nop"<<std::endl;
 
-            std::cout<<std::endl<<" registers that are still being used :"<<std::endl;
-            for(int i=0; i<32;i++){
-                if(state.registers[i]!=0){
-                    std::cout<<"regNo - "<<i<<std::endl;
-                }
-            }
+            dst<<state;
         }
 
         void bodyCount(int &cnt) const{
