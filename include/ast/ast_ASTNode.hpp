@@ -34,6 +34,7 @@ public:
     int currentScope;
     int registers[32];
     int currentOffset;
+    int exitId;
 
     CompilerState():
         labelId(0), currentScope(0), currentOffset(-4) {
@@ -47,6 +48,11 @@ public:
         for(int i=varVector.size()-1;i>=0;i--){
             varVector[i].stackOffset=+offset;
         }
+    }
+
+    int label(){
+        state.labelId++;
+        return labelId-1;
     }
 
     int offset(){

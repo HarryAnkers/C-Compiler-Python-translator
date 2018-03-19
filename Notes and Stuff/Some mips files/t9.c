@@ -4,5 +4,7 @@ int main(int a, int b, int c, int d)
     b=2;
     c=3;
     d=4;
-    return a+b+c+d;
+    int x=21;
+    return a+b+c+d+x;
 }
+

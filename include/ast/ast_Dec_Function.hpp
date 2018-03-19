@@ -49,8 +49,7 @@ class Function : public ASTNode
             argsCount(varCount);
             varCount = varCount * 4 + 8;
 
-            dst<<"f"<<state.labelId<<":"<<std::endl;
-            state.labelId++;
+            dst<<"f"<<state.label()<<":"<<std::endl;
             //need function to count how many variables are used
             dst<<"addiu "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*varCount)<<std::endl;
             dst<<"sw "<<"$fp"<<" , "<<(varCount-4)<<"($sp)"<<std::endl;

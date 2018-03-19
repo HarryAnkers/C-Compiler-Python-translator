@@ -320,7 +320,14 @@ class If_Statement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(0);
+            condition->compile();
+            state.exitId=labelId+1;
+            dst<<"beq"<<" "<<reg1<<" , "<<"$0"<<" , "<<"$L"<<state.labelId+1<<std::endl;
+            dst<<"nop"<<std::endl;
+
+        }
 };
 
 class ElIf_Statement : public Statement
@@ -366,7 +373,9 @@ class ElIf_Statement : public Statement
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            condition->compile();
+        }
 };
 
 class Else_Statement : public Statement

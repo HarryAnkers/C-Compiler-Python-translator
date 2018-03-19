@@ -79,6 +79,12 @@ class LEqual : public ConditionOp
 
         virtual const char *getCOp() const override{ return "=="; }
         virtual const char *getPyOp() const override{ return "=="; }
+
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            /*int reg1 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0);
+            dst<<"bne"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$L"<<state.labelId+1<<std::endl;*/
+        }
 };
 
 class LAnd : public ConditionOp
