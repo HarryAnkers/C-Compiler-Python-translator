@@ -369,5 +369,50 @@ class TenOp
         }
 };
 
+class CommaOp
+    : public ASTNode
+{
+    public:
+        node expression1;
+        node expression2;
+
+        CommaOp(node _expression1, node _expression2):
+        expression1(_expression1), expression2(_expression2){}
+
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {
+            dst<<"(";
+            expression1->print(dst,state);
+            dst<<" , ";
+            expression2->print(dst, state);
+            dst<<")";
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            dst<<"(";
+            expression1->translate(dst,state);
+            dst<<" , ";
+            expression2->translate(dst, state);
+            dst<<")";
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(1);
+            int reg2 = state.getTempReg(0);
+            expression1->compile(dst,state);
+            state.registers[reg2]=0;
+
+            dst<<" , ";
+            
+            reg2 = state.getTempReg(0);
+            expression2->compile(dst, state);
+            state.registers[reg2]=0;
+            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+        }
+};
+
 
 #endif

@@ -47,7 +47,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : TOP_LEVEL { g_root = $1; }
+ROOT : EXPR { g_root = $1; }
 
 //choose main in main body so it gets priority
 TOP_LEVEL : TOP_LIST {$$ = $1; }
@@ -116,29 +116,29 @@ ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new 
 ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else_Statement ($3);}
 
 
-
-EXPR : TERM                                 { $$ = $1; }
-        | EXPR T_PLUS TERM                  { $$ = new AddOperator( $1 , $3 ); }
+EXPR : TERM                                 { printf("term,");$$ = $1;}
+        | EXPR T_COMMA TERM                 { $$ = new CommaOp( $1 , $3); }
+        | EXPR T_PLUS TERM                  { printf("add,");$$ = new AddOperator( $1 , $3 );}
         | EXPR T_MINUS TERM                 { $$ = new SubOperator( $1 , $3 ); }
-        | T_ID T_INC                        {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
-        | T_ID T_DEC                        {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));}
         | ASSIGNOP                          { $$ = $1; }
         | BITWISEOP                         { $$ = $1; }
         | CONDITIONOP                       { $$ = $1; }
 
-TERM : FACTOR                       { $$ = $1; }
+TERM : FACTOR                       { printf("factor");$$ = $1; }
         | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
         | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
         | TERM T_MODULUS FACTOR     { $$ = new ModOperator( $1 , $3 ); }
 
 FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2;}
         | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
-        | NUMBER                {$$ = $1; }
+        | NUMBER                {printf("number");$$ = $1; }
         | T_ID                    { $$ = new Variable( *$1 );}
         | T_SIZE_OF T_ID             {$$ = new SizeOf(*$2);}
-        | EXPR T_QMARK EXPR T_COLON EXPR        {$$ = new TenOp($1,$3,$5);} 
+        | EXPR T_QMARK EXPR T_COLON EXPR        {$$ = new TenOp($1,$3,$5);}
+        | T_ID T_INC                        {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
+        | T_ID T_DEC                        {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));} 
 
-NUMBER : T_NUMBER                       { $$ = new Number( $1 , 0 ); }
+NUMBER : T_NUMBER                       { printf("(%f is the number)",$1);$$ = new Number( $1 , 0 ); }
         | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
 
 BITWISEOP : EXPR T_AND TERM             {$$ = new BAnd($1,$3);}
