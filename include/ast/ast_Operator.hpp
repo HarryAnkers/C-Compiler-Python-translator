@@ -38,7 +38,9 @@ public:
         dst<<")";
     }
 
-    //compiler 
+    //compiler
+    // Looks like we still need a function to differentiate 
+    // between getSignInst() and getUnsignInst()?
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
         int reg2 = state.getTempReg(0);
         left->compile(dst, state);
@@ -125,23 +127,22 @@ public:
     {}
 };
 
-class ExpOperator
+class AssignOperator
     : public Operator
 {
 protected:
     virtual const char *getOpcode() const override
-    { return "^"; }
+    { return "="; }
 
-    //need to impliment the below
-    virtual const char *getSignInst() const override
-    { return "NOT IMPIMENTED"; }
+    virtual const char *getSignInst() const ovveride
+    { return "mov"; }
 
-    virtual const char *getUnsignInst() const override
-    { return "NOT IMPIMENTED"; }
+    virtual const char *getUnsignInst() const ovveride
+    { return "mov"; }    
+
 public:
-    ExpOperator(node _left, node _right)
-        : Operator(_left, _right)
-    {}
+
+    
 };
 
 
