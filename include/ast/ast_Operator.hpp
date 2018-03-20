@@ -303,5 +303,71 @@ class AssignOp
         }
 };
 
+class TenOp
+    : public ASTNode
+{
+    public:
+        node condition;
+        node expression1;
+        node expression2;
+
+        TenOp(node _condition, node _expression1, node _expression2):
+        condition(_condition), expression1(_expression1), expression2(_expression2){}
+
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {   
+            dst<<"(";
+            condition->print(dst,state);
+            dst<<" ? ";
+            expression1->print(dst,state);
+            dst<<" : ";
+            expression2->print(dst,state);
+            dst<<")";
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            dst<<"(";
+            condition->translate(dst,state);
+            dst<<" ? ";
+            expression1->translate(dst,state);
+            dst<<" : ";
+            expression2->translate(dst,state);
+            dst<<")";
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(0);
+            int reg2;
+            condition->compile(dst,state);
+            state.registers[reg1]=0;
+            
+            reg1 = state.getTempReg(1);
+            
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            reg2 = state.getTempReg(0);
+            expression1->compile(dst,state);
+            state.registers[reg2]=0;
+            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+
+
+            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            dst<<"$L"<<state.label()<<std::endl;
+
+            reg2 = state.getTempReg(0);
+            expression2->compile(dst,state);
+            state.registers[reg2]=0;
+            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+
+            dst<<"$L"<<state.label()<<std::endl;
+        }
+};
+
 
 #endif

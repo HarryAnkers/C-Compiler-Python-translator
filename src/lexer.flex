@@ -56,6 +56,7 @@ extern "C" int fileno(FILE *stream);
 [;]             { return T_SEMICOLON; }
 [\"]             { return T_SPEACHMARK; }
 [']             { return T_APOSTROPHE; }
+[?]             { return T_QMARK; }
 
 "int"   	{ yylval.string=new std::string(yytext); return T_INT; }
 "double"	{ yylval.string=new std::string(yytext); return T_DOUBLE; }

@@ -21,7 +21,7 @@
 }
 
 %token T_LSQBRACKET T_RSQBRACKET T_LCUBRACKET T_RCUBRACKET T_LTRIBRACKET T_RTRIBRACKET T_LBRACKET T_RBRACKET
-%token T_ASSIGN T_DOT T_COMMA T_COLON T_SEMICOLON T_SPEACHMARK T_APOSTROPHE
+%token T_ASSIGN T_DOT T_COMMA T_COLON T_QMARK T_SEMICOLON T_SPEACHMARK T_APOSTROPHE
 %token T_NOT T_AND T_OR T_MORE T_LESS T_XOR T_TILDA
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_MODULUS T_INC T_DEC
@@ -136,6 +136,7 @@ FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2;}
         | NUMBER                {$$ = $1; }
         | T_ID                    { $$ = new Variable( *$1 );}
         | T_SIZE_OF T_ID             {$$ = new SizeOf(*$2);}
+        | EXPR T_QMARK EXPR T_COLON EXPR        {$$ = new TenOp($1,$3,$5);} 
 
 NUMBER : T_NUMBER                       { $$ = new Number( $1 , 0 ); }
         | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
