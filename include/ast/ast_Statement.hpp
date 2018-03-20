@@ -61,16 +61,15 @@ class ReturnStatement : public Statement
         }
 };
 
-class AssignStatement : public Statement
+class ExprStatement : public Statement
 {
     public:
-        std::string id;
         node expression;
 
-        AssignStatement(std::string &_id, node _expression):
-        id(_id), expression(_expression){}
+        ExprStatement(node _expression):
+        expression(_expression){}
 
-        virtual std::string getStateType() const override { return "assign"; }
+        virtual std::string getStateType() const override { return "expr"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -78,7 +77,6 @@ class AssignStatement : public Statement
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<id<<"=";
             expression->print(dst, state);
             dst<<";"<<std::endl;
         }
@@ -88,13 +86,16 @@ class AssignStatement : public Statement
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<id<<"=";
             expression->translate(dst, state);
             dst<<std::endl;
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            int reg1 = state.getTempReg(0);
+            expression->compile(dst,state);
+            state.registers[reg1]=0;
+        }
 };
 
 class DeclareStatement : public Statement

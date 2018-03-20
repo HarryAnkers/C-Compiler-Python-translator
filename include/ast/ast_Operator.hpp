@@ -127,22 +127,41 @@ public:
     {}
 };
 
-class AssignOperator
-    : public Operator
+class AssignOp
+    : public ASTNode
 {
-protected:
-    virtual const char *getOpcode() const override
-    { return "="; }
+    public:
+        std::string id;
+        node expression;
 
-    virtual const char *getSignInst() const ovveride
-    { return "mov"; }
+        AssignOp(std::string &_id, node _expression):
+        id(_id), expression(_expression){}
 
-    virtual const char *getUnsignInst() const ovveride
-    { return "mov"; }    
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {
+            dst<<id<<"=";
+            expression->print(dst, state);
+        }
 
-public:
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            dst<<id<<"=";
+            expression->translate(dst, state);
+        }
 
-    
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            for(int i = state.varVector.size()-1;i>=0;i--){
+                if(!state.varVector[i].id.compare(id)){
+                    int reg1 = state.getTempReg(0);
+                    expression->compile(dst,state);
+                    dst<<"sw"<<" "<<"$"<<reg1<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                    return;
+                }
+            }
+            throw std::invalid_argument( "variable used was not found (previously declared)" );
+        }
 };
 
 

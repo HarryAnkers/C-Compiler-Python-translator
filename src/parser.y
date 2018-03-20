@@ -29,11 +29,11 @@
 %token T_RETURN T_ELSE T_IF T_WHILE T_DO
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
-%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE ASSIGN_STATEMENT FUNCTION_STATEMENT
+%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE FUNCTION_STATEMENT
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
-%type <node> EXPR EXPR_TOP TERM FACTOR CONDITION
+%type <node> EXPR TERM FACTOR CONDITION
 %type <node> NUMBER ID
 %type <number> T_NUMBER
 %type <string> T_ID
@@ -79,7 +79,7 @@ BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
 STATEMENT :  RETURN_STATEMENT       {$$=$1;}
         | DEC_VARIABLE                   {$$=$1;}
         | FUNCTION_STATEMENT            {$$=$1;}
-        | ASSIGN_STATEMENT              {$$=$1;}
+        | EXPR T_SEMICOLON              {$$= new ExprStatement($1);}
         | IFANDORELSEORELIF             {$$=$1;}
         | WHILE_STATEMENT               {$$=$1;}
         | DO_STATEMENT                  {$$=$1;}
@@ -88,15 +88,13 @@ STATEMENT :  RETURN_STATEMENT       {$$=$1;}
 NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      {$$ = new NewScope($2);}
         | T_LCUBRACKET T_RCUBRACKET             {;}
 
-RETURN_STATEMENT : T_RETURN EXPR_TOP T_SEMICOLON {$$ = new ReturnStatement($2);}
+RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
 
-DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
+DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
         | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
 
-GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_TOP T_SEMICOLON      {$$ = new GlobalDeclareStatement(*$1, *$2, $4);}  
+GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON      {$$ = new GlobalDeclareStatement(*$1, *$2, $4);}  
         | TYPE T_ID T_SEMICOLON                                 {$$ = new GlobalDeclareStatement(*$1, *$2);}
-
-ASSIGN_STATEMENT : T_ID T_ASSIGN EXPR_TOP T_SEMICOLON {$$ = new AssignStatement(*$1, $3);}
 
 FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
 
@@ -125,20 +123,19 @@ CONDITION :  CONDITION T_LEQUAL CONDITION   {$$ = new LEqual($1,$3);}
         | CONDITION T_LLESS CONDITION       {$$ = new LLess($1,$3);}
         | CONDITION T_LMOREEQUAL CONDITION  {$$ = new LMoreEqual($1,$3);}
         | CONDITION T_LLESSEQUAL CONDITION  {$$ = new LLessEqual($1,$3);}
-        | EXPR_TOP                          {$$ = $1;}
+        | EXPR                              {$$ = $1;}
         | T_LBRACKET CONDITION T_RBRACKET   {$$ = $2;}
-
-EXPR_TOP : EXPR                             {$$=$1;}
-        | T_SPEACHMARK T_ID T_SPEACHMARK    {$$= new String(*$2);}
 
 EXPR : TERM                                 { $$ = $1; }
         | EXPR T_PLUS TERM                  { $$ = new AddOperator( $1 , $3 ); }
         | EXPR T_MINUS TERM                 { $$ = new SubOperator( $1 , $3 ); }
+        | T_ID T_ASSIGN EXPR                {$$ = new AssignOp(*$1, $3);}
+        | T_ID T_PLUS T_PLUS                {$$ = new AssignOp(*$1,new AddOperator(new Variable(*$1) , new Number(1,0)));}
+        | T_ID T_MINUS T_MINUS              {$$ = new AssignOp(*$1,new SubOperator(new Variable(*$1) , new Number(1,0)));}
 
 TERM : FACTOR                       { $$ = $1; }
         | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
         | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
-        | TERM T_EXPONENT FACTOR    { $$ = new ExpOperator( $1 , $3 ); }
 
 FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
         | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
