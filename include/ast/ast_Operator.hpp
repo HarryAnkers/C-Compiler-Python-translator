@@ -49,7 +49,20 @@ public:
         state.registers[reg2]=0;
         state.registers[reg3]=0;
         int reg1 = state.getTempReg(1);
-        dst<<getSignInst()<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+
+        std::string type = getOpcode();
+        if(type.compare("*")){
+            dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+            dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
+        } else if(type.compare("/")){
+            dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+            dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
+        } else if(type.compare("%")){
+            dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+            dst<<"mfhi"<<" "<<"$"<<reg1<<std::endl;
+        } else{
+            dst<<getSignInst()<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+        }
     }
 };
 
@@ -123,6 +136,24 @@ protected:
     { return "divu"; }
 public:
     DivOperator(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
+class ModOperator
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "%"; }
+
+    virtual const char *getSignInst() const override
+    { return "div"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "divu"; }
+public:
+    ModOperator(node _left, node _right)
         : Operator(_left, _right)
     {}
 };
