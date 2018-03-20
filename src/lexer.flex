@@ -63,6 +63,8 @@ extern "C" int fileno(FILE *stream);
 "void"		{ yylval.string=new std::string(yytext); return T_VOID; }
 "long"		{ yylval.string=new std::string(yytext); return T_LONG; }
 
+"size of" {return T_SIZE_OF;}
+
 [*]             { return T_TIMES; }
 [/]             { return T_DIVIDE; }
 [+]             { return T_PLUS; }

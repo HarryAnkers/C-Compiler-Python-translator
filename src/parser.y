@@ -29,7 +29,7 @@
 %token T_LSHIFTASSIGN T_RSHIFTASSIGN T_ANDASSIGN T_XORASSIGN T_ORASSIGN
 %token T_LAND T_LOR T_LEQUAL T_LNEQUAL T_LLESSEQ T_LMOREEQ T_LSHIFT T_RSHIFT
 %token T_NUMBER T_ID T_COMMENT
-%token T_RETURN T_ELSE T_IF T_WHILE T_DO
+%token T_RETURN T_SIZE_OF T_ELSE T_IF T_WHILE T_DO
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
 %type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE FUNCTION_STATEMENT
@@ -37,7 +37,7 @@
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <node> EXPR TERM FACTOR CONDITIONOP ASSIGNOP BITWISEOP
-%type <node> NUMBER ID
+%type <node> NUMBER
 %type <number> T_NUMBER
 %type <string> T_ID
 %type <string> TYPE T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
@@ -63,10 +63,8 @@ ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         {$$ = new Argument(*$3, 
         | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
         | %empty                                        {$$ = new Argument();}
 
-ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA ID        {$$ = new ArgumentNoType($3, $1);}
-        | ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER                  {$$ = new ArgumentNoType($3, $1);}
-        | ID                                                    {$$ = new ArgumentNoType($1);}
-        | NUMBER                                                {$$ = new ArgumentNoType($1);}
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR      {$$ = new ArgumentNoType($3, $1);}
+        | EXPR                                                  {$$ = new ArgumentNoType($1);}
         | %empty                                                {$$ = new ArgumentNoType();}
 
 TYPE : T_INT      {$$=$1;}
@@ -136,12 +134,11 @@ TERM : FACTOR                       { $$ = $1; }
 FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2;}
         | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
         | NUMBER                {$$ = $1; }
-        | ID                    {$$ = $1; }
+        | T_ID                    { $$ = new Variable( *$1 );}
+        | T_SIZE_OF T_ID             {$$ = new SizeOf(*$2);}
 
 NUMBER : T_NUMBER                       { $$ = new Number( $1 , 0 ); }
         | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
-
-ID :  T_ID                        { $$ = new Variable( *$1 );}
 
 BITWISEOP : EXPR T_AND TERM             {$$ = new BAnd($1,$3);}
         | EXPR T_OR TERM                {$$ = new BOr($1,$3);}

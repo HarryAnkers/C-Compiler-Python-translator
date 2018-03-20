@@ -12,7 +12,8 @@ Terminals unused in grammar
    T_COMMENT
 
 
-State 76 conflicts: 16 shift/reduce
+State 77 conflicts: 17 shift/reduce
+State 82 conflicts: 15 shift/reduce
 State 83 conflicts: 15 shift/reduce
 State 84 conflicts: 15 shift/reduce
 State 85 conflicts: 15 shift/reduce
@@ -23,14 +24,13 @@ State 89 conflicts: 15 shift/reduce
 State 90 conflicts: 15 shift/reduce
 State 91 conflicts: 15 shift/reduce
 State 92 conflicts: 15 shift/reduce
-State 93 conflicts: 15 shift/reduce
-State 112 conflicts: 17 shift/reduce
-State 140 conflicts: 16 shift/reduce
-State 153 conflicts: 16 shift/reduce
-State 154 conflicts: 16 shift/reduce
-State 158 conflicts: 16 shift/reduce
-State 160 conflicts: 1 shift/reduce
-State 173 conflicts: 16 shift/reduce
+State 111 conflicts: 18 shift/reduce
+State 139 conflicts: 17 shift/reduce
+State 151 conflicts: 17 shift/reduce
+State 152 conflicts: 17 shift/reduce
+State 156 conflicts: 17 shift/reduce
+State 158 conflicts: 1 shift/reduce
+State 171 conflicts: 17 shift/reduce
 
 
 Grammar
@@ -52,112 +52,109 @@ Grammar
     9              | TYPE T_ID
    10              | %empty
 
-   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA ID
-   12                      | ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER
-   13                      | ID
-   14                      | NUMBER
-   15                      | %empty
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA EXPR
+   12                      | EXPR
+   13                      | %empty
 
-   16 TYPE: T_INT
-   17     | T_DOUBLE
-   18     | T_STRING
-   19     | T_VOID
-   20     | T_LONG
+   14 TYPE: T_INT
+   15     | T_DOUBLE
+   16     | T_STRING
+   17     | T_VOID
+   18     | T_LONG
 
-   21 BODY: BODY STATEMENT
-   22     | STATEMENT
-   23     | %empty
+   19 BODY: BODY STATEMENT
+   20     | STATEMENT
+   21     | %empty
 
-   24 STATEMENT: RETURN_STATEMENT
-   25          | DEC_VARIABLE
-   26          | FUNCTION_STATEMENT
-   27          | EXPR T_SEMICOLON
-   28          | IFANDORELSEORELIF
-   29          | WHILE_STATEMENT
-   30          | DO_STATEMENT
-   31          | NEW_SCOPE
+   22 STATEMENT: RETURN_STATEMENT
+   23          | DEC_VARIABLE
+   24          | FUNCTION_STATEMENT
+   25          | EXPR T_SEMICOLON
+   26          | IFANDORELSEORELIF
+   27          | WHILE_STATEMENT
+   28          | DO_STATEMENT
+   29          | NEW_SCOPE
 
-   32 NEW_SCOPE: T_LCUBRACKET BODY T_RCUBRACKET
-   33          | T_LCUBRACKET T_RCUBRACKET
+   30 NEW_SCOPE: T_LCUBRACKET BODY T_RCUBRACKET
+   31          | T_LCUBRACKET T_RCUBRACKET
 
-   34 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON
+   32 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON
 
-   35 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
-   36             | TYPE T_ID T_SEMICOLON
+   33 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
+   34             | TYPE T_ID T_SEMICOLON
 
-   37 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
-   38                 | TYPE T_ID T_SEMICOLON
+   35 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON
+   36                 | TYPE T_ID T_SEMICOLON
 
-   39 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
 
-   40 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT
-   41                  | IFANDORELIF
+   38 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT
+   39                  | IFANDORELIF
 
-   42 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT
-   43            | IF_STATEMENT
+   40 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT
+   41            | IF_STATEMENT
 
-   44 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   42 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET
 
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
 
-   46 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   44 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
 
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
 
-   48 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET
+   46 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET
 
-   49 EXPR: TERM
-   50     | EXPR T_PLUS TERM
-   51     | EXPR T_MINUS TERM
-   52     | T_ID T_INC
-   53     | T_ID T_DEC
-   54     | ASSIGNOP
-   55     | BITWISEOP
-   56     | CONDITIONOP
+   47 EXPR: TERM
+   48     | EXPR T_PLUS TERM
+   49     | EXPR T_MINUS TERM
+   50     | T_ID T_INC
+   51     | T_ID T_DEC
+   52     | ASSIGNOP
+   53     | BITWISEOP
+   54     | CONDITIONOP
 
-   57 TERM: FACTOR
-   58     | TERM T_TIMES FACTOR
-   59     | TERM T_DIVIDE FACTOR
-   60     | TERM T_MODULUS FACTOR
+   55 TERM: FACTOR
+   56     | TERM T_TIMES FACTOR
+   57     | TERM T_DIVIDE FACTOR
+   58     | TERM T_MODULUS FACTOR
 
-   61 FACTOR: T_LBRACKET EXPR T_RBRACKET
-   62       | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-   63       | NUMBER
-   64       | ID
+   59 FACTOR: T_LBRACKET EXPR T_RBRACKET
+   60       | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   61       | NUMBER
+   62       | T_ID
+   63       | T_SIZE_OF T_ID
 
-   65 NUMBER: T_NUMBER
-   66       | T_MINUS T_NUMBER
+   64 NUMBER: T_NUMBER
+   65       | T_MINUS T_NUMBER
 
-   67 ID: T_ID
+   66 BITWISEOP: EXPR T_AND TERM
+   67          | EXPR T_OR TERM
+   68          | EXPR T_XOR TERM
+   69          | T_TILDA TERM
+   70          | EXPR T_LSHIFT TERM
+   71          | EXPR T_RSHIFT TERM
 
-   68 BITWISEOP: EXPR T_AND TERM
-   69          | EXPR T_OR TERM
-   70          | EXPR T_XOR TERM
-   71          | T_TILDA TERM
-   72          | EXPR T_LSHIFT TERM
-   73          | EXPR T_RSHIFT TERM
+   72 ASSIGNOP: T_ID T_ASSIGN EXPR
+   73         | T_ID T_ADDASSIGN EXPR
+   74         | T_ID T_SUBASSIGN EXPR
+   75         | T_ID T_MULASSIGN EXPR
+   76         | T_ID T_DIVASSIGN EXPR
+   77         | T_ID T_MODASSIGN EXPR
+   78         | T_ID T_LSHIFTASSIGN EXPR
+   79         | T_ID T_RSHIFTASSIGN EXPR
+   80         | T_ID T_ANDASSIGN EXPR
+   81         | T_ID T_ORASSIGN EXPR
+   82         | T_ID T_XORASSIGN EXPR
 
-   74 ASSIGNOP: T_ID T_ASSIGN EXPR
-   75         | T_ID T_ADDASSIGN EXPR
-   76         | T_ID T_SUBASSIGN EXPR
-   77         | T_ID T_MULASSIGN EXPR
-   78         | T_ID T_DIVASSIGN EXPR
-   79         | T_ID T_MODASSIGN EXPR
-   80         | T_ID T_LSHIFTASSIGN EXPR
-   81         | T_ID T_RSHIFTASSIGN EXPR
-   82         | T_ID T_ANDASSIGN EXPR
-   83         | T_ID T_ORASSIGN EXPR
-   84         | T_ID T_XORASSIGN EXPR
-
-   85 CONDITIONOP: EXPR T_LEQUAL TERM
-   86            | EXPR T_LAND TERM
-   87            | EXPR T_LOR TERM
-   88            | T_NOT TERM
-   89            | EXPR T_LNEQUAL TERM
-   90            | EXPR T_MORE TERM
-   91            | EXPR T_LESS TERM
-   92            | EXPR T_LMOREEQ TERM
-   93            | EXPR T_LLESSEQ TERM
+   83 CONDITIONOP: EXPR T_LEQUAL TERM
+   84            | EXPR T_LAND TERM
+   85            | EXPR T_LOR TERM
+   86            | T_NOT TERM
+   87            | EXPR T_LNEQUAL TERM
+   88            | EXPR T_MORE TERM
+   89            | EXPR T_LESS TERM
+   90            | EXPR T_LMOREEQ TERM
+   91            | EXPR T_LLESSEQ TERM
 
 
 Terminals, with rules where they appear
@@ -166,133 +163,132 @@ $end (0) 0
 error (256)
 T_LSQBRACKET (258)
 T_RSQBRACKET (259)
-T_LCUBRACKET (260) 7 32 33 44 45 46 47 48
-T_RCUBRACKET (261) 7 32 33 44 45 46 47 48
+T_LCUBRACKET (260) 7 30 31 42 43 44 45 46
+T_RCUBRACKET (261) 7 30 31 42 43 44 45 46
 T_LTRIBRACKET (262)
 T_RTRIBRACKET (263)
-T_LBRACKET (264) 7 39 61 62
-T_RBRACKET (265) 7 39 61 62
-T_ASSIGN (266) 35 37 74
+T_LBRACKET (264) 7 37 59 60
+T_RBRACKET (265) 7 37 59 60
+T_ASSIGN (266) 33 35 72
 T_DOT (267)
-T_COMMA (268) 8 11 12
+T_COMMA (268) 8 11
 T_COLON (269)
-T_SEMICOLON (270) 27 34 35 36 37 38 39 45
+T_SEMICOLON (270) 25 32 33 34 35 36 37 43
 T_SPEACHMARK (271)
 T_APOSTROPHE (272)
-T_NOT (273) 88
-T_AND (274) 68
-T_OR (275) 69
-T_MORE (276) 90
-T_LESS (277) 91
-T_XOR (278) 70
-T_TILDA (279) 71
-T_INT (280) 16
-T_DOUBLE (281) 17
-T_STRING (282) 18
+T_NOT (273) 86
+T_AND (274) 66
+T_OR (275) 67
+T_MORE (276) 88
+T_LESS (277) 89
+T_XOR (278) 68
+T_TILDA (279) 69
+T_INT (280) 14
+T_DOUBLE (281) 15
+T_STRING (282) 16
 T_BOOL (283)
-T_VOID (284) 19
-T_LONG (285) 20
-T_TIMES (286) 58
-T_DIVIDE (287) 59
-T_PLUS (288) 50
-T_MINUS (289) 51 66
-T_MODULUS (290) 60
-T_INC (291) 52
-T_DEC (292) 53
-T_ADDASSIGN (293) 75
-T_SUBASSIGN (294) 76
-T_MULASSIGN (295) 77
-T_DIVASSIGN (296) 78
-T_MODASSIGN (297) 79
-T_LSHIFTASSIGN (298) 80
-T_RSHIFTASSIGN (299) 81
-T_ANDASSIGN (300) 82
-T_XORASSIGN (301) 84
-T_ORASSIGN (302) 83
-T_LAND (303) 86
-T_LOR (304) 87
-T_LEQUAL (305) 85
-T_LNEQUAL (306) 89
-T_LLESSEQ (307) 93
-T_LMOREEQ (308) 92
-T_LSHIFT (309) 72
-T_RSHIFT (310) 73
-T_NUMBER (311) 65 66
-T_ID (312) 7 8 9 35 36 37 38 39 52 53 62 67 74 75 76 77 78 79 80 81
-    82 83 84
+T_VOID (284) 17
+T_LONG (285) 18
+T_TIMES (286) 56
+T_DIVIDE (287) 57
+T_PLUS (288) 48
+T_MINUS (289) 49 65
+T_MODULUS (290) 58
+T_INC (291) 50
+T_DEC (292) 51
+T_ADDASSIGN (293) 73
+T_SUBASSIGN (294) 74
+T_MULASSIGN (295) 75
+T_DIVASSIGN (296) 76
+T_MODASSIGN (297) 77
+T_LSHIFTASSIGN (298) 78
+T_RSHIFTASSIGN (299) 79
+T_ANDASSIGN (300) 80
+T_XORASSIGN (301) 82
+T_ORASSIGN (302) 81
+T_LAND (303) 84
+T_LOR (304) 85
+T_LEQUAL (305) 83
+T_LNEQUAL (306) 87
+T_LLESSEQ (307) 91
+T_LMOREEQ (308) 90
+T_LSHIFT (309) 70
+T_RSHIFT (310) 71
+T_NUMBER (311) 64 65
+T_ID (312) 7 8 9 33 34 35 36 37 50 51 60 62 63 72 73 74 75 76 77 78
+    79 80 81 82
 T_COMMENT (313)
-T_RETURN (314) 34
-T_ELSE (315) 47 48
-T_IF (316) 46 47
-T_WHILE (317) 44 45
-T_DO (318) 45
+T_RETURN (314) 32
+T_SIZE_OF (315) 63
+T_ELSE (316) 45 46
+T_IF (317) 44 45
+T_WHILE (318) 42 43
+T_DO (319) 43
 
 
 Nonterminals, with rules where they appear
 
-$accept (64)
+$accept (65)
     on left: 0
-ROOT (65)
+ROOT (66)
     on left: 1, on right: 0
-TOP_LEVEL (66)
+TOP_LEVEL (67)
     on left: 2, on right: 1
-TOP_LIST (67)
+TOP_LIST (68)
     on left: 3 4 5 6, on right: 2 3 4
-DEC_FUNCTION (68)
+DEC_FUNCTION (69)
     on left: 7, on right: 3 5
-ARGUMENT_LIST (69)
+ARGUMENT_LIST (70)
     on left: 8 9 10, on right: 7 8
-ARGUMENT_LIST_NO_TYPE (70)
-    on left: 11 12 13 14 15, on right: 11 12 39 62
-TYPE (71)
-    on left: 16 17 18 19 20, on right: 7 8 9 35 36 37 38
-BODY (72)
-    on left: 21 22 23, on right: 7 21 32 44 45 46 47 48
-STATEMENT (73)
-    on left: 24 25 26 27 28 29 30 31, on right: 21 22
-NEW_SCOPE (74)
-    on left: 32 33, on right: 31
-RETURN_STATEMENT (75)
-    on left: 34, on right: 24
-DEC_VARIABLE (76)
-    on left: 35 36, on right: 25
-GLO_DEC_VARIABLE (77)
-    on left: 37 38, on right: 4 6
-FUNCTION_STATEMENT (78)
-    on left: 39, on right: 26
-IFANDORELSEORELIF (79)
-    on left: 40 41, on right: 28
-IFANDORELIF (80)
-    on left: 42 43, on right: 40 41 42
-WHILE_STATEMENT (81)
-    on left: 44, on right: 29
-DO_STATEMENT (82)
-    on left: 45, on right: 30
-IF_STATEMENT (83)
-    on left: 46, on right: 43
-ELSE_IF_STATEMENT (84)
-    on left: 47, on right: 42
-ELSE_STATEMENT (85)
-    on left: 48, on right: 40
-EXPR (86)
-    on left: 49 50 51 52 53 54 55 56, on right: 27 34 35 37 44 45 46
-    47 50 51 61 68 69 70 72 73 74 75 76 77 78 79 80 81 82 83 84 85
-    86 87 89 90 91 92 93
-TERM (87)
-    on left: 57 58 59 60, on right: 49 50 51 58 59 60 68 69 70 71 72
-    73 85 86 87 88 89 90 91 92 93
-FACTOR (88)
-    on left: 61 62 63 64, on right: 57 58 59 60
-NUMBER (89)
-    on left: 65 66, on right: 12 14 63
-ID (90)
-    on left: 67, on right: 11 13 64
+ARGUMENT_LIST_NO_TYPE (71)
+    on left: 11 12 13, on right: 11 37 60
+TYPE (72)
+    on left: 14 15 16 17 18, on right: 7 8 9 33 34 35 36
+BODY (73)
+    on left: 19 20 21, on right: 7 19 30 42 43 44 45 46
+STATEMENT (74)
+    on left: 22 23 24 25 26 27 28 29, on right: 19 20
+NEW_SCOPE (75)
+    on left: 30 31, on right: 29
+RETURN_STATEMENT (76)
+    on left: 32, on right: 22
+DEC_VARIABLE (77)
+    on left: 33 34, on right: 23
+GLO_DEC_VARIABLE (78)
+    on left: 35 36, on right: 4 6
+FUNCTION_STATEMENT (79)
+    on left: 37, on right: 24
+IFANDORELSEORELIF (80)
+    on left: 38 39, on right: 26
+IFANDORELIF (81)
+    on left: 40 41, on right: 38 39 40
+WHILE_STATEMENT (82)
+    on left: 42, on right: 27
+DO_STATEMENT (83)
+    on left: 43, on right: 28
+IF_STATEMENT (84)
+    on left: 44, on right: 41
+ELSE_IF_STATEMENT (85)
+    on left: 45, on right: 40
+ELSE_STATEMENT (86)
+    on left: 46, on right: 38
+EXPR (87)
+    on left: 47 48 49 50 51 52 53 54, on right: 11 12 25 32 33 35 42
+    43 44 45 48 49 59 66 67 68 70 71 72 73 74 75 76 77 78 79 80 81
+    82 83 84 85 87 88 89 90 91
+TERM (88)
+    on left: 55 56 57 58, on right: 47 48 49 56 57 58 66 67 68 69 70
+    71 83 84 85 86 87 88 89 90 91
+FACTOR (89)
+    on left: 59 60 61 62 63, on right: 55 56 57 58
+NUMBER (90)
+    on left: 64 65, on right: 61
 BITWISEOP (91)
-    on left: 68 69 70 71 72 73, on right: 55
+    on left: 66 67 68 69 70 71, on right: 53
 ASSIGNOP (92)
-    on left: 74 75 76 77 78 79 80 81 82 83 84, on right: 54
+    on left: 72 73 74 75 76 77 78 79 80 81 82, on right: 52
 CONDITIONOP (93)
-    on left: 85 86 87 88 89 90 91 92 93, on right: 56
+    on left: 83 84 85 86 87 88 89 90 91, on right: 54
 
 
 State 0
@@ -315,37 +311,37 @@ State 0
 
 State 1
 
-   16 TYPE: T_INT .
+   14 TYPE: T_INT .
 
-    $default  reduce using rule 16 (TYPE)
+    $default  reduce using rule 14 (TYPE)
 
 
 State 2
 
-   17 TYPE: T_DOUBLE .
+   15 TYPE: T_DOUBLE .
 
-    $default  reduce using rule 17 (TYPE)
+    $default  reduce using rule 15 (TYPE)
 
 
 State 3
 
-   18 TYPE: T_STRING .
+   16 TYPE: T_STRING .
 
-    $default  reduce using rule 18 (TYPE)
+    $default  reduce using rule 16 (TYPE)
 
 
 State 4
 
-   19 TYPE: T_VOID .
+   17 TYPE: T_VOID .
 
-    $default  reduce using rule 19 (TYPE)
+    $default  reduce using rule 17 (TYPE)
 
 
 State 5
 
-   20 TYPE: T_LONG .
+   18 TYPE: T_LONG .
 
-    $default  reduce using rule 20 (TYPE)
+    $default  reduce using rule 18 (TYPE)
 
 
 State 6
@@ -391,8 +387,8 @@ State 9
 State 10
 
     7 DEC_FUNCTION: TYPE . T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
-   37 GLO_DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
-   38                 | TYPE . T_ID T_SEMICOLON
+   35 GLO_DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
+   36                 | TYPE . T_ID T_SEMICOLON
 
     T_ID  shift, and go to state 15
 
@@ -428,8 +424,8 @@ State 14
 State 15
 
     7 DEC_FUNCTION: TYPE T_ID . T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET
-   37 GLO_DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
-   38                 | TYPE T_ID . T_SEMICOLON
+   35 GLO_DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
+   36                 | TYPE T_ID . T_SEMICOLON
 
     T_LBRACKET   shift, and go to state 16
     T_ASSIGN     shift, and go to state 17
@@ -454,7 +450,7 @@ State 16
 
 State 17
 
-   37 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
+   35 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -462,12 +458,12 @@ State 17
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 27
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 28
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -475,9 +471,9 @@ State 17
 
 State 18
 
-   38 GLO_DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
+   36 GLO_DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
 
-    $default  reduce using rule 38 (GLO_DEC_VARIABLE)
+    $default  reduce using rule 36 (GLO_DEC_VARIABLE)
 
 
 State 19
@@ -498,7 +494,7 @@ State 20
 
 State 21
 
-   61 FACTOR: T_LBRACKET . EXPR T_RBRACKET
+   59 FACTOR: T_LBRACKET . EXPR T_RBRACKET
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -506,12 +502,12 @@ State 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
     EXPR         go to state 38
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -519,65 +515,65 @@ State 21
 
 State 22
 
-   88 CONDITIONOP: T_NOT . TERM
+   86 CONDITIONOP: T_NOT . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
     TERM    go to state 40
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 23
 
-   71 BITWISEOP: T_TILDA . TERM
+   69 BITWISEOP: T_TILDA . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
     TERM    go to state 41
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 24
 
-   66 NUMBER: T_MINUS . T_NUMBER
+   65 NUMBER: T_MINUS . T_NUMBER
 
     T_NUMBER  shift, and go to state 42
 
 
 State 25
 
-   65 NUMBER: T_NUMBER .
+   64 NUMBER: T_NUMBER .
 
-    $default  reduce using rule 65 (NUMBER)
+    $default  reduce using rule 64 (NUMBER)
 
 
 State 26
 
-   52 EXPR: T_ID . T_INC
-   53     | T_ID . T_DEC
-   62 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-   67 ID: T_ID .
-   74 ASSIGNOP: T_ID . T_ASSIGN EXPR
-   75         | T_ID . T_ADDASSIGN EXPR
-   76         | T_ID . T_SUBASSIGN EXPR
-   77         | T_ID . T_MULASSIGN EXPR
-   78         | T_ID . T_DIVASSIGN EXPR
-   79         | T_ID . T_MODASSIGN EXPR
-   80         | T_ID . T_LSHIFTASSIGN EXPR
-   81         | T_ID . T_RSHIFTASSIGN EXPR
-   82         | T_ID . T_ANDASSIGN EXPR
-   83         | T_ID . T_ORASSIGN EXPR
-   84         | T_ID . T_XORASSIGN EXPR
+   50 EXPR: T_ID . T_INC
+   51     | T_ID . T_DEC
+   60 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   62       | T_ID .
+   72 ASSIGNOP: T_ID . T_ASSIGN EXPR
+   73         | T_ID . T_ADDASSIGN EXPR
+   74         | T_ID . T_SUBASSIGN EXPR
+   75         | T_ID . T_MULASSIGN EXPR
+   76         | T_ID . T_DIVASSIGN EXPR
+   77         | T_ID . T_MODASSIGN EXPR
+   78         | T_ID . T_LSHIFTASSIGN EXPR
+   79         | T_ID . T_RSHIFTASSIGN EXPR
+   80         | T_ID . T_ANDASSIGN EXPR
+   81         | T_ID . T_ORASSIGN EXPR
+   82         | T_ID . T_XORASSIGN EXPR
 
     T_LBRACKET      shift, and go to state 43
     T_ASSIGN        shift, and go to state 44
@@ -594,107 +590,107 @@ State 26
     T_XORASSIGN     shift, and go to state 55
     T_ORASSIGN      shift, and go to state 56
 
-    $default  reduce using rule 67 (ID)
+    $default  reduce using rule 62 (FACTOR)
 
 
 State 27
 
-   37 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   63 FACTOR: T_SIZE_OF . T_ID
 
-    T_SEMICOLON  shift, and go to state 57
-    T_AND        shift, and go to state 58
-    T_OR         shift, and go to state 59
-    T_MORE       shift, and go to state 60
-    T_LESS       shift, and go to state 61
-    T_XOR        shift, and go to state 62
-    T_PLUS       shift, and go to state 63
-    T_MINUS      shift, and go to state 64
-    T_LAND       shift, and go to state 65
-    T_LOR        shift, and go to state 66
-    T_LEQUAL     shift, and go to state 67
-    T_LNEQUAL    shift, and go to state 68
-    T_LLESSEQ    shift, and go to state 69
-    T_LMOREEQ    shift, and go to state 70
-    T_LSHIFT     shift, and go to state 71
-    T_RSHIFT     shift, and go to state 72
+    T_ID  shift, and go to state 57
 
 
 State 28
 
-   49 EXPR: TERM .
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
+   35 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 49 (EXPR)
+    T_SEMICOLON  shift, and go to state 58
+    T_AND        shift, and go to state 59
+    T_OR         shift, and go to state 60
+    T_MORE       shift, and go to state 61
+    T_LESS       shift, and go to state 62
+    T_XOR        shift, and go to state 63
+    T_PLUS       shift, and go to state 64
+    T_MINUS      shift, and go to state 65
+    T_LAND       shift, and go to state 66
+    T_LOR        shift, and go to state 67
+    T_LEQUAL     shift, and go to state 68
+    T_LNEQUAL    shift, and go to state 69
+    T_LLESSEQ    shift, and go to state 70
+    T_LMOREEQ    shift, and go to state 71
+    T_LSHIFT     shift, and go to state 72
+    T_RSHIFT     shift, and go to state 73
 
 
 State 29
 
-   57 TERM: FACTOR .
+   47 EXPR: TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
 
-    $default  reduce using rule 57 (TERM)
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 47 (EXPR)
 
 
 State 30
 
-   63 FACTOR: NUMBER .
+   55 TERM: FACTOR .
 
-    $default  reduce using rule 63 (FACTOR)
+    $default  reduce using rule 55 (TERM)
 
 
 State 31
 
-   64 FACTOR: ID .
+   61 FACTOR: NUMBER .
 
-    $default  reduce using rule 64 (FACTOR)
+    $default  reduce using rule 61 (FACTOR)
 
 
 State 32
 
-   55 EXPR: BITWISEOP .
+   53 EXPR: BITWISEOP .
 
-    $default  reduce using rule 55 (EXPR)
+    $default  reduce using rule 53 (EXPR)
 
 
 State 33
 
-   54 EXPR: ASSIGNOP .
+   52 EXPR: ASSIGNOP .
 
-    $default  reduce using rule 54 (EXPR)
+    $default  reduce using rule 52 (EXPR)
 
 
 State 34
 
-   56 EXPR: CONDITIONOP .
+   54 EXPR: CONDITIONOP .
 
-    $default  reduce using rule 56 (EXPR)
+    $default  reduce using rule 54 (EXPR)
 
 
 State 35
 
     7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET . T_LCUBRACKET BODY T_RCUBRACKET
 
-    T_LCUBRACKET  shift, and go to state 76
+    T_LCUBRACKET  shift, and go to state 77
 
 
 State 36
@@ -707,7 +703,7 @@ State 36
     T_VOID    shift, and go to state 4
     T_LONG    shift, and go to state 5
 
-    TYPE  go to state 77
+    TYPE  go to state 78
 
 
 State 37
@@ -719,104 +715,89 @@ State 37
 
 State 38
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   61 FACTOR: T_LBRACKET EXPR . T_RBRACKET
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   59 FACTOR: T_LBRACKET EXPR . T_RBRACKET
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_RBRACKET  shift, and go to state 78
-    T_AND       shift, and go to state 58
-    T_OR        shift, and go to state 59
-    T_MORE      shift, and go to state 60
-    T_LESS      shift, and go to state 61
-    T_XOR       shift, and go to state 62
-    T_PLUS      shift, and go to state 63
-    T_MINUS     shift, and go to state 64
-    T_LAND      shift, and go to state 65
-    T_LOR       shift, and go to state 66
-    T_LEQUAL    shift, and go to state 67
-    T_LNEQUAL   shift, and go to state 68
-    T_LLESSEQ   shift, and go to state 69
-    T_LMOREEQ   shift, and go to state 70
-    T_LSHIFT    shift, and go to state 71
-    T_RSHIFT    shift, and go to state 72
+    T_RBRACKET  shift, and go to state 79
+    T_AND       shift, and go to state 59
+    T_OR        shift, and go to state 60
+    T_MORE      shift, and go to state 61
+    T_LESS      shift, and go to state 62
+    T_XOR       shift, and go to state 63
+    T_PLUS      shift, and go to state 64
+    T_MINUS     shift, and go to state 65
+    T_LAND      shift, and go to state 66
+    T_LOR       shift, and go to state 67
+    T_LEQUAL    shift, and go to state 68
+    T_LNEQUAL   shift, and go to state 69
+    T_LLESSEQ   shift, and go to state 70
+    T_LMOREEQ   shift, and go to state 71
+    T_LSHIFT    shift, and go to state 72
+    T_RSHIFT    shift, and go to state 73
 
 
 State 39
 
-   62 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-   67 ID: T_ID .
+   60 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   62       | T_ID .
 
     T_LBRACKET  shift, and go to state 43
 
-    $default  reduce using rule 67 (ID)
+    $default  reduce using rule 62 (FACTOR)
 
 
 State 40
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   88 CONDITIONOP: T_NOT TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   86 CONDITIONOP: T_NOT TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 88 (CONDITIONOP)
+    $default  reduce using rule 86 (CONDITIONOP)
 
 
 State 41
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   71 BITWISEOP: T_TILDA TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   69 BITWISEOP: T_TILDA TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 71 (BITWISEOP)
+    $default  reduce using rule 69 (BITWISEOP)
 
 
 State 42
 
-   66 NUMBER: T_MINUS T_NUMBER .
+   65 NUMBER: T_MINUS T_NUMBER .
 
-    $default  reduce using rule 66 (NUMBER)
+    $default  reduce using rule 65 (NUMBER)
 
 
 State 43
 
-   62 FACTOR: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
-
-    T_MINUS   shift, and go to state 24
-    T_NUMBER  shift, and go to state 25
-    T_ID      shift, and go to state 79
-
-    $default  reduce using rule 15 (ARGUMENT_LIST_NO_TYPE)
-
-    ARGUMENT_LIST_NO_TYPE  go to state 80
-    NUMBER                 go to state 81
-    ID                     go to state 82
-
-
-State 44
-
-   74 ASSIGNOP: T_ID T_ASSIGN . EXPR
+   60 FACTOR: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -824,12 +805,36 @@ State 44
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 83
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    $default  reduce using rule 13 (ARGUMENT_LIST_NO_TYPE)
+
+    ARGUMENT_LIST_NO_TYPE  go to state 80
+    EXPR                   go to state 81
+    TERM                   go to state 29
+    FACTOR                 go to state 30
+    NUMBER                 go to state 31
+    BITWISEOP              go to state 32
+    ASSIGNOP               go to state 33
+    CONDITIONOP            go to state 34
+
+
+State 44
+
+   72 ASSIGNOP: T_ID T_ASSIGN . EXPR
+
+    T_LBRACKET  shift, and go to state 21
+    T_NOT       shift, and go to state 22
+    T_TILDA     shift, and go to state 23
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
+
+    EXPR         go to state 82
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -837,21 +842,21 @@ State 44
 
 State 45
 
-   52 EXPR: T_ID T_INC .
+   50 EXPR: T_ID T_INC .
 
-    $default  reduce using rule 52 (EXPR)
+    $default  reduce using rule 50 (EXPR)
 
 
 State 46
 
-   53 EXPR: T_ID T_DEC .
+   51 EXPR: T_ID T_DEC .
 
-    $default  reduce using rule 53 (EXPR)
+    $default  reduce using rule 51 (EXPR)
 
 
 State 47
 
-   75 ASSIGNOP: T_ID T_ADDASSIGN . EXPR
+   73 ASSIGNOP: T_ID T_ADDASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -859,12 +864,12 @@ State 47
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 84
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 83
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -872,7 +877,7 @@ State 47
 
 State 48
 
-   76 ASSIGNOP: T_ID T_SUBASSIGN . EXPR
+   74 ASSIGNOP: T_ID T_SUBASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -880,12 +885,12 @@ State 48
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 85
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 84
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -893,7 +898,7 @@ State 48
 
 State 49
 
-   77 ASSIGNOP: T_ID T_MULASSIGN . EXPR
+   75 ASSIGNOP: T_ID T_MULASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -901,12 +906,12 @@ State 49
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 86
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 85
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -914,7 +919,7 @@ State 49
 
 State 50
 
-   78 ASSIGNOP: T_ID T_DIVASSIGN . EXPR
+   76 ASSIGNOP: T_ID T_DIVASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -922,12 +927,12 @@ State 50
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 87
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 86
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -935,7 +940,7 @@ State 50
 
 State 51
 
-   79 ASSIGNOP: T_ID T_MODASSIGN . EXPR
+   77 ASSIGNOP: T_ID T_MODASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -943,12 +948,12 @@ State 51
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 88
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 87
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -956,7 +961,7 @@ State 51
 
 State 52
 
-   80 ASSIGNOP: T_ID T_LSHIFTASSIGN . EXPR
+   78 ASSIGNOP: T_ID T_LSHIFTASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -964,12 +969,12 @@ State 52
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 89
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 88
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -977,7 +982,7 @@ State 52
 
 State 53
 
-   81 ASSIGNOP: T_ID T_RSHIFTASSIGN . EXPR
+   79 ASSIGNOP: T_ID T_RSHIFTASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -985,12 +990,12 @@ State 53
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 90
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 89
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -998,7 +1003,7 @@ State 53
 
 State 54
 
-   82 ASSIGNOP: T_ID T_ANDASSIGN . EXPR
+   80 ASSIGNOP: T_ID T_ANDASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -1006,12 +1011,12 @@ State 54
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 91
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 90
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -1019,7 +1024,7 @@ State 54
 
 State 55
 
-   84 ASSIGNOP: T_ID T_XORASSIGN . EXPR
+   82 ASSIGNOP: T_ID T_XORASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -1027,12 +1032,12 @@ State 55
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 92
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 91
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -1040,7 +1045,7 @@ State 55
 
 State 56
 
-   83 ASSIGNOP: T_ID T_ORASSIGN . EXPR
+   81 ASSIGNOP: T_ID T_ORASSIGN . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -1048,12 +1053,12 @@ State 56
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 93
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 92
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -1061,283 +1066,290 @@ State 56
 
 State 57
 
-   37 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
+   63 FACTOR: T_SIZE_OF T_ID .
 
-    $default  reduce using rule 37 (GLO_DEC_VARIABLE)
+    $default  reduce using rule 63 (FACTOR)
 
 
 State 58
 
-   68 BITWISEOP: EXPR T_AND . TERM
+   35 GLO_DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
 
-    T_LBRACKET  shift, and go to state 21
-    T_MINUS     shift, and go to state 24
-    T_NUMBER    shift, and go to state 25
-    T_ID        shift, and go to state 39
-
-    TERM    go to state 94
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    $default  reduce using rule 35 (GLO_DEC_VARIABLE)
 
 
 State 59
 
-   69 BITWISEOP: EXPR T_OR . TERM
+   66 BITWISEOP: EXPR T_AND . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 95
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 93
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 60
 
-   90 CONDITIONOP: EXPR T_MORE . TERM
+   67 BITWISEOP: EXPR T_OR . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 96
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 94
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 61
 
-   91 CONDITIONOP: EXPR T_LESS . TERM
+   88 CONDITIONOP: EXPR T_MORE . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 97
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 95
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 62
 
-   70 BITWISEOP: EXPR T_XOR . TERM
+   89 CONDITIONOP: EXPR T_LESS . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 98
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 96
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 63
 
-   50 EXPR: EXPR T_PLUS . TERM
+   68 BITWISEOP: EXPR T_XOR . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 99
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 97
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 64
 
-   51 EXPR: EXPR T_MINUS . TERM
+   48 EXPR: EXPR T_PLUS . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 100
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 98
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 65
 
-   86 CONDITIONOP: EXPR T_LAND . TERM
+   49 EXPR: EXPR T_MINUS . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 101
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 99
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 66
 
-   87 CONDITIONOP: EXPR T_LOR . TERM
+   84 CONDITIONOP: EXPR T_LAND . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 102
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 100
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 67
 
-   85 CONDITIONOP: EXPR T_LEQUAL . TERM
+   85 CONDITIONOP: EXPR T_LOR . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 103
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 101
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 68
 
-   89 CONDITIONOP: EXPR T_LNEQUAL . TERM
+   83 CONDITIONOP: EXPR T_LEQUAL . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 104
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 102
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 69
 
-   93 CONDITIONOP: EXPR T_LLESSEQ . TERM
+   87 CONDITIONOP: EXPR T_LNEQUAL . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 105
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 103
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 70
 
-   92 CONDITIONOP: EXPR T_LMOREEQ . TERM
+   91 CONDITIONOP: EXPR T_LLESSEQ . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 106
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 104
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 71
 
-   72 BITWISEOP: EXPR T_LSHIFT . TERM
+   90 CONDITIONOP: EXPR T_LMOREEQ . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 107
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 105
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 72
 
-   73 BITWISEOP: EXPR T_RSHIFT . TERM
+   70 BITWISEOP: EXPR T_LSHIFT . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    TERM    go to state 108
-    FACTOR  go to state 29
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 106
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 73
 
-   58 TERM: TERM T_TIMES . FACTOR
+   71 BITWISEOP: EXPR T_RSHIFT . TERM
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    FACTOR  go to state 109
-    NUMBER  go to state 30
-    ID      go to state 31
+    TERM    go to state 107
+    FACTOR  go to state 30
+    NUMBER  go to state 31
 
 
 State 74
 
-   59 TERM: TERM T_DIVIDE . FACTOR
+   56 TERM: TERM T_TIMES . FACTOR
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    FACTOR  go to state 110
-    NUMBER  go to state 30
-    ID      go to state 31
+    FACTOR  go to state 108
+    NUMBER  go to state 31
 
 
 State 75
 
-   60 TERM: TERM T_MODULUS . FACTOR
+   57 TERM: TERM T_DIVIDE . FACTOR
 
     T_LBRACKET  shift, and go to state 21
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
 
-    FACTOR  go to state 111
-    NUMBER  go to state 30
-    ID      go to state 31
+    FACTOR  go to state 109
+    NUMBER  go to state 31
 
 
 State 76
 
+   58 TERM: TERM T_MODULUS . FACTOR
+
+    T_LBRACKET  shift, and go to state 21
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 39
+    T_SIZE_OF   shift, and go to state 27
+
+    FACTOR  go to state 110
+    NUMBER  go to state 31
+
+
+State 77
+
     7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET . BODY T_RCUBRACKET
 
-    T_LCUBRACKET  shift, and go to state 112
+    T_LCUBRACKET  shift, and go to state 111
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -1348,131 +1360,254 @@ State 76
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
 
-    TYPE                go to state 118
-    BODY                go to state 119
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    BODY                go to state 118
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
 
 
-State 77
+State 78
 
     8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE . T_ID
 
-    T_ID  shift, and go to state 131
-
-
-State 78
-
-   61 FACTOR: T_LBRACKET EXPR T_RBRACKET .
-
-    $default  reduce using rule 61 (FACTOR)
+    T_ID  shift, and go to state 130
 
 
 State 79
 
-   67 ID: T_ID .
+   59 FACTOR: T_LBRACKET EXPR T_RBRACKET .
 
-    $default  reduce using rule 67 (ID)
+    $default  reduce using rule 59 (FACTOR)
 
 
 State 80
 
-   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA ID
-   12                      | ARGUMENT_LIST_NO_TYPE . T_COMMA NUMBER
-   62 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA EXPR
+   60 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
 
-    T_RBRACKET  shift, and go to state 132
-    T_COMMA     shift, and go to state 133
+    T_RBRACKET  shift, and go to state 131
+    T_COMMA     shift, and go to state 132
 
 
 State 81
 
-   14 ARGUMENT_LIST_NO_TYPE: NUMBER .
+   12 ARGUMENT_LIST_NO_TYPE: EXPR .
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    $default  reduce using rule 14 (ARGUMENT_LIST_NO_TYPE)
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
+
+    $default  reduce using rule 12 (ARGUMENT_LIST_NO_TYPE)
 
 
 State 82
 
-   13 ARGUMENT_LIST_NO_TYPE: ID .
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   72 ASSIGNOP: T_ID T_ASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    $default  reduce using rule 13 (ARGUMENT_LIST_NO_TYPE)
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
+
+    T_AND      [reduce using rule 72 (ASSIGNOP)]
+    T_OR       [reduce using rule 72 (ASSIGNOP)]
+    T_MORE     [reduce using rule 72 (ASSIGNOP)]
+    T_LESS     [reduce using rule 72 (ASSIGNOP)]
+    T_XOR      [reduce using rule 72 (ASSIGNOP)]
+    T_PLUS     [reduce using rule 72 (ASSIGNOP)]
+    T_MINUS    [reduce using rule 72 (ASSIGNOP)]
+    T_LAND     [reduce using rule 72 (ASSIGNOP)]
+    T_LOR      [reduce using rule 72 (ASSIGNOP)]
+    T_LEQUAL   [reduce using rule 72 (ASSIGNOP)]
+    T_LNEQUAL  [reduce using rule 72 (ASSIGNOP)]
+    T_LLESSEQ  [reduce using rule 72 (ASSIGNOP)]
+    T_LMOREEQ  [reduce using rule 72 (ASSIGNOP)]
+    T_LSHIFT   [reduce using rule 72 (ASSIGNOP)]
+    T_RSHIFT   [reduce using rule 72 (ASSIGNOP)]
+    $default   reduce using rule 72 (ASSIGNOP)
 
 
 State 83
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   74 ASSIGNOP: T_ID T_ASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   73 ASSIGNOP: T_ID T_ADDASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
+
+    T_AND      [reduce using rule 73 (ASSIGNOP)]
+    T_OR       [reduce using rule 73 (ASSIGNOP)]
+    T_MORE     [reduce using rule 73 (ASSIGNOP)]
+    T_LESS     [reduce using rule 73 (ASSIGNOP)]
+    T_XOR      [reduce using rule 73 (ASSIGNOP)]
+    T_PLUS     [reduce using rule 73 (ASSIGNOP)]
+    T_MINUS    [reduce using rule 73 (ASSIGNOP)]
+    T_LAND     [reduce using rule 73 (ASSIGNOP)]
+    T_LOR      [reduce using rule 73 (ASSIGNOP)]
+    T_LEQUAL   [reduce using rule 73 (ASSIGNOP)]
+    T_LNEQUAL  [reduce using rule 73 (ASSIGNOP)]
+    T_LLESSEQ  [reduce using rule 73 (ASSIGNOP)]
+    T_LMOREEQ  [reduce using rule 73 (ASSIGNOP)]
+    T_LSHIFT   [reduce using rule 73 (ASSIGNOP)]
+    T_RSHIFT   [reduce using rule 73 (ASSIGNOP)]
+    $default   reduce using rule 73 (ASSIGNOP)
+
+
+State 84
+
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   74 ASSIGNOP: T_ID T_SUBASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
+
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 74 (ASSIGNOP)]
     T_OR       [reduce using rule 74 (ASSIGNOP)]
@@ -1492,40 +1627,40 @@ State 83
     $default   reduce using rule 74 (ASSIGNOP)
 
 
-State 84
+State 85
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   75 ASSIGNOP: T_ID T_ADDASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   75 ASSIGNOP: T_ID T_MULASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 75 (ASSIGNOP)]
     T_OR       [reduce using rule 75 (ASSIGNOP)]
@@ -1545,40 +1680,40 @@ State 84
     $default   reduce using rule 75 (ASSIGNOP)
 
 
-State 85
+State 86
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   76 ASSIGNOP: T_ID T_SUBASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   76 ASSIGNOP: T_ID T_DIVASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 76 (ASSIGNOP)]
     T_OR       [reduce using rule 76 (ASSIGNOP)]
@@ -1598,40 +1733,40 @@ State 85
     $default   reduce using rule 76 (ASSIGNOP)
 
 
-State 86
+State 87
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   77 ASSIGNOP: T_ID T_MULASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   77 ASSIGNOP: T_ID T_MODASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 77 (ASSIGNOP)]
     T_OR       [reduce using rule 77 (ASSIGNOP)]
@@ -1651,40 +1786,40 @@ State 86
     $default   reduce using rule 77 (ASSIGNOP)
 
 
-State 87
+State 88
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   78 ASSIGNOP: T_ID T_DIVASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   78 ASSIGNOP: T_ID T_LSHIFTASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 78 (ASSIGNOP)]
     T_OR       [reduce using rule 78 (ASSIGNOP)]
@@ -1704,40 +1839,40 @@ State 87
     $default   reduce using rule 78 (ASSIGNOP)
 
 
-State 88
+State 89
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   79 ASSIGNOP: T_ID T_MODASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   79 ASSIGNOP: T_ID T_RSHIFTASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 79 (ASSIGNOP)]
     T_OR       [reduce using rule 79 (ASSIGNOP)]
@@ -1757,40 +1892,40 @@ State 88
     $default   reduce using rule 79 (ASSIGNOP)
 
 
-State 89
+State 90
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   80 ASSIGNOP: T_ID T_LSHIFTASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   80 ASSIGNOP: T_ID T_ANDASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 80 (ASSIGNOP)]
     T_OR       [reduce using rule 80 (ASSIGNOP)]
@@ -1810,93 +1945,40 @@ State 89
     $default   reduce using rule 80 (ASSIGNOP)
 
 
-State 90
-
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   81 ASSIGNOP: T_ID T_RSHIFTASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
-
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
-
-    T_AND      [reduce using rule 81 (ASSIGNOP)]
-    T_OR       [reduce using rule 81 (ASSIGNOP)]
-    T_MORE     [reduce using rule 81 (ASSIGNOP)]
-    T_LESS     [reduce using rule 81 (ASSIGNOP)]
-    T_XOR      [reduce using rule 81 (ASSIGNOP)]
-    T_PLUS     [reduce using rule 81 (ASSIGNOP)]
-    T_MINUS    [reduce using rule 81 (ASSIGNOP)]
-    T_LAND     [reduce using rule 81 (ASSIGNOP)]
-    T_LOR      [reduce using rule 81 (ASSIGNOP)]
-    T_LEQUAL   [reduce using rule 81 (ASSIGNOP)]
-    T_LNEQUAL  [reduce using rule 81 (ASSIGNOP)]
-    T_LLESSEQ  [reduce using rule 81 (ASSIGNOP)]
-    T_LMOREEQ  [reduce using rule 81 (ASSIGNOP)]
-    T_LSHIFT   [reduce using rule 81 (ASSIGNOP)]
-    T_RSHIFT   [reduce using rule 81 (ASSIGNOP)]
-    $default   reduce using rule 81 (ASSIGNOP)
-
-
 State 91
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   82 ASSIGNOP: T_ID T_ANDASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   82 ASSIGNOP: T_ID T_XORASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     T_AND      [reduce using rule 82 (ASSIGNOP)]
     T_OR       [reduce using rule 82 (ASSIGNOP)]
@@ -1918,348 +2000,295 @@ State 91
 
 State 92
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   84 ASSIGNOP: T_ID T_XORASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   81 ASSIGNOP: T_ID T_ORASSIGN EXPR .
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
-    T_AND      [reduce using rule 84 (ASSIGNOP)]
-    T_OR       [reduce using rule 84 (ASSIGNOP)]
-    T_MORE     [reduce using rule 84 (ASSIGNOP)]
-    T_LESS     [reduce using rule 84 (ASSIGNOP)]
-    T_XOR      [reduce using rule 84 (ASSIGNOP)]
-    T_PLUS     [reduce using rule 84 (ASSIGNOP)]
-    T_MINUS    [reduce using rule 84 (ASSIGNOP)]
-    T_LAND     [reduce using rule 84 (ASSIGNOP)]
-    T_LOR      [reduce using rule 84 (ASSIGNOP)]
-    T_LEQUAL   [reduce using rule 84 (ASSIGNOP)]
-    T_LNEQUAL  [reduce using rule 84 (ASSIGNOP)]
-    T_LLESSEQ  [reduce using rule 84 (ASSIGNOP)]
-    T_LMOREEQ  [reduce using rule 84 (ASSIGNOP)]
-    T_LSHIFT   [reduce using rule 84 (ASSIGNOP)]
-    T_RSHIFT   [reduce using rule 84 (ASSIGNOP)]
-    $default   reduce using rule 84 (ASSIGNOP)
+    T_AND      [reduce using rule 81 (ASSIGNOP)]
+    T_OR       [reduce using rule 81 (ASSIGNOP)]
+    T_MORE     [reduce using rule 81 (ASSIGNOP)]
+    T_LESS     [reduce using rule 81 (ASSIGNOP)]
+    T_XOR      [reduce using rule 81 (ASSIGNOP)]
+    T_PLUS     [reduce using rule 81 (ASSIGNOP)]
+    T_MINUS    [reduce using rule 81 (ASSIGNOP)]
+    T_LAND     [reduce using rule 81 (ASSIGNOP)]
+    T_LOR      [reduce using rule 81 (ASSIGNOP)]
+    T_LEQUAL   [reduce using rule 81 (ASSIGNOP)]
+    T_LNEQUAL  [reduce using rule 81 (ASSIGNOP)]
+    T_LLESSEQ  [reduce using rule 81 (ASSIGNOP)]
+    T_LMOREEQ  [reduce using rule 81 (ASSIGNOP)]
+    T_LSHIFT   [reduce using rule 81 (ASSIGNOP)]
+    T_RSHIFT   [reduce using rule 81 (ASSIGNOP)]
+    $default   reduce using rule 81 (ASSIGNOP)
 
 
 State 93
 
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   83 ASSIGNOP: T_ID T_ORASSIGN EXPR .
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   66 BITWISEOP: EXPR T_AND TERM .
 
-    T_AND      shift, and go to state 58
-    T_OR       shift, and go to state 59
-    T_MORE     shift, and go to state 60
-    T_LESS     shift, and go to state 61
-    T_XOR      shift, and go to state 62
-    T_PLUS     shift, and go to state 63
-    T_MINUS    shift, and go to state 64
-    T_LAND     shift, and go to state 65
-    T_LOR      shift, and go to state 66
-    T_LEQUAL   shift, and go to state 67
-    T_LNEQUAL  shift, and go to state 68
-    T_LLESSEQ  shift, and go to state 69
-    T_LMOREEQ  shift, and go to state 70
-    T_LSHIFT   shift, and go to state 71
-    T_RSHIFT   shift, and go to state 72
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    T_AND      [reduce using rule 83 (ASSIGNOP)]
-    T_OR       [reduce using rule 83 (ASSIGNOP)]
-    T_MORE     [reduce using rule 83 (ASSIGNOP)]
-    T_LESS     [reduce using rule 83 (ASSIGNOP)]
-    T_XOR      [reduce using rule 83 (ASSIGNOP)]
-    T_PLUS     [reduce using rule 83 (ASSIGNOP)]
-    T_MINUS    [reduce using rule 83 (ASSIGNOP)]
-    T_LAND     [reduce using rule 83 (ASSIGNOP)]
-    T_LOR      [reduce using rule 83 (ASSIGNOP)]
-    T_LEQUAL   [reduce using rule 83 (ASSIGNOP)]
-    T_LNEQUAL  [reduce using rule 83 (ASSIGNOP)]
-    T_LLESSEQ  [reduce using rule 83 (ASSIGNOP)]
-    T_LMOREEQ  [reduce using rule 83 (ASSIGNOP)]
-    T_LSHIFT   [reduce using rule 83 (ASSIGNOP)]
-    T_RSHIFT   [reduce using rule 83 (ASSIGNOP)]
-    $default   reduce using rule 83 (ASSIGNOP)
+    $default  reduce using rule 66 (BITWISEOP)
 
 
 State 94
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   68 BITWISEOP: EXPR T_AND TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   67 BITWISEOP: EXPR T_OR TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 68 (BITWISEOP)
+    $default  reduce using rule 67 (BITWISEOP)
 
 
 State 95
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   69 BITWISEOP: EXPR T_OR TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   88 CONDITIONOP: EXPR T_MORE TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 69 (BITWISEOP)
+    $default  reduce using rule 88 (CONDITIONOP)
 
 
 State 96
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   90 CONDITIONOP: EXPR T_MORE TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   89 CONDITIONOP: EXPR T_LESS TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 90 (CONDITIONOP)
-
-
-State 97
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   91 CONDITIONOP: EXPR T_LESS TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 91 (CONDITIONOP)
-
-
-State 98
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   70 BITWISEOP: EXPR T_XOR TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 70 (BITWISEOP)
-
-
-State 99
-
-   50 EXPR: EXPR T_PLUS TERM .
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 50 (EXPR)
-
-
-State 100
-
-   51 EXPR: EXPR T_MINUS TERM .
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 51 (EXPR)
-
-
-State 101
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   86 CONDITIONOP: EXPR T_LAND TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 86 (CONDITIONOP)
-
-
-State 102
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   87 CONDITIONOP: EXPR T_LOR TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 87 (CONDITIONOP)
-
-
-State 103
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   85 CONDITIONOP: EXPR T_LEQUAL TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 85 (CONDITIONOP)
-
-
-State 104
-
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   89 CONDITIONOP: EXPR T_LNEQUAL TERM .
-
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
     $default  reduce using rule 89 (CONDITIONOP)
 
 
+State 97
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   68 BITWISEOP: EXPR T_XOR TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 68 (BITWISEOP)
+
+
+State 98
+
+   48 EXPR: EXPR T_PLUS TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 48 (EXPR)
+
+
+State 99
+
+   49 EXPR: EXPR T_MINUS TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 49 (EXPR)
+
+
+State 100
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   84 CONDITIONOP: EXPR T_LAND TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 84 (CONDITIONOP)
+
+
+State 101
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   85 CONDITIONOP: EXPR T_LOR TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 85 (CONDITIONOP)
+
+
+State 102
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   83 CONDITIONOP: EXPR T_LEQUAL TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 83 (CONDITIONOP)
+
+
+State 103
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   87 CONDITIONOP: EXPR T_LNEQUAL TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 87 (CONDITIONOP)
+
+
+State 104
+
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   91 CONDITIONOP: EXPR T_LLESSEQ TERM .
+
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
+
+    $default  reduce using rule 91 (CONDITIONOP)
+
+
 State 105
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   93 CONDITIONOP: EXPR T_LLESSEQ TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   90 CONDITIONOP: EXPR T_LMOREEQ TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 93 (CONDITIONOP)
+    $default  reduce using rule 90 (CONDITIONOP)
 
 
 State 106
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   92 CONDITIONOP: EXPR T_LMOREEQ TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   70 BITWISEOP: EXPR T_LSHIFT TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 92 (CONDITIONOP)
+    $default  reduce using rule 70 (BITWISEOP)
 
 
 State 107
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   72 BITWISEOP: EXPR T_LSHIFT TERM .
+   56 TERM: TERM . T_TIMES FACTOR
+   57     | TERM . T_DIVIDE FACTOR
+   58     | TERM . T_MODULUS FACTOR
+   71 BITWISEOP: EXPR T_RSHIFT TERM .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
+    T_TIMES    shift, and go to state 74
+    T_DIVIDE   shift, and go to state 75
+    T_MODULUS  shift, and go to state 76
 
-    $default  reduce using rule 72 (BITWISEOP)
+    $default  reduce using rule 71 (BITWISEOP)
 
 
 State 108
 
-   58 TERM: TERM . T_TIMES FACTOR
-   59     | TERM . T_DIVIDE FACTOR
-   60     | TERM . T_MODULUS FACTOR
-   73 BITWISEOP: EXPR T_RSHIFT TERM .
+   56 TERM: TERM T_TIMES FACTOR .
 
-    T_TIMES    shift, and go to state 73
-    T_DIVIDE   shift, and go to state 74
-    T_MODULUS  shift, and go to state 75
-
-    $default  reduce using rule 73 (BITWISEOP)
+    $default  reduce using rule 56 (TERM)
 
 
 State 109
 
-   58 TERM: TERM T_TIMES FACTOR .
+   57 TERM: TERM T_DIVIDE FACTOR .
 
-    $default  reduce using rule 58 (TERM)
+    $default  reduce using rule 57 (TERM)
 
 
 State 110
 
-   59 TERM: TERM T_DIVIDE FACTOR .
+   58 TERM: TERM T_MODULUS FACTOR .
 
-    $default  reduce using rule 59 (TERM)
+    $default  reduce using rule 58 (TERM)
 
 
 State 111
 
-   60 TERM: TERM T_MODULUS FACTOR .
+   30 NEW_SCOPE: T_LCUBRACKET . BODY T_RCUBRACKET
+   31          | T_LCUBRACKET . T_RCUBRACKET
 
-    $default  reduce using rule 60 (TERM)
-
-
-State 112
-
-   32 NEW_SCOPE: T_LCUBRACKET . BODY T_RCUBRACKET
-   33          | T_LCUBRACKET . T_RCUBRACKET
-
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 134
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 133
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -2270,72 +2299,73 @@ State 112
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_RCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_RCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
 
-    TYPE                go to state 118
-    BODY                go to state 135
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    BODY                go to state 134
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
 
 
-State 113
+State 112
 
-   39 FUNCTION_STATEMENT: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
-   52 EXPR: T_ID . T_INC
-   53     | T_ID . T_DEC
-   62 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-   67 ID: T_ID .
-   74 ASSIGNOP: T_ID . T_ASSIGN EXPR
-   75         | T_ID . T_ADDASSIGN EXPR
-   76         | T_ID . T_SUBASSIGN EXPR
-   77         | T_ID . T_MULASSIGN EXPR
-   78         | T_ID . T_DIVASSIGN EXPR
-   79         | T_ID . T_MODASSIGN EXPR
-   80         | T_ID . T_LSHIFTASSIGN EXPR
-   81         | T_ID . T_RSHIFTASSIGN EXPR
-   82         | T_ID . T_ANDASSIGN EXPR
-   83         | T_ID . T_ORASSIGN EXPR
-   84         | T_ID . T_XORASSIGN EXPR
+   37 FUNCTION_STATEMENT: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+   50 EXPR: T_ID . T_INC
+   51     | T_ID . T_DEC
+   60 FACTOR: T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   62       | T_ID .
+   72 ASSIGNOP: T_ID . T_ASSIGN EXPR
+   73         | T_ID . T_ADDASSIGN EXPR
+   74         | T_ID . T_SUBASSIGN EXPR
+   75         | T_ID . T_MULASSIGN EXPR
+   76         | T_ID . T_DIVASSIGN EXPR
+   77         | T_ID . T_MODASSIGN EXPR
+   78         | T_ID . T_LSHIFTASSIGN EXPR
+   79         | T_ID . T_RSHIFTASSIGN EXPR
+   80         | T_ID . T_ANDASSIGN EXPR
+   81         | T_ID . T_ORASSIGN EXPR
+   82         | T_ID . T_XORASSIGN EXPR
 
-    T_LBRACKET      shift, and go to state 136
+    T_LBRACKET      shift, and go to state 135
     T_ASSIGN        shift, and go to state 44
     T_INC           shift, and go to state 45
     T_DEC           shift, and go to state 46
@@ -2350,12 +2380,12 @@ State 113
     T_XORASSIGN     shift, and go to state 55
     T_ORASSIGN      shift, and go to state 56
 
-    $default  reduce using rule 67 (ID)
+    $default  reduce using rule 62 (FACTOR)
 
 
-State 114
+State 113
 
-   34 RETURN_STATEMENT: T_RETURN . EXPR T_SEMICOLON
+   32 RETURN_STATEMENT: T_RETURN . EXPR T_SEMICOLON
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -2363,12 +2393,33 @@ State 114
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
+
+    EXPR         go to state 136
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
+    BITWISEOP    go to state 32
+    ASSIGNOP     go to state 33
+    CONDITIONOP  go to state 34
+
+
+State 114
+
+   44 IF_STATEMENT: T_IF . EXPR T_LCUBRACKET BODY T_RCUBRACKET
+
+    T_LBRACKET  shift, and go to state 21
+    T_NOT       shift, and go to state 22
+    T_TILDA     shift, and go to state 23
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
     EXPR         go to state 137
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -2376,7 +2427,7 @@ State 114
 
 State 115
 
-   46 IF_STATEMENT: T_IF . EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   42 WHILE_STATEMENT: T_WHILE . EXPR T_LCUBRACKET BODY T_RCUBRACKET
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -2384,12 +2435,12 @@ State 115
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
     EXPR         go to state 138
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
@@ -2397,7 +2448,194 @@ State 115
 
 State 116
 
-   44 WHILE_STATEMENT: T_WHILE . EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   43 DO_STATEMENT: T_DO . T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
+
+    T_LCUBRACKET  shift, and go to state 139
+
+
+State 117
+
+   33 DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
+   34             | TYPE . T_ID T_SEMICOLON
+
+    T_ID  shift, and go to state 140
+
+
+State 118
+
+    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
+   19 BODY: BODY . STATEMENT
+
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 141
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
+
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
+
+
+State 119
+
+   20 BODY: STATEMENT .
+
+    $default  reduce using rule 20 (BODY)
+
+
+State 120
+
+   29 STATEMENT: NEW_SCOPE .
+
+    $default  reduce using rule 29 (STATEMENT)
+
+
+State 121
+
+   22 STATEMENT: RETURN_STATEMENT .
+
+    $default  reduce using rule 22 (STATEMENT)
+
+
+State 122
+
+   23 STATEMENT: DEC_VARIABLE .
+
+    $default  reduce using rule 23 (STATEMENT)
+
+
+State 123
+
+   24 STATEMENT: FUNCTION_STATEMENT .
+
+    $default  reduce using rule 24 (STATEMENT)
+
+
+State 124
+
+   26 STATEMENT: IFANDORELSEORELIF .
+
+    $default  reduce using rule 26 (STATEMENT)
+
+
+State 125
+
+   38 IFANDORELSEORELIF: IFANDORELIF . ELSE_STATEMENT
+   39                  | IFANDORELIF .
+   40 IFANDORELIF: IFANDORELIF . ELSE_IF_STATEMENT
+
+    T_ELSE  shift, and go to state 143
+
+    $default  reduce using rule 39 (IFANDORELSEORELIF)
+
+    ELSE_IF_STATEMENT  go to state 144
+    ELSE_STATEMENT     go to state 145
+
+
+State 126
+
+   27 STATEMENT: WHILE_STATEMENT .
+
+    $default  reduce using rule 27 (STATEMENT)
+
+
+State 127
+
+   28 STATEMENT: DO_STATEMENT .
+
+    $default  reduce using rule 28 (STATEMENT)
+
+
+State 128
+
+   41 IFANDORELIF: IF_STATEMENT .
+
+    $default  reduce using rule 41 (IFANDORELIF)
+
+
+State 129
+
+   25 STATEMENT: EXPR . T_SEMICOLON
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
+
+    T_SEMICOLON  shift, and go to state 146
+    T_AND        shift, and go to state 59
+    T_OR         shift, and go to state 60
+    T_MORE       shift, and go to state 61
+    T_LESS       shift, and go to state 62
+    T_XOR        shift, and go to state 63
+    T_PLUS       shift, and go to state 64
+    T_MINUS      shift, and go to state 65
+    T_LAND       shift, and go to state 66
+    T_LOR        shift, and go to state 67
+    T_LEQUAL     shift, and go to state 68
+    T_LNEQUAL    shift, and go to state 69
+    T_LLESSEQ    shift, and go to state 70
+    T_LMOREEQ    shift, and go to state 71
+    T_LSHIFT     shift, and go to state 72
+    T_RSHIFT     shift, and go to state 73
+
+
+State 130
+
+    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID .
+
+    $default  reduce using rule 8 (ARGUMENT_LIST)
+
+
+State 131
+
+   60 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
+
+    $default  reduce using rule 60 (FACTOR)
+
+
+State 132
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA . EXPR
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -2405,400 +2643,209 @@ State 116
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 139
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 147
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
 
 
-State 117
-
-   45 DO_STATEMENT: T_DO . T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
-
-    T_LCUBRACKET  shift, and go to state 140
-
-
-State 118
-
-   35 DEC_VARIABLE: TYPE . T_ID T_ASSIGN EXPR T_SEMICOLON
-   36             | TYPE . T_ID T_SEMICOLON
-
-    T_ID  shift, and go to state 141
-
-
-State 119
-
-    7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY . T_RCUBRACKET
-   21 BODY: BODY . STATEMENT
-
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 142
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
-
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
-
-
-State 120
-
-   22 BODY: STATEMENT .
-
-    $default  reduce using rule 22 (BODY)
-
-
-State 121
-
-   31 STATEMENT: NEW_SCOPE .
-
-    $default  reduce using rule 31 (STATEMENT)
-
-
-State 122
-
-   24 STATEMENT: RETURN_STATEMENT .
-
-    $default  reduce using rule 24 (STATEMENT)
-
-
-State 123
-
-   25 STATEMENT: DEC_VARIABLE .
-
-    $default  reduce using rule 25 (STATEMENT)
-
-
-State 124
-
-   26 STATEMENT: FUNCTION_STATEMENT .
-
-    $default  reduce using rule 26 (STATEMENT)
-
-
-State 125
-
-   28 STATEMENT: IFANDORELSEORELIF .
-
-    $default  reduce using rule 28 (STATEMENT)
-
-
-State 126
-
-   40 IFANDORELSEORELIF: IFANDORELIF . ELSE_STATEMENT
-   41                  | IFANDORELIF .
-   42 IFANDORELIF: IFANDORELIF . ELSE_IF_STATEMENT
-
-    T_ELSE  shift, and go to state 144
-
-    $default  reduce using rule 41 (IFANDORELSEORELIF)
-
-    ELSE_IF_STATEMENT  go to state 145
-    ELSE_STATEMENT     go to state 146
-
-
-State 127
-
-   29 STATEMENT: WHILE_STATEMENT .
-
-    $default  reduce using rule 29 (STATEMENT)
-
-
-State 128
-
-   30 STATEMENT: DO_STATEMENT .
-
-    $default  reduce using rule 30 (STATEMENT)
-
-
-State 129
-
-   43 IFANDORELIF: IF_STATEMENT .
-
-    $default  reduce using rule 43 (IFANDORELIF)
-
-
-State 130
-
-   27 STATEMENT: EXPR . T_SEMICOLON
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
-
-    T_SEMICOLON  shift, and go to state 147
-    T_AND        shift, and go to state 58
-    T_OR         shift, and go to state 59
-    T_MORE       shift, and go to state 60
-    T_LESS       shift, and go to state 61
-    T_XOR        shift, and go to state 62
-    T_PLUS       shift, and go to state 63
-    T_MINUS      shift, and go to state 64
-    T_LAND       shift, and go to state 65
-    T_LOR        shift, and go to state 66
-    T_LEQUAL     shift, and go to state 67
-    T_LNEQUAL    shift, and go to state 68
-    T_LLESSEQ    shift, and go to state 69
-    T_LMOREEQ    shift, and go to state 70
-    T_LSHIFT     shift, and go to state 71
-    T_RSHIFT     shift, and go to state 72
-
-
-State 131
-
-    8 ARGUMENT_LIST: ARGUMENT_LIST T_COMMA TYPE T_ID .
-
-    $default  reduce using rule 8 (ARGUMENT_LIST)
-
-
-State 132
-
-   62 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
-
-    $default  reduce using rule 62 (FACTOR)
-
-
 State 133
 
-   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA . ID
-   12                      | ARGUMENT_LIST_NO_TYPE T_COMMA . NUMBER
+   31 NEW_SCOPE: T_LCUBRACKET T_RCUBRACKET .
 
-    T_MINUS   shift, and go to state 24
-    T_NUMBER  shift, and go to state 25
-    T_ID      shift, and go to state 79
-
-    NUMBER  go to state 148
-    ID      go to state 149
+    $default  reduce using rule 31 (NEW_SCOPE)
 
 
 State 134
 
-   33 NEW_SCOPE: T_LCUBRACKET T_RCUBRACKET .
+   19 BODY: BODY . STATEMENT
+   30 NEW_SCOPE: T_LCUBRACKET BODY . T_RCUBRACKET
 
-    $default  reduce using rule 33 (NEW_SCOPE)
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 148
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
+
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
 
 
 State 135
 
-   21 BODY: BODY . STATEMENT
-   32 NEW_SCOPE: T_LCUBRACKET BODY . T_RCUBRACKET
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
+   60 FACTOR: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 150
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_LBRACKET  shift, and go to state 21
+    T_NOT       shift, and go to state 22
+    T_TILDA     shift, and go to state 23
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    $default  reduce using rule 13 (ARGUMENT_LIST_NO_TYPE)
+
+    ARGUMENT_LIST_NO_TYPE  go to state 149
+    EXPR                   go to state 81
+    TERM                   go to state 29
+    FACTOR                 go to state 30
+    NUMBER                 go to state 31
+    BITWISEOP              go to state 32
+    ASSIGNOP               go to state 33
+    CONDITIONOP            go to state 34
 
 
 State 136
 
-   39 FUNCTION_STATEMENT: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON
-   62 FACTOR: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
+   32 RETURN_STATEMENT: T_RETURN EXPR . T_SEMICOLON
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_MINUS   shift, and go to state 24
-    T_NUMBER  shift, and go to state 25
-    T_ID      shift, and go to state 79
-
-    $default  reduce using rule 15 (ARGUMENT_LIST_NO_TYPE)
-
-    ARGUMENT_LIST_NO_TYPE  go to state 151
-    NUMBER                 go to state 81
-    ID                     go to state 82
+    T_SEMICOLON  shift, and go to state 150
+    T_AND        shift, and go to state 59
+    T_OR         shift, and go to state 60
+    T_MORE       shift, and go to state 61
+    T_LESS       shift, and go to state 62
+    T_XOR        shift, and go to state 63
+    T_PLUS       shift, and go to state 64
+    T_MINUS      shift, and go to state 65
+    T_LAND       shift, and go to state 66
+    T_LOR        shift, and go to state 67
+    T_LEQUAL     shift, and go to state 68
+    T_LNEQUAL    shift, and go to state 69
+    T_LLESSEQ    shift, and go to state 70
+    T_LMOREEQ    shift, and go to state 71
+    T_LSHIFT     shift, and go to state 72
+    T_RSHIFT     shift, and go to state 73
 
 
 State 137
 
-   34 RETURN_STATEMENT: T_RETURN EXPR . T_SEMICOLON
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   44 IF_STATEMENT: T_IF EXPR . T_LCUBRACKET BODY T_RCUBRACKET
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_SEMICOLON  shift, and go to state 152
-    T_AND        shift, and go to state 58
-    T_OR         shift, and go to state 59
-    T_MORE       shift, and go to state 60
-    T_LESS       shift, and go to state 61
-    T_XOR        shift, and go to state 62
-    T_PLUS       shift, and go to state 63
-    T_MINUS      shift, and go to state 64
-    T_LAND       shift, and go to state 65
-    T_LOR        shift, and go to state 66
-    T_LEQUAL     shift, and go to state 67
-    T_LNEQUAL    shift, and go to state 68
-    T_LLESSEQ    shift, and go to state 69
-    T_LMOREEQ    shift, and go to state 70
-    T_LSHIFT     shift, and go to state 71
-    T_RSHIFT     shift, and go to state 72
+    T_LCUBRACKET  shift, and go to state 151
+    T_AND         shift, and go to state 59
+    T_OR          shift, and go to state 60
+    T_MORE        shift, and go to state 61
+    T_LESS        shift, and go to state 62
+    T_XOR         shift, and go to state 63
+    T_PLUS        shift, and go to state 64
+    T_MINUS       shift, and go to state 65
+    T_LAND        shift, and go to state 66
+    T_LOR         shift, and go to state 67
+    T_LEQUAL      shift, and go to state 68
+    T_LNEQUAL     shift, and go to state 69
+    T_LLESSEQ     shift, and go to state 70
+    T_LMOREEQ     shift, and go to state 71
+    T_LSHIFT      shift, and go to state 72
+    T_RSHIFT      shift, and go to state 73
 
 
 State 138
 
-   46 IF_STATEMENT: T_IF EXPR . T_LCUBRACKET BODY T_RCUBRACKET
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   42 WHILE_STATEMENT: T_WHILE EXPR . T_LCUBRACKET BODY T_RCUBRACKET
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_LCUBRACKET  shift, and go to state 153
-    T_AND         shift, and go to state 58
-    T_OR          shift, and go to state 59
-    T_MORE        shift, and go to state 60
-    T_LESS        shift, and go to state 61
-    T_XOR         shift, and go to state 62
-    T_PLUS        shift, and go to state 63
-    T_MINUS       shift, and go to state 64
-    T_LAND        shift, and go to state 65
-    T_LOR         shift, and go to state 66
-    T_LEQUAL      shift, and go to state 67
-    T_LNEQUAL     shift, and go to state 68
-    T_LLESSEQ     shift, and go to state 69
-    T_LMOREEQ     shift, and go to state 70
-    T_LSHIFT      shift, and go to state 71
-    T_RSHIFT      shift, and go to state 72
+    T_LCUBRACKET  shift, and go to state 152
+    T_AND         shift, and go to state 59
+    T_OR          shift, and go to state 60
+    T_MORE        shift, and go to state 61
+    T_LESS        shift, and go to state 62
+    T_XOR         shift, and go to state 63
+    T_PLUS        shift, and go to state 64
+    T_MINUS       shift, and go to state 65
+    T_LAND        shift, and go to state 66
+    T_LOR         shift, and go to state 67
+    T_LEQUAL      shift, and go to state 68
+    T_LNEQUAL     shift, and go to state 69
+    T_LLESSEQ     shift, and go to state 70
+    T_LMOREEQ     shift, and go to state 71
+    T_LSHIFT      shift, and go to state 72
+    T_RSHIFT      shift, and go to state 73
 
 
 State 139
 
-   44 WHILE_STATEMENT: T_WHILE EXPR . T_LCUBRACKET BODY T_RCUBRACKET
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   43 DO_STATEMENT: T_DO T_LCUBRACKET . BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
 
-    T_LCUBRACKET  shift, and go to state 154
-    T_AND         shift, and go to state 58
-    T_OR          shift, and go to state 59
-    T_MORE        shift, and go to state 60
-    T_LESS        shift, and go to state 61
-    T_XOR         shift, and go to state 62
-    T_PLUS        shift, and go to state 63
-    T_MINUS       shift, and go to state 64
-    T_LAND        shift, and go to state 65
-    T_LOR         shift, and go to state 66
-    T_LEQUAL      shift, and go to state 67
-    T_LNEQUAL     shift, and go to state 68
-    T_LLESSEQ     shift, and go to state 69
-    T_LMOREEQ     shift, and go to state 70
-    T_LSHIFT      shift, and go to state 71
-    T_RSHIFT      shift, and go to state 72
-
-
-State 140
-
-   45 DO_STATEMENT: T_DO T_LCUBRACKET . BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
-
-    T_LCUBRACKET  shift, and go to state 112
+    T_LCUBRACKET  shift, and go to state 111
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -2809,149 +2856,173 @@ State 140
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
 
-    TYPE                go to state 118
-    BODY                go to state 155
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    BODY                go to state 153
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
 
 
+State 140
+
+   33 DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
+   34             | TYPE T_ID . T_SEMICOLON
+
+    T_ASSIGN     shift, and go to state 154
+    T_SEMICOLON  shift, and go to state 155
+
+
 State 141
-
-   35 DEC_VARIABLE: TYPE T_ID . T_ASSIGN EXPR T_SEMICOLON
-   36             | TYPE T_ID . T_SEMICOLON
-
-    T_ASSIGN     shift, and go to state 156
-    T_SEMICOLON  shift, and go to state 157
-
-
-State 142
 
     7 DEC_FUNCTION: TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET .
 
     $default  reduce using rule 7 (DEC_FUNCTION)
 
 
+State 142
+
+   19 BODY: BODY STATEMENT .
+
+    $default  reduce using rule 19 (BODY)
+
+
 State 143
 
-   21 BODY: BODY STATEMENT .
+   45 ELSE_IF_STATEMENT: T_ELSE . T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   46 ELSE_STATEMENT: T_ELSE . T_LCUBRACKET BODY T_RCUBRACKET
 
-    $default  reduce using rule 21 (BODY)
+    T_LCUBRACKET  shift, and go to state 156
+    T_IF          shift, and go to state 157
 
 
 State 144
 
-   47 ELSE_IF_STATEMENT: T_ELSE . T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET
-   48 ELSE_STATEMENT: T_ELSE . T_LCUBRACKET BODY T_RCUBRACKET
+   40 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT .
 
-    T_LCUBRACKET  shift, and go to state 158
-    T_IF          shift, and go to state 159
+    $default  reduce using rule 40 (IFANDORELIF)
 
 
 State 145
 
-   42 IFANDORELIF: IFANDORELIF ELSE_IF_STATEMENT .
+   38 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT .
 
-    $default  reduce using rule 42 (IFANDORELIF)
+    $default  reduce using rule 38 (IFANDORELSEORELIF)
 
 
 State 146
 
-   40 IFANDORELSEORELIF: IFANDORELIF ELSE_STATEMENT .
+   25 STATEMENT: EXPR T_SEMICOLON .
 
-    $default  reduce using rule 40 (IFANDORELSEORELIF)
+    $default  reduce using rule 25 (STATEMENT)
 
 
 State 147
 
-   27 STATEMENT: EXPR T_SEMICOLON .
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA EXPR .
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    $default  reduce using rule 27 (STATEMENT)
-
-
-State 148
-
-   12 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA NUMBER .
-
-    $default  reduce using rule 12 (ARGUMENT_LIST_NO_TYPE)
-
-
-State 149
-
-   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE T_COMMA ID .
+    T_AND      shift, and go to state 59
+    T_OR       shift, and go to state 60
+    T_MORE     shift, and go to state 61
+    T_LESS     shift, and go to state 62
+    T_XOR      shift, and go to state 63
+    T_PLUS     shift, and go to state 64
+    T_MINUS    shift, and go to state 65
+    T_LAND     shift, and go to state 66
+    T_LOR      shift, and go to state 67
+    T_LEQUAL   shift, and go to state 68
+    T_LNEQUAL  shift, and go to state 69
+    T_LLESSEQ  shift, and go to state 70
+    T_LMOREEQ  shift, and go to state 71
+    T_LSHIFT   shift, and go to state 72
+    T_RSHIFT   shift, and go to state 73
 
     $default  reduce using rule 11 (ARGUMENT_LIST_NO_TYPE)
 
 
+State 148
+
+   30 NEW_SCOPE: T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 30 (NEW_SCOPE)
+
+
+State 149
+
+   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA EXPR
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET T_SEMICOLON
+   60 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
+
+    T_RBRACKET  shift, and go to state 158
+    T_COMMA     shift, and go to state 132
+
+
 State 150
 
-   32 NEW_SCOPE: T_LCUBRACKET BODY T_RCUBRACKET .
+   32 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON .
 
-    $default  reduce using rule 32 (NEW_SCOPE)
+    $default  reduce using rule 32 (RETURN_STATEMENT)
 
 
 State 151
 
-   11 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA ID
-   12                      | ARGUMENT_LIST_NO_TYPE . T_COMMA NUMBER
-   39 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET T_SEMICOLON
-   62 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
+   44 IF_STATEMENT: T_IF EXPR T_LCUBRACKET . BODY T_RCUBRACKET
 
-    T_RBRACKET  shift, and go to state 160
-    T_COMMA     shift, and go to state 133
-
-
-State 152
-
-   34 RETURN_STATEMENT: T_RETURN EXPR T_SEMICOLON .
-
-    $default  reduce using rule 34 (RETURN_STATEMENT)
-
-
-State 153
-
-   46 IF_STATEMENT: T_IF EXPR T_LCUBRACKET . BODY T_RCUBRACKET
-
-    T_LCUBRACKET  shift, and go to state 112
+    T_LCUBRACKET  shift, and go to state 111
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -2962,47 +3033,154 @@ State 153
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
 
-    TYPE                go to state 118
-    BODY                go to state 161
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    BODY                go to state 159
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
+
+
+State 152
+
+   42 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET . BODY T_RCUBRACKET
+
+    T_LCUBRACKET  shift, and go to state 111
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
+
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
+
+    TYPE                go to state 117
+    BODY                go to state 160
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
+
+
+State 153
+
+   19 BODY: BODY . STATEMENT
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY . T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
+
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 161
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
+
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
@@ -3010,369 +3188,265 @@ State 153
 
 State 154
 
-   44 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET . BODY T_RCUBRACKET
+   33 DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_LBRACKET  shift, and go to state 21
+    T_NOT       shift, and go to state 22
+    T_TILDA     shift, and go to state 23
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
-
-    TYPE                go to state 118
-    BODY                go to state 162
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    EXPR         go to state 162
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
+    BITWISEOP    go to state 32
+    ASSIGNOP     go to state 33
+    CONDITIONOP  go to state 34
 
 
 State 155
 
-   21 BODY: BODY . STATEMENT
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY . T_RCUBRACKET T_WHILE EXPR T_SEMICOLON
+   34 DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 163
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
-
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    $default  reduce using rule 34 (DEC_VARIABLE)
 
 
 State 156
 
-   35 DEC_VARIABLE: TYPE T_ID T_ASSIGN . EXPR T_SEMICOLON
+   46 ELSE_STATEMENT: T_ELSE T_LCUBRACKET . BODY T_RCUBRACKET
 
-    T_LBRACKET  shift, and go to state 21
-    T_NOT       shift, and go to state 22
-    T_TILDA     shift, and go to state 23
-    T_MINUS     shift, and go to state 24
-    T_NUMBER    shift, and go to state 25
-    T_ID        shift, and go to state 26
+    T_LCUBRACKET  shift, and go to state 111
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    EXPR         go to state 164
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
-    BITWISEOP    go to state 32
-    ASSIGNOP     go to state 33
-    CONDITIONOP  go to state 34
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
+
+    TYPE                go to state 117
+    BODY                go to state 163
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
 
 
 State 157
 
-   36 DEC_VARIABLE: TYPE T_ID T_SEMICOLON .
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF . EXPR T_LCUBRACKET BODY T_RCUBRACKET
 
-    $default  reduce using rule 36 (DEC_VARIABLE)
+    T_LBRACKET  shift, and go to state 21
+    T_NOT       shift, and go to state 22
+    T_TILDA     shift, and go to state 23
+    T_MINUS     shift, and go to state 24
+    T_NUMBER    shift, and go to state 25
+    T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
+
+    EXPR         go to state 164
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
+    BITWISEOP    go to state 32
+    ASSIGNOP     go to state 33
+    CONDITIONOP  go to state 34
 
 
 State 158
 
-   48 ELSE_STATEMENT: T_ELSE T_LCUBRACKET . BODY T_RCUBRACKET
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET . T_SEMICOLON
+   60 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_SEMICOLON  shift, and go to state 165
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
-
-    TYPE                go to state 118
-    BODY                go to state 165
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    T_SEMICOLON  [reduce using rule 60 (FACTOR)]
+    $default     reduce using rule 60 (FACTOR)
 
 
 State 159
 
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF . EXPR T_LCUBRACKET BODY T_RCUBRACKET
+   19 BODY: BODY . STATEMENT
+   44 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY . T_RCUBRACKET
 
-    T_LBRACKET  shift, and go to state 21
-    T_NOT       shift, and go to state 22
-    T_TILDA     shift, and go to state 23
-    T_MINUS     shift, and go to state 24
-    T_NUMBER    shift, and go to state 25
-    T_ID        shift, and go to state 26
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 166
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    EXPR         go to state 166
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
-    BITWISEOP    go to state 32
-    ASSIGNOP     go to state 33
-    CONDITIONOP  go to state 34
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
 
 
 State 160
 
-   39 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET . T_SEMICOLON
-   62 FACTOR: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
+   19 BODY: BODY . STATEMENT
+   42 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY . T_RCUBRACKET
 
-    T_SEMICOLON  shift, and go to state 167
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 167
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_SEMICOLON  [reduce using rule 62 (FACTOR)]
-    $default     reduce using rule 62 (FACTOR)
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
 
 
 State 161
 
-   21 BODY: BODY . STATEMENT
-   46 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY . T_RCUBRACKET
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET . T_WHILE EXPR T_SEMICOLON
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 168
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
-
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    T_WHILE  shift, and go to state 168
 
 
 State 162
 
-   21 BODY: BODY . STATEMENT
-   44 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY . T_RCUBRACKET
+   33 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 169
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
-
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
+    T_SEMICOLON  shift, and go to state 169
+    T_AND        shift, and go to state 59
+    T_OR         shift, and go to state 60
+    T_MORE       shift, and go to state 61
+    T_LESS       shift, and go to state 62
+    T_XOR        shift, and go to state 63
+    T_PLUS       shift, and go to state 64
+    T_MINUS      shift, and go to state 65
+    T_LAND       shift, and go to state 66
+    T_LOR        shift, and go to state 67
+    T_LEQUAL     shift, and go to state 68
+    T_LNEQUAL    shift, and go to state 69
+    T_LLESSEQ    shift, and go to state 70
+    T_LMOREEQ    shift, and go to state 71
+    T_LSHIFT     shift, and go to state 72
+    T_RSHIFT     shift, and go to state 73
 
 
 State 163
 
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET . T_WHILE EXPR T_SEMICOLON
+   19 BODY: BODY . STATEMENT
+   46 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY . T_RCUBRACKET
 
-    T_WHILE  shift, and go to state 170
-
-
-State 164
-
-   35 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR . T_SEMICOLON
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
-
-    T_SEMICOLON  shift, and go to state 171
-    T_AND        shift, and go to state 58
-    T_OR         shift, and go to state 59
-    T_MORE       shift, and go to state 60
-    T_LESS       shift, and go to state 61
-    T_XOR        shift, and go to state 62
-    T_PLUS       shift, and go to state 63
-    T_MINUS      shift, and go to state 64
-    T_LAND       shift, and go to state 65
-    T_LOR        shift, and go to state 66
-    T_LEQUAL     shift, and go to state 67
-    T_LNEQUAL    shift, and go to state 68
-    T_LLESSEQ    shift, and go to state 69
-    T_LMOREEQ    shift, and go to state 70
-    T_LSHIFT     shift, and go to state 71
-    T_RSHIFT     shift, and go to state 72
-
-
-State 165
-
-   21 BODY: BODY . STATEMENT
-   48 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY . T_RCUBRACKET
-
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 172
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 170
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -3383,94 +3457,94 @@ State 165
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
 
 
+State 164
+
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR . T_LCUBRACKET BODY T_RCUBRACKET
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
+
+    T_LCUBRACKET  shift, and go to state 171
+    T_AND         shift, and go to state 59
+    T_OR          shift, and go to state 60
+    T_MORE        shift, and go to state 61
+    T_LESS        shift, and go to state 62
+    T_XOR         shift, and go to state 63
+    T_PLUS        shift, and go to state 64
+    T_MINUS       shift, and go to state 65
+    T_LAND        shift, and go to state 66
+    T_LOR         shift, and go to state 67
+    T_LEQUAL      shift, and go to state 68
+    T_LNEQUAL     shift, and go to state 69
+    T_LLESSEQ     shift, and go to state 70
+    T_LMOREEQ     shift, and go to state 71
+    T_LSHIFT      shift, and go to state 72
+    T_RSHIFT      shift, and go to state 73
+
+
+State 165
+
+   37 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON .
+
+    $default  reduce using rule 37 (FUNCTION_STATEMENT)
+
+
 State 166
 
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR . T_LCUBRACKET BODY T_RCUBRACKET
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   44 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET .
 
-    T_LCUBRACKET  shift, and go to state 173
-    T_AND         shift, and go to state 58
-    T_OR          shift, and go to state 59
-    T_MORE        shift, and go to state 60
-    T_LESS        shift, and go to state 61
-    T_XOR         shift, and go to state 62
-    T_PLUS        shift, and go to state 63
-    T_MINUS       shift, and go to state 64
-    T_LAND        shift, and go to state 65
-    T_LOR         shift, and go to state 66
-    T_LEQUAL      shift, and go to state 67
-    T_LNEQUAL     shift, and go to state 68
-    T_LLESSEQ     shift, and go to state 69
-    T_LMOREEQ     shift, and go to state 70
-    T_LSHIFT      shift, and go to state 71
-    T_RSHIFT      shift, and go to state 72
+    $default  reduce using rule 44 (IF_STATEMENT)
 
 
 State 167
 
-   39 FUNCTION_STATEMENT: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON .
+   42 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET .
 
-    $default  reduce using rule 39 (FUNCTION_STATEMENT)
+    $default  reduce using rule 42 (WHILE_STATEMENT)
 
 
 State 168
 
-   46 IF_STATEMENT: T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET .
-
-    $default  reduce using rule 46 (IF_STATEMENT)
-
-
-State 169
-
-   44 WHILE_STATEMENT: T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET .
-
-    $default  reduce using rule 44 (WHILE_STATEMENT)
-
-
-State 170
-
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE . EXPR T_SEMICOLON
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE . EXPR T_SEMICOLON
 
     T_LBRACKET  shift, and go to state 21
     T_NOT       shift, and go to state 22
@@ -3478,36 +3552,36 @@ State 170
     T_MINUS     shift, and go to state 24
     T_NUMBER    shift, and go to state 25
     T_ID        shift, and go to state 26
+    T_SIZE_OF   shift, and go to state 27
 
-    EXPR         go to state 174
-    TERM         go to state 28
-    FACTOR       go to state 29
-    NUMBER       go to state 30
-    ID           go to state 31
+    EXPR         go to state 172
+    TERM         go to state 29
+    FACTOR       go to state 30
+    NUMBER       go to state 31
     BITWISEOP    go to state 32
     ASSIGNOP     go to state 33
     CONDITIONOP  go to state 34
 
 
+State 169
+
+   33 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
+
+    $default  reduce using rule 33 (DEC_VARIABLE)
+
+
+State 170
+
+   46 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET .
+
+    $default  reduce using rule 46 (ELSE_STATEMENT)
+
+
 State 171
 
-   35 DEC_VARIABLE: TYPE T_ID T_ASSIGN EXPR T_SEMICOLON .
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET . BODY T_RCUBRACKET
 
-    $default  reduce using rule 35 (DEC_VARIABLE)
-
-
-State 172
-
-   48 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET .
-
-    $default  reduce using rule 48 (ELSE_STATEMENT)
-
-
-State 173
-
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET . BODY T_RCUBRACKET
-
-    T_LCUBRACKET  shift, and go to state 112
+    T_LCUBRACKET  shift, and go to state 111
     T_LBRACKET    shift, and go to state 21
     T_NOT         shift, and go to state 22
     T_TILDA       shift, and go to state 23
@@ -3518,47 +3592,129 @@ State 173
     T_LONG        shift, and go to state 5
     T_MINUS       shift, and go to state 24
     T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
 
-    T_LCUBRACKET  [reduce using rule 23 (BODY)]
-    T_LBRACKET    [reduce using rule 23 (BODY)]
-    T_NOT         [reduce using rule 23 (BODY)]
-    T_TILDA       [reduce using rule 23 (BODY)]
-    T_INT         [reduce using rule 23 (BODY)]
-    T_DOUBLE      [reduce using rule 23 (BODY)]
-    T_STRING      [reduce using rule 23 (BODY)]
-    T_VOID        [reduce using rule 23 (BODY)]
-    T_LONG        [reduce using rule 23 (BODY)]
-    T_MINUS       [reduce using rule 23 (BODY)]
-    T_NUMBER      [reduce using rule 23 (BODY)]
-    T_ID          [reduce using rule 23 (BODY)]
-    T_RETURN      [reduce using rule 23 (BODY)]
-    T_IF          [reduce using rule 23 (BODY)]
-    T_WHILE       [reduce using rule 23 (BODY)]
-    T_DO          [reduce using rule 23 (BODY)]
-    $default      reduce using rule 23 (BODY)
+    T_LCUBRACKET  [reduce using rule 21 (BODY)]
+    T_LBRACKET    [reduce using rule 21 (BODY)]
+    T_NOT         [reduce using rule 21 (BODY)]
+    T_TILDA       [reduce using rule 21 (BODY)]
+    T_INT         [reduce using rule 21 (BODY)]
+    T_DOUBLE      [reduce using rule 21 (BODY)]
+    T_STRING      [reduce using rule 21 (BODY)]
+    T_VOID        [reduce using rule 21 (BODY)]
+    T_LONG        [reduce using rule 21 (BODY)]
+    T_MINUS       [reduce using rule 21 (BODY)]
+    T_NUMBER      [reduce using rule 21 (BODY)]
+    T_ID          [reduce using rule 21 (BODY)]
+    T_RETURN      [reduce using rule 21 (BODY)]
+    T_SIZE_OF     [reduce using rule 21 (BODY)]
+    T_IF          [reduce using rule 21 (BODY)]
+    T_WHILE       [reduce using rule 21 (BODY)]
+    T_DO          [reduce using rule 21 (BODY)]
+    $default      reduce using rule 21 (BODY)
 
-    TYPE                go to state 118
-    BODY                go to state 175
-    STATEMENT           go to state 120
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
+    TYPE                go to state 117
+    BODY                go to state 173
+    STATEMENT           go to state 119
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
+    BITWISEOP           go to state 32
+    ASSIGNOP            go to state 33
+    CONDITIONOP         go to state 34
+
+
+State 172
+
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR . T_SEMICOLON
+   48 EXPR: EXPR . T_PLUS TERM
+   49     | EXPR . T_MINUS TERM
+   66 BITWISEOP: EXPR . T_AND TERM
+   67          | EXPR . T_OR TERM
+   68          | EXPR . T_XOR TERM
+   70          | EXPR . T_LSHIFT TERM
+   71          | EXPR . T_RSHIFT TERM
+   83 CONDITIONOP: EXPR . T_LEQUAL TERM
+   84            | EXPR . T_LAND TERM
+   85            | EXPR . T_LOR TERM
+   87            | EXPR . T_LNEQUAL TERM
+   88            | EXPR . T_MORE TERM
+   89            | EXPR . T_LESS TERM
+   90            | EXPR . T_LMOREEQ TERM
+   91            | EXPR . T_LLESSEQ TERM
+
+    T_SEMICOLON  shift, and go to state 174
+    T_AND        shift, and go to state 59
+    T_OR         shift, and go to state 60
+    T_MORE       shift, and go to state 61
+    T_LESS       shift, and go to state 62
+    T_XOR        shift, and go to state 63
+    T_PLUS       shift, and go to state 64
+    T_MINUS      shift, and go to state 65
+    T_LAND       shift, and go to state 66
+    T_LOR        shift, and go to state 67
+    T_LEQUAL     shift, and go to state 68
+    T_LNEQUAL    shift, and go to state 69
+    T_LLESSEQ    shift, and go to state 70
+    T_LMOREEQ    shift, and go to state 71
+    T_LSHIFT     shift, and go to state 72
+    T_RSHIFT     shift, and go to state 73
+
+
+State 173
+
+   19 BODY: BODY . STATEMENT
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY . T_RCUBRACKET
+
+    T_LCUBRACKET  shift, and go to state 111
+    T_RCUBRACKET  shift, and go to state 175
+    T_LBRACKET    shift, and go to state 21
+    T_NOT         shift, and go to state 22
+    T_TILDA       shift, and go to state 23
+    T_INT         shift, and go to state 1
+    T_DOUBLE      shift, and go to state 2
+    T_STRING      shift, and go to state 3
+    T_VOID        shift, and go to state 4
+    T_LONG        shift, and go to state 5
+    T_MINUS       shift, and go to state 24
+    T_NUMBER      shift, and go to state 25
+    T_ID          shift, and go to state 112
+    T_RETURN      shift, and go to state 113
+    T_SIZE_OF     shift, and go to state 27
+    T_IF          shift, and go to state 114
+    T_WHILE       shift, and go to state 115
+    T_DO          shift, and go to state 116
+
+    TYPE                go to state 117
+    STATEMENT           go to state 142
+    NEW_SCOPE           go to state 120
+    RETURN_STATEMENT    go to state 121
+    DEC_VARIABLE        go to state 122
+    FUNCTION_STATEMENT  go to state 123
+    IFANDORELSEORELIF   go to state 124
+    IFANDORELIF         go to state 125
+    WHILE_STATEMENT     go to state 126
+    DO_STATEMENT        go to state 127
+    IF_STATEMENT        go to state 128
+    EXPR                go to state 129
+    TERM                go to state 29
+    FACTOR              go to state 30
+    NUMBER              go to state 31
     BITWISEOP           go to state 32
     ASSIGNOP            go to state 33
     CONDITIONOP         go to state 34
@@ -3566,94 +3722,13 @@ State 173
 
 State 174
 
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR . T_SEMICOLON
-   50 EXPR: EXPR . T_PLUS TERM
-   51     | EXPR . T_MINUS TERM
-   68 BITWISEOP: EXPR . T_AND TERM
-   69          | EXPR . T_OR TERM
-   70          | EXPR . T_XOR TERM
-   72          | EXPR . T_LSHIFT TERM
-   73          | EXPR . T_RSHIFT TERM
-   85 CONDITIONOP: EXPR . T_LEQUAL TERM
-   86            | EXPR . T_LAND TERM
-   87            | EXPR . T_LOR TERM
-   89            | EXPR . T_LNEQUAL TERM
-   90            | EXPR . T_MORE TERM
-   91            | EXPR . T_LESS TERM
-   92            | EXPR . T_LMOREEQ TERM
-   93            | EXPR . T_LLESSEQ TERM
+   43 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON .
 
-    T_SEMICOLON  shift, and go to state 176
-    T_AND        shift, and go to state 58
-    T_OR         shift, and go to state 59
-    T_MORE       shift, and go to state 60
-    T_LESS       shift, and go to state 61
-    T_XOR        shift, and go to state 62
-    T_PLUS       shift, and go to state 63
-    T_MINUS      shift, and go to state 64
-    T_LAND       shift, and go to state 65
-    T_LOR        shift, and go to state 66
-    T_LEQUAL     shift, and go to state 67
-    T_LNEQUAL    shift, and go to state 68
-    T_LLESSEQ    shift, and go to state 69
-    T_LMOREEQ    shift, and go to state 70
-    T_LSHIFT     shift, and go to state 71
-    T_RSHIFT     shift, and go to state 72
+    $default  reduce using rule 43 (DO_STATEMENT)
 
 
 State 175
 
-   21 BODY: BODY . STATEMENT
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY . T_RCUBRACKET
+   45 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET .
 
-    T_LCUBRACKET  shift, and go to state 112
-    T_RCUBRACKET  shift, and go to state 177
-    T_LBRACKET    shift, and go to state 21
-    T_NOT         shift, and go to state 22
-    T_TILDA       shift, and go to state 23
-    T_INT         shift, and go to state 1
-    T_DOUBLE      shift, and go to state 2
-    T_STRING      shift, and go to state 3
-    T_VOID        shift, and go to state 4
-    T_LONG        shift, and go to state 5
-    T_MINUS       shift, and go to state 24
-    T_NUMBER      shift, and go to state 25
-    T_ID          shift, and go to state 113
-    T_RETURN      shift, and go to state 114
-    T_IF          shift, and go to state 115
-    T_WHILE       shift, and go to state 116
-    T_DO          shift, and go to state 117
-
-    TYPE                go to state 118
-    STATEMENT           go to state 143
-    NEW_SCOPE           go to state 121
-    RETURN_STATEMENT    go to state 122
-    DEC_VARIABLE        go to state 123
-    FUNCTION_STATEMENT  go to state 124
-    IFANDORELSEORELIF   go to state 125
-    IFANDORELIF         go to state 126
-    WHILE_STATEMENT     go to state 127
-    DO_STATEMENT        go to state 128
-    IF_STATEMENT        go to state 129
-    EXPR                go to state 130
-    TERM                go to state 28
-    FACTOR              go to state 29
-    NUMBER              go to state 30
-    ID                  go to state 31
-    BITWISEOP           go to state 32
-    ASSIGNOP            go to state 33
-    CONDITIONOP         go to state 34
-
-
-State 176
-
-   45 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON .
-
-    $default  reduce using rule 45 (DO_STATEMENT)
-
-
-State 177
-
-   47 ELSE_IF_STATEMENT: T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET .
-
-    $default  reduce using rule 47 (ELSE_IF_STATEMENT)
+    $default  reduce using rule 45 (ELSE_IF_STATEMENT)
