@@ -158,6 +158,114 @@ public:
     {}
 };
 
+class BAnd
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "&"; }
+
+    virtual const char *getSignInst() const override
+    { return "and"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "and"; }
+public:
+    BAnd(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
+class BOr
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "|"; }
+
+    virtual const char *getSignInst() const override
+    { return "or"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "or"; }
+public:
+    BOr(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
+class BXor
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "^"; }
+
+    virtual const char *getSignInst() const override
+    { return "xor"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "xor"; }
+public:
+    BXor(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
+class BNot
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "~"; }
+
+    virtual const char *getSignInst() const override
+    { return "nor"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "nor"; }
+public:
+    BNot(node _left)
+        : Operator(_left, _left)
+    {}
+};
+
+class BLShift
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "<<"; }
+
+    virtual const char *getSignInst() const override
+    { return "sllv"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "sllv"; }
+public:
+    BLShift(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
+class BRShift
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return ">>"; }
+
+    virtual const char *getSignInst() const override
+    { return "srlv"; }
+
+    virtual const char *getUnsignInst() const override
+    { return "srlv"; }
+public:
+    BRShift(node _left, node _right)
+        : Operator(_left, _right)
+    {}
+};
+
 class AssignOp
     : public ASTNode
 {

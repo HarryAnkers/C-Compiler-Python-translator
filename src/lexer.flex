@@ -17,15 +17,37 @@ extern "C" int fileno(FILE *stream);
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }
 
-"&&"		{ return T_LAND; }
-"||"		{ return T_LOR; }
-"=="		{ return T_LEQUAL; }
-[!]		  { return T_LNOT; }
-"!="		{ return T_LNOTEQUAL; }
-"<="		{ return T_LLESSEQUAL; }
-">="		{ return T_LMOREEQUAL; }
-[<]     { return T_LMORE; }
-[>]     { return T_LLESS; }
+"+="    { return T_ADDASSIGN; }
+"-="    { return T_SUBASSIGN; }
+"*="    { return T_MULASSIGN; }
+"/="    { return T_DIVASSIGN; }
+"%="    { return T_MODASSIGN; }
+"<<="   { return T_LSHIFTASSIGN; }
+">>="   { return T_RSHIFTASSIGN; }
+"&="    { return T_ANDASSIGN; }
+"^="    { return T_XORASSIGN; }
+"|="    { return T_ORASSIGN; }
+
+"&&"    { return T_LAND; }
+"||"    { return T_LOR; }
+"=="    { return T_LEQUAL; }
+"!="    { return T_LNEQUAL; }
+"<="    { return T_LLESSEQ; }
+">="    { return T_LMOREEQ; }
+
+"<<"    { return T_LSHIFT; }
+">>"    { return T_RSHIFT; }
+
+"++"    { return T_INC; }
+"--"    { return T_DEC; }
+
+[&]		  { return T_AND; }
+[|]		  { return T_OR; }
+[!]		  { return T_NOT; }
+[>]     { return T_MORE; }
+[<]     { return T_LESS; }
+[~]     { return T_TILDA; }
+[\^]    { return T_XOR; }
 
 [=]             { return T_ASSIGN; }
 [.]             { return T_DOT; }
@@ -45,7 +67,7 @@ extern "C" int fileno(FILE *stream);
 [/]             { return T_DIVIDE; }
 [+]             { return T_PLUS; }
 [-]             { return T_MINUS; }
-[\^]             { return T_EXPONENT; }
+[%]             { return T_MODULUS; }
 
 "return"            { return T_RETURN; }
 "while"            { return T_WHILE; }

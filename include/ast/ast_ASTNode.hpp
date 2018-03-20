@@ -73,11 +73,15 @@ public:
                 return i;
             }
         }
+        return -1;
+        std::cout<<"no free registers"<<std::endl;
+    }
+
+    void fullRegCheck(std::ostream &dst){
 
         //NEED TO FIX THIS BUT WILL WORK FOR NOW
 
         std::cout<<"no free registers"<<std::endl;
-        return -1;
     }
 
     void popScope(){

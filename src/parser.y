@@ -22,9 +22,12 @@
 
 %token T_LSQBRACKET T_RSQBRACKET T_LCUBRACKET T_RCUBRACKET T_LTRIBRACKET T_RTRIBRACKET T_LBRACKET T_RBRACKET
 %token T_ASSIGN T_DOT T_COMMA T_COLON T_SEMICOLON T_SPEACHMARK T_APOSTROPHE
-%token T_LAND T_LOR T_LNOT T_LEQUAL T_LNOTEQUAL T_LLESSEQUAL T_LMOREEQUAL T_LMORE T_LLESS
+%token T_NOT T_AND T_OR T_MORE T_LESS T_XOR T_TILDA
 %token T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
-%token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
+%token T_TIMES T_DIVIDE T_PLUS T_MINUS T_MODULUS T_INC T_DEC
+%token T_ADDASSIGN T_SUBASSIGN T_MULASSIGN T_DIVASSIGN T_MODASSIGN 
+%token T_LSHIFTASSIGN T_RSHIFTASSIGN T_ANDASSIGN T_XORASSIGN T_ORASSIGN
+%token T_LAND T_LOR T_LEQUAL T_LNEQUAL T_LLESSEQ T_LMOREEQ T_LSHIFT T_RSHIFT
 %token T_NUMBER T_ID T_COMMENT
 %token T_RETURN T_ELSE T_IF T_WHILE T_DO
 
@@ -33,7 +36,7 @@
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
-%type <node> EXPR TERM FACTOR CONDITION
+%type <node> EXPR TERM FACTOR CONDITIONOP ASSIGNOP BITWISEOP
 %type <node> NUMBER ID
 %type <number> T_NUMBER
 %type <string> T_ID
@@ -104,40 +107,33 @@ IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  {$$=new IfElseList($1, $2);}
 IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     {$$=new IfElseList($1, $2);}
         | IF_STATEMENT                          {$$=$1;}
 
-WHILE_STATEMENT : T_WHILE CONDITION T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new While_Statement($2,$4);}
+WHILE_STATEMENT : T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new While_Statement($2,$4);}
 
-DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE CONDITION T_SEMICOLON  {$$ = new Do_While_Statement($3,$6);}
+DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON  {$$ = new Do_While_Statement($3,$6);}
 
-IF_STATEMENT : T_IF CONDITION  T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new If_Statement($2,$4);}
+IF_STATEMENT : T_IF EXPR  T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new If_Statement($2,$4);}
 
-ELSE_IF_STATEMENT : T_ELSE T_IF CONDITION T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new ElIf_Statement($3,$5);}
+ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new ElIf_Statement($3,$5);}
 
 ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else_Statement ($3);}
 
-CONDITION :  CONDITION T_LEQUAL CONDITION   {$$ = new LEqual($1,$3);}
-        | CONDITION T_LAND CONDITION        {$$ = new LAnd($1,$3);}
-        | CONDITION T_LOR CONDITION         {$$ = new LOr($1,$3);}
-        | T_LNOT CONDITION                  {$$ = new LNot($2);}
-        | CONDITION T_LNOTEQUAL CONDITION   {$$ = new LNotEqual($1,$3);}
-        | CONDITION T_LMORE CONDITION       {$$ = new LMore($1,$3);}
-        | CONDITION T_LLESS CONDITION       {$$ = new LLess($1,$3);}
-        | CONDITION T_LMOREEQUAL CONDITION  {$$ = new LMoreEqual($1,$3);}
-        | CONDITION T_LLESSEQUAL CONDITION  {$$ = new LLessEqual($1,$3);}
-        | EXPR                              {$$ = $1;}
-        | T_LBRACKET CONDITION T_RBRACKET   {$$ = $2;}
+
 
 EXPR : TERM                                 { $$ = $1; }
         | EXPR T_PLUS TERM                  { $$ = new AddOperator( $1 , $3 ); }
         | EXPR T_MINUS TERM                 { $$ = new SubOperator( $1 , $3 ); }
-        | T_ID T_ASSIGN EXPR                {$$ = new AssignOp(*$1, $3);}
-        | T_ID T_PLUS T_PLUS                {$$ = new AssignOp(*$1,new AddOperator(new Variable(*$1) , new Number(1,0)));}
-        | T_ID T_MINUS T_MINUS              {$$ = new AssignOp(*$1,new SubOperator(new Variable(*$1) , new Number(1,0)));}
+        | T_ID T_INC                        {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
+        | T_ID T_DEC                        {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));}
+        | ASSIGNOP                          { $$ = $1; }
+        | BITWISEOP                         { $$ = $1; }
+        | CONDITIONOP                       { $$ = $1; }
 
 TERM : FACTOR                       { $$ = $1; }
         | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
         | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
+        | TERM T_MODULUS FACTOR     { $$ = new ModOperator( $1 , $3 ); }
 
-FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2; }
+FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2;}
         | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
         | NUMBER                {$$ = $1; }
         | ID                    {$$ = $1; }
@@ -146,6 +142,35 @@ NUMBER : T_NUMBER                       { $$ = new Number( $1 , 0 ); }
         | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
 
 ID :  T_ID                        { $$ = new Variable( *$1 );}
+
+BITWISEOP : EXPR T_AND TERM             {$$ = new BAnd($1,$3);}
+        | EXPR T_OR TERM                {$$ = new BOr($1,$3);}
+        | EXPR T_XOR TERM               {$$ = new BXor($1,$3);}
+        | T_TILDA TERM                  {$$ = new BNot($2);}
+        | EXPR T_LSHIFT TERM            {$$ = new BLShift($1,$3);}
+        | EXPR T_RSHIFT TERM            {$$ = new BRShift($1,$3);}
+
+ASSIGNOP : T_ID T_ASSIGN EXPR                   {$$ = new AssignOp(*$1, $3);}
+        | T_ID T_ADDASSIGN EXPR             {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), $3));}
+        | T_ID T_SUBASSIGN EXPR            {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), $3));}
+        | T_ID T_MULASSIGN EXPR            {$$ = new AssignOp(*$1, new MulOperator(new Variable(*$1), $3));}
+        | T_ID T_DIVASSIGN EXPR           {$$ = new AssignOp(*$1, new DivOperator(new Variable(*$1), $3));}
+        | T_ID T_MODASSIGN EXPR          {$$ = new AssignOp(*$1, new ModOperator(new Variable(*$1), $3));}
+        | T_ID T_LSHIFTASSIGN EXPR      {$$ = new AssignOp(*$1, new BLShift(new Variable(*$1), $3));}
+        | T_ID T_RSHIFTASSIGN EXPR      {$$ = new AssignOp(*$1, new BRShift(new Variable(*$1), $3));}
+        | T_ID T_ANDASSIGN EXPR              {$$ = new AssignOp(*$1, new BAnd(new Variable(*$1), $3));}
+        | T_ID T_ORASSIGN EXPR               {$$ = new AssignOp(*$1, new BOr(new Variable(*$1), $3));}
+        | T_ID T_XORASSIGN EXPR              {$$ = new AssignOp(*$1, new BXor(new Variable(*$1), $3));}
+
+CONDITIONOP :  EXPR T_LEQUAL TERM   {$$ = new LEqual($1,$3);}
+        | EXPR T_LAND TERM       {$$ = new LAnd($1,$3);}
+        | EXPR T_LOR TERM         {$$ = new LOr($1,$3);}
+        | T_NOT TERM                       {$$ = new LNot($2);}
+        | EXPR T_LNEQUAL TERM    {$$ = new LNotEqual($1,$3);}
+        | EXPR T_MORE TERM            {$$ = new LMore($1,$3);}
+        | EXPR T_LESS TERM            {$$ = new LLess($1,$3);}
+        | EXPR T_LMOREEQ TERM   {$$ = new LMoreEqual($1,$3);}
+        | EXPR T_LLESSEQ TERM   {$$ = new LLessEqual($1,$3);}
 %%
 
 const ASTNode *g_root; // Definition of variable (to match declaration earlier)
