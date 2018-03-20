@@ -205,11 +205,20 @@ class GlobalDeclareStatement : public Statement
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg1 = state.getTempReg(1);
+            int offset=state.offset();
+            state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
+            if(expression!=NULL){
+                int reg1 = state.getTempReg(0);
+                expression->compile(dst,state);
+                dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
+                state.registers[reg1]=0;
+            } else {
+                int reg1 = state.getTempReg(1);
                 dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
 	            dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 state.registers[reg1]=0;
-                //NOT SURE IF CORRECT
+            }
+            //not sure if correct
         }
 };
 
