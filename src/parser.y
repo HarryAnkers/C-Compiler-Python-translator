@@ -36,8 +36,8 @@
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
-%type <node> EXPR TERM FACTOR CONDITIONOP ASSIGNOP BITWISEOP
-%type <node> NUMBER
+%type <node> EXPR EXPR_1 EXPR_2 EXPR_3 EXPR_4 EXPR_5 EXPR_6 EXPR_7 EXPR_8
+%type <node> EXPR_9 EXPR_10 EXPR_11 EXPR_12 EXPR_13 EXPR_14 EXPR_15 PRIMATIVES
 %type <number> T_NUMBER
 %type <string> T_ID
 %type <string> TYPE T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
@@ -47,7 +47,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : EXPR { g_root = $1; }
+ROOT : TOP_LEVEL { g_root = $1; }
 
 //choose main in main body so it gets priority
 TOP_LEVEL : TOP_LIST {$$ = $1; }
@@ -115,60 +115,81 @@ ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new 
 
 ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else_Statement ($3);}
 
+EXPR : EXPR_1                           {$$=$1;}
 
-EXPR : TERM                                 { printf("term,");$$ = $1;}
-        | EXPR T_COMMA TERM                 { $$ = new CommaOp( $1 , $3); }
-        | EXPR T_PLUS TERM                  { printf("add,");$$ = new AddOperator( $1 , $3 );}
-        | EXPR T_MINUS TERM                 { $$ = new SubOperator( $1 , $3 ); }
-        | ASSIGNOP                          { $$ = $1; }
-        | BITWISEOP                         { $$ = $1; }
-        | CONDITIONOP                       { $$ = $1; }
+EXPR_1 : EXPR_2                         {$$=$1;}
+        | EXPR_1 T_COMMA EXPR_2         { $$ = new CommaOp($1, $3);}
+        | EXPR_1                        {$$=$1;}
 
-TERM : FACTOR                       { printf("factor");$$ = $1; }
-        | TERM T_TIMES FACTOR       { $$ = new MulOperator( $1 , $3 ); }
-        | TERM T_DIVIDE FACTOR      { $$ = new DivOperator( $1 , $3 ); }
-        | TERM T_MODULUS FACTOR     { $$ = new ModOperator( $1 , $3 ); }
+EXPR_2 : EXPR_3                                 {$$=$1;}
+        | T_ID T_ASSIGN EXPR_2                  {$$ = new AssignOp(*$1, $3);}
+        | T_ID T_ADDASSIGN EXPR_2               {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), $3));}
+        | T_ID T_SUBASSIGN EXPR_2               {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), $3));}
+        | T_ID T_MULASSIGN EXPR_2               {$$ = new AssignOp(*$1, new MulOperator(new Variable(*$1), $3));}
+        | T_ID T_DIVASSIGN EXPR_2               {$$ = new AssignOp(*$1, new DivOperator(new Variable(*$1), $3));}
+        | T_ID T_MODASSIGN EXPR_2               {$$ = new AssignOp(*$1, new ModOperator(new Variable(*$1), $3));}
+        | T_ID T_LSHIFTASSIGN EXPR_2            {$$ = new AssignOp(*$1, new BLShift(new Variable(*$1), $3));}
+        | T_ID T_RSHIFTASSIGN EXPR_2            {$$ = new AssignOp(*$1, new BRShift(new Variable(*$1), $3));}
+        | T_ID T_ANDASSIGN EXPR_2               {$$ = new AssignOp(*$1, new BAnd(new Variable(*$1), $3));}
+        | T_ID T_ORASSIGN EXPR_2                {$$ = new AssignOp(*$1, new BOr(new Variable(*$1), $3));}
+        | T_ID T_XORASSIGN EXPR_2               {$$ = new AssignOp(*$1, new BXor(new Variable(*$1), $3));}
 
-FACTOR : T_LBRACKET EXPR T_RBRACKET    { $$ = $2;}
-        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET {$$ = new FunctionStatementInExpr(*$1,$3);}
-        | NUMBER                {printf("number");$$ = $1; }
-        | T_ID                    { $$ = new Variable( *$1 );}
-        | T_SIZE_OF T_ID             {$$ = new SizeOf(*$2);}
-        | EXPR T_QMARK EXPR T_COLON EXPR        {$$ = new TenOp($1,$3,$5);}
-        | T_ID T_INC                        {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
-        | T_ID T_DEC                        {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));} 
+EXPR_3 : EXPR_4                                         {$$=$1;}
+        | EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4          { $$ = new TenOp($1,$3,$5);}
 
-NUMBER : T_NUMBER                       { printf("(%f is the number)",$1);$$ = new Number( $1 , 0 ); }
+EXPR_4 : EXPR_5                         {$$=$1;}
+        | EXPR_4 T_LOR EXPR_5           {$$ = new LOr($1,$3);}
+
+EXPR_5 : EXPR_6                         {$$=$1;}
+        | EXPR_5 T_LAND EXPR_6          {$$ = new LAnd($1,$3);}
+
+EXPR_6 : EXPR_7                         {$$=$1;}
+        | EXPR_6 T_OR EXPR_7            {$$ = new BOr($1,$3);}
+
+EXPR_7 : EXPR_8                         {$$=$1;}
+        | EXPR_7 T_XOR EXPR_8           {$$ = new BXor($1,$3);}
+
+EXPR_8 : EXPR_9                         {$$=$1;}
+        | EXPR_8 T_AND EXPR_9           {$$ = new BAnd($1,$3);}
+
+EXPR_9 : EXPR_10                        {$$=$1;}
+        | EXPR_9 T_LEQUAL EXPR_10       {$$ = new LEqual($1,$3);}
+        | EXPR_9 T_LNEQUAL EXPR_10      {$$ = new LNotEqual($1,$3);}
+
+EXPR_10 : EXPR_11                       { $$=$1;}
+        | EXPR_10 T_MORE EXPR_11        { $$ = new LMore($1,$3);}
+        | EXPR_10 T_LESS EXPR_11        { $$ = new LLess($1,$3);}
+        | EXPR_10 T_LMOREEQ EXPR_11     { $$ = new LMoreEqual($1,$3);}
+        | EXPR_10 T_LLESSEQ EXPR_11     { $$ = new LLessEqual($1,$3);}
+
+EXPR_11 : EXPR_12                       { $$=$1;}
+        | EXPR_11 T_LSHIFT EXPR_12      { $$ = new BLShift($1,$3);}
+        | EXPR_11 T_RSHIFT EXPR_12      { $$ = new BRShift($1,$3);}
+
+EXPR_12 : EXPR_13                       {$$=$1;}
+        | EXPR_12 T_PLUS EXPR_13        { $$ = new AddOperator( $1 , $3 );}
+        | EXPR_12 T_MINUS EXPR_13       { $$ = new SubOperator( $1 , $3 ); }
+
+EXPR_13 : EXPR_14                       {$$=$1;}
+        | EXPR_13 T_TIMES EXPR_14       { $$ = new MulOperator( $1 , $3 ); }
+        | EXPR_13 T_DIVIDE EXPR_14      { $$ = new DivOperator( $1 , $3 ); }
+        | EXPR_13 T_MODULUS EXPR_14     { $$ = new ModOperator( $1 , $3 ); }
+
+EXPR_14 : EXPR_15                       { $$=$1;}
+        | T_SIZE_OF T_ID                { $$ = new SizeOf(*$2);}
+        | T_NOT EXPR_14                 { $$ = new LNot($2);}
+        | T_TILDA EXPR_14               { $$ = new BNot($2);}
+        | T_INC T_ID                    { $$ = new AssignOp(*$2, new AddOperator(new Variable(*$2), new Number(1,0)));}
+        | T_DEC T_ID                    { $$ = new AssignOp(*$2, new SubOperator(new Variable(*$2), new Number(1,0)));}
+
+EXPR_15 : PRIMATIVES                                                 {$$=$1;}
+        | T_ID T_INC                                            { $$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
+        | T_ID T_DEC                                            { $$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));}
+        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1,$3);}
+
+PRIMATIVES : T_ID                    { $$ = new Variable( *$1 );}
+        | T_NUMBER                      { $$ = new Number( $1 , 0 ); }
         | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
-
-BITWISEOP : EXPR T_AND TERM             {$$ = new BAnd($1,$3);}
-        | EXPR T_OR TERM                {$$ = new BOr($1,$3);}
-        | EXPR T_XOR TERM               {$$ = new BXor($1,$3);}
-        | T_TILDA TERM                  {$$ = new BNot($2);}
-        | EXPR T_LSHIFT TERM            {$$ = new BLShift($1,$3);}
-        | EXPR T_RSHIFT TERM            {$$ = new BRShift($1,$3);}
-
-ASSIGNOP : T_ID T_ASSIGN EXPR                   {$$ = new AssignOp(*$1, $3);}
-        | T_ID T_ADDASSIGN EXPR             {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), $3));}
-        | T_ID T_SUBASSIGN EXPR            {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), $3));}
-        | T_ID T_MULASSIGN EXPR            {$$ = new AssignOp(*$1, new MulOperator(new Variable(*$1), $3));}
-        | T_ID T_DIVASSIGN EXPR           {$$ = new AssignOp(*$1, new DivOperator(new Variable(*$1), $3));}
-        | T_ID T_MODASSIGN EXPR          {$$ = new AssignOp(*$1, new ModOperator(new Variable(*$1), $3));}
-        | T_ID T_LSHIFTASSIGN EXPR      {$$ = new AssignOp(*$1, new BLShift(new Variable(*$1), $3));}
-        | T_ID T_RSHIFTASSIGN EXPR      {$$ = new AssignOp(*$1, new BRShift(new Variable(*$1), $3));}
-        | T_ID T_ANDASSIGN EXPR              {$$ = new AssignOp(*$1, new BAnd(new Variable(*$1), $3));}
-        | T_ID T_ORASSIGN EXPR               {$$ = new AssignOp(*$1, new BOr(new Variable(*$1), $3));}
-        | T_ID T_XORASSIGN EXPR              {$$ = new AssignOp(*$1, new BXor(new Variable(*$1), $3));}
-
-CONDITIONOP :  EXPR T_LEQUAL TERM   {$$ = new LEqual($1,$3);}
-        | EXPR T_LAND TERM       {$$ = new LAnd($1,$3);}
-        | EXPR T_LOR TERM         {$$ = new LOr($1,$3);}
-        | T_NOT TERM                       {$$ = new LNot($2);}
-        | EXPR T_LNEQUAL TERM    {$$ = new LNotEqual($1,$3);}
-        | EXPR T_MORE TERM            {$$ = new LMore($1,$3);}
-        | EXPR T_LESS TERM            {$$ = new LLess($1,$3);}
-        | EXPR T_LMOREEQ TERM   {$$ = new LMoreEqual($1,$3);}
-        | EXPR T_LLESSEQ TERM   {$$ = new LLessEqual($1,$3);}
 %%
 
 const ASTNode *g_root; // Definition of variable (to match declaration earlier)
