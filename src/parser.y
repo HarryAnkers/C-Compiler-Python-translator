@@ -23,7 +23,8 @@
 %token T_LSQBRACKET T_RSQBRACKET T_LCUBRACKET T_RCUBRACKET T_LTRIBRACKET T_RTRIBRACKET T_LBRACKET T_RBRACKET
 %token T_ASSIGN T_DOT T_COMMA T_COLON T_QMARK T_SEMICOLON T_SPEACHMARK T_APOSTROPHE
 %token T_NOT T_AND T_OR T_MORE T_LESS T_XOR T_TILDA
-%token T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
+%token T_CHAR T_SIGN_CHAR T_UNSIGN_CHAR T_SHORT T_UNSIGN_SHORT T_INT T_UNSIGN_INT
+%token T_LONG T_UNSIGN_LONG T_LONGLONG T_UNSIGN_LONGLONG T_FLOAT T_DOUBLE T_LONGDOUBLE T_VOID
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_MODULUS T_INC T_DEC
 %token T_ADDASSIGN T_SUBASSIGN T_MULASSIGN T_DIVASSIGN T_MODASSIGN 
 %token T_LSHIFTASSIGN T_RSHIFTASSIGN T_ANDASSIGN T_XORASSIGN T_ORASSIGN
@@ -36,11 +37,12 @@
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
-%type <node> EXPR EXPR_1 EXPR_2 EXPR_3 EXPR_4 EXPR_5 EXPR_6 EXPR_7 EXPR_8
+%type <node> EXPR_1 EXPR_2 EXPR_3 EXPR_4 EXPR_5 EXPR_6 EXPR_7 EXPR_8
 %type <node> EXPR_9 EXPR_10 EXPR_11 EXPR_12 EXPR_13 EXPR_14 EXPR_15 PRIMATIVES
 %type <number> T_NUMBER
 %type <string> T_ID
-%type <string> TYPE T_INT T_DOUBLE T_STRING T_BOOL T_VOID T_LONG
+%type <string> TYPE T_CHAR T_SIGN_CHAR T_UNSIGN_CHAR T_SHORT T_UNSIGN_SHORT T_INT T_UNSIGN_INT
+%type <string> T_LONG T_UNSIGN_LONG T_LONGLONG T_UNSIGN_LONGLONG T_FLOAT T_DOUBLE T_LONGDOUBLE T_VOID
 
 %start ROOT
 
@@ -63,15 +65,25 @@ ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3,
         | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }
         | %empty                                        { $$ = new Argument(); }
 
-ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR      { $$ = new ArgumentNoType($3, $1); }
-        | EXPR                                                  { $$ = new ArgumentNoType($1); }
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR_1    { $$ = new ArgumentNoType($3, $1); }
+        | EXPR_1                                                { $$ = new ArgumentNoType($1); }
         | %empty                                                { $$ = new ArgumentNoType(); }
 
-TYPE : T_INT            { $$ = $1; }
-        | T_DOUBLE      { $$ = $1; }
-        | T_STRING      { $$ = $1; }
-        | T_VOID        { $$ = $1; }
-        | T_LONG        { $$ = $1; }
+TYPE : T_CHAR                   { $$ = $1; }
+        | T_SIGN_CHAR           { $$ = $1; }
+        | T_UNSIGN_CHAR         { $$ = $1; }
+        | T_SHORT               { $$ = $1; }
+        | T_UNSIGN_SHORT        { $$ = $1; }
+        | T_INT                 { $$ = $1; }
+        | T_UNSIGN_INT          { $$ = $1; }
+        | T_LONG                { $$ = $1; }
+        | T_UNSIGN_LONG         { $$ = $1; }
+        | T_LONGLONG            { $$ = $1; }
+        | T_UNSIGN_LONGLONG     { $$ = $1; }
+        | T_FLOAT               { $$ = $1; }
+        | T_DOUBLE              { $$ = $1; }
+        | T_LONGDOUBLE          { $$ = $1; }
+        | T_VOID                { $$ = $1; }
 
 BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
         | STATEMENT             { $$ = $1; }
@@ -80,7 +92,7 @@ BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
 STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
         | DEC_VARIABLE                  { $$ = $1; }
         | FUNCTION_STATEMENT            { $$ = $1; }
-        | EXPR T_SEMICOLON              { $$ = new ExprStatement($1); }
+        | EXPR_1 T_SEMICOLON            { $$ = new ExprStatement($1); }
         | IFANDORELSEORELIF             { $$ = $1; }
         | WHILE_STATEMENT               { $$ = $1; }
         | DO_STATEMENT                  { $$ = $1; }
@@ -89,12 +101,12 @@ STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
 NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      { $$ = new NewScope($2); }
         | T_LCUBRACKET T_RCUBRACKET             { ; }
 
-RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON            { $$ = new ReturnStatement($2); }
+RETURN_STATEMENT : T_RETURN EXPR_1 T_SEMICOLON            { $$ = new ReturnStatement($2); }
 
-DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON      { $$ = new DeclareStatement(*$1, *$2, $4); }  
+DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON      { $$ = new DeclareStatement(*$1, *$2, $4); }  
         | TYPE T_ID T_SEMICOLON                         { $$ = new DeclareStatement(*$1, *$2); }
 
-GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON          { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
+GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON          { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
         | TYPE T_ID T_SEMICOLON                                 { $$ = new GlobalDeclareStatement(*$1, *$2); }
 
 FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON { $$ = new FunctionStatement(*$1,$3); }
@@ -105,21 +117,18 @@ IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  { $$ = new IfElseList($1, $2); }
 IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     { $$ = new IfElseList($1, $2); }
         | IF_STATEMENT                          { $$ = $1; }
 
-WHILE_STATEMENT : T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new While_Statement($2,$4); }
+WHILE_STATEMENT : T_WHILE EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new While_Statement($2,$4); }
 
-DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON  { $$ = new Do_While_Statement($3,$6); }
+DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR_1 T_SEMICOLON  { $$ = new Do_While_Statement($3,$6); }
 
-IF_STATEMENT : T_IF EXPR  T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new If_Statement($2,$4); }
+IF_STATEMENT : T_IF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new If_Statement($2,$4); }
 
-ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new ElIf_Statement($3,$5); }
+ELSE_IF_STATEMENT : T_ELSE T_IF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new ElIf_Statement($3,$5); }
 
 ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new Else_Statement ($3); }
 
-EXPR : EXPR_1                           { $$ = $1; }
-
 EXPR_1 : EXPR_2                         { $$ = $1; }
         | EXPR_1 T_COMMA EXPR_2         { $$ = new CommaOp($1, $3); }
-        | EXPR_1                        { $$ = $1; }
 
 EXPR_2 : EXPR_3                                 { $$ = $1; }
         | T_ID T_ASSIGN EXPR_2                  { $$ = new AssignOp(*$1, $3); }
@@ -177,6 +186,7 @@ EXPR_13 : EXPR_14                       { $$ = $1; }
 
 EXPR_14 : EXPR_15                       { $$ = $1; }
         | T_SIZE_OF T_ID                { $$ = new SizeOf(*$2); }
+        | T_SIZE_OF T_LBRACKET TYPE T_RBRACKET  { $$ = new SizeOf(*$3); }
         | T_NOT EXPR_14                 { $$ = new LNot($2); }
         | T_TILDA EXPR_14               { $$ = new BNot($2); }
         | T_INC T_ID                    { $$ = new AssignOp(*$2, new AddOperator(new Variable(*$2), new Number(1,0))); }

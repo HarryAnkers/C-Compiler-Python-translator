@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <sstream>
 
 class VariableBind
 {
@@ -98,6 +99,13 @@ public:
             }
             adjustStack(-1*((i*4)+8));
         }
+    }
+
+    std::string toHex(int dec){
+        std::stringstream stream;
+        stream << std::hex << dec;
+        std::string result = stream.str();
+        return result;
     }
 
     friend std::ostream& operator<< (std::ostream &o, CompilerState b){

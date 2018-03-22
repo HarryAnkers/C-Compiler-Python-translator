@@ -58,11 +58,50 @@ extern "C" int fileno(FILE *stream);
 [']             { return T_APOSTROPHE; }
 [?]             { return T_QMARK; }
 
-"int"   	{ yylval.string=new std::string(yytext); return T_INT; }
-"double"	{ yylval.string=new std::string(yytext); return T_DOUBLE; }
-"string"	{ yylval.string=new std::string(yytext); return T_STRING; }
-"void"		{ yylval.string=new std::string(yytext); return T_VOID; }
-"long"		{ yylval.string=new std::string(yytext); return T_LONG; }
+"char"                   { yylval.string=new std::string("char"); return T_CHAR; }
+
+"signed char"            { yylval.string=new std::string("signed char"); return T_SIGN_CHAR; }
+
+"unsigned char"          { yylval.string=new std::string("unsigned char"); return T_UNSIGN_CHAR; }
+
+"short"                  { yylval.string=new std::string("short"); return T_SHORT; }
+"short int"              { yylval.string=new std::string("short"); return T_SHORT; }
+"signed short"           { yylval.string=new std::string("short"); return T_SHORT; }
+"signed short int"       { yylval.string=new std::string("short"); return T_SHORT; }
+
+"unsigned short"         { yylval.string=new std::string("unsigned short"); return T_UNSIGN_SHORT; }
+"unsigned short int"     { yylval.string=new std::string("unsigned short"); return T_UNSIGN_SHORT; }
+
+"int"                    { yylval.string=new std::string("int"); return T_INT; }
+"signed"                 { yylval.string=new std::string("int"); return T_INT; }
+"signed int"             { yylval.string=new std::string("int"); return T_INT; }
+
+"unsigned"               { yylval.string=new std::string("unsigned int"); return T_UNSIGN_INT; }
+"unsigned int"           { yylval.string=new std::string("unsigned int"); return T_UNSIGN_INT; }
+
+"long"                   { yylval.string=new std::string("long"); return T_LONG; }
+"long int"               { yylval.string=new std::string("long"); return T_LONG; }
+"signed long"            { yylval.string=new std::string("long"); return T_LONG; }
+"signed long int"        { yylval.string=new std::string("long"); return T_LONG; }
+
+"unsigned long"          { yylval.string=new std::string("unsigned long"); return T_UNSIGN_LONG; }
+"unsigned long int"      { yylval.string=new std::string("unsigned long"); return T_UNSIGN_LONG; }
+
+"long long"              { yylval.string=new std::string("long long"); return T_LONGLONG; }
+"long long int"          { yylval.string=new std::string("long long"); return T_LONGLONG; }
+"signed long long"       { yylval.string=new std::string("long long"); return T_LONGLONG; }
+"signed long long int"   { yylval.string=new std::string("long long"); return T_LONGLONG; }
+
+"unsigned long long"     { yylval.string=new std::string("unsigned long long"); return T_UNSIGN_LONGLONG; }
+"unsigned long long int" { yylval.string=new std::string("unsigned long long"); return T_UNSIGN_LONGLONG; }
+
+"float"                  { yylval.string=new std::string("float"); return T_FLOAT; }
+
+"double"                 { yylval.string=new std::string("double"); return T_DOUBLE; }
+
+"long double"            { yylval.string=new std::string("long double"); return T_LONGDOUBLE; }
+
+"void"                   { yylval.string=new std::string("void"); return T_VOID; }
 
 "size of" {return T_SIZE_OF;}
 
