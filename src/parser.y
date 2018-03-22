@@ -50,146 +50,146 @@
 ROOT : TOP_LEVEL { g_root = $1; }
 
 //choose main in main body so it gets priority
-TOP_LEVEL : TOP_LIST {$$ = $1; }
+TOP_LEVEL : TOP_LIST                    { $$ = $1; }
 
-TOP_LIST : TOP_LIST DEC_FUNCTION      {$$ = new Top_List($2,$1);}
-        | TOP_LIST GLO_DEC_VARIABLE            {$$ = new Top_List($2,$1);}
-        | DEC_FUNCTION                          {$$ = $1;}
-        | GLO_DEC_VARIABLE                          {$$ = $1;}
+TOP_LIST : TOP_LIST DEC_FUNCTION        {$$ = new Top_List($2,$1); }
+        | TOP_LIST GLO_DEC_VARIABLE     {$$ = new Top_List($2,$1); }
+        | DEC_FUNCTION                  {$$ = $1; }
+        | GLO_DEC_VARIABLE              {$$ = $1; }
 
-DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET {$$ = new Function(*$1, *$2, $4, $7);}
+DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
 
-ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         {$$ = new Argument(*$3, *$4, $1);}
-        | TYPE T_ID                                     {$$ = new Argument(*$1, *$2);}
-        | %empty                                        {$$ = new Argument();}
+ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3, *$4, $1); }
+        | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }
+        | %empty                                        { $$ = new Argument(); }
 
-ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR      {$$ = new ArgumentNoType($3, $1);}
-        | EXPR                                                  {$$ = new ArgumentNoType($1);}
-        | %empty                                                {$$ = new ArgumentNoType();}
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR      { $$ = new ArgumentNoType($3, $1); }
+        | EXPR                                                  { $$ = new ArgumentNoType($1); }
+        | %empty                                                { $$ = new ArgumentNoType(); }
 
-TYPE : T_INT      {$$=$1;}
-        | T_DOUBLE    {$$=$1;}
-        | T_STRING    {$$=$1;}
-        | T_VOID      {$$=$1;}
-        | T_LONG        {$$=$1;}
+TYPE : T_INT            { $$ = $1; }
+        | T_DOUBLE      { $$ = $1; }
+        | T_STRING      { $$ = $1; }
+        | T_VOID        { $$ = $1; }
+        | T_LONG        { $$ = $1; }
 
-BODY : BODY STATEMENT   {$$ = new Body($2,$1);}
-        | STATEMENT         {$$ = $1;}
-        | %empty          {$$ = new Body();}
+BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
+        | STATEMENT             { $$ = $1; }
+        | %empty                { $$ = new Body(); }
     
-STATEMENT :  RETURN_STATEMENT       {$$=$1;}
-        | DEC_VARIABLE                   {$$=$1;}
-        | FUNCTION_STATEMENT            {$$=$1;}
-        | EXPR T_SEMICOLON              {$$= new ExprStatement($1);}
-        | IFANDORELSEORELIF             {$$=$1;}
-        | WHILE_STATEMENT               {$$=$1;}
-        | DO_STATEMENT                  {$$=$1;}
-        | NEW_SCOPE                     {$$=$1;}
+STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
+        | DEC_VARIABLE                  { $$ = $1; }
+        | FUNCTION_STATEMENT            { $$ = $1; }
+        | EXPR T_SEMICOLON              { $$ = new ExprStatement($1); }
+        | IFANDORELSEORELIF             { $$ = $1; }
+        | WHILE_STATEMENT               { $$ = $1; }
+        | DO_STATEMENT                  { $$ = $1; }
+        | NEW_SCOPE                     { $$ = $1; }
 
-NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      {$$ = new NewScope($2);}
-        | T_LCUBRACKET T_RCUBRACKET             {;}
+NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      { $$ = new NewScope($2); }
+        | T_LCUBRACKET T_RCUBRACKET             { ; }
 
-RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON {$$ = new ReturnStatement($2);}
+RETURN_STATEMENT : T_RETURN EXPR T_SEMICOLON            { $$ = new ReturnStatement($2); }
 
-DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON   {$$ = new DeclareStatement(*$1, *$2, $4);}  
-        | TYPE T_ID T_SEMICOLON                         {$$ = new DeclareStatement(*$1, *$2);}
+DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON      { $$ = new DeclareStatement(*$1, *$2, $4); }  
+        | TYPE T_ID T_SEMICOLON                         { $$ = new DeclareStatement(*$1, *$2); }
 
-GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON      {$$ = new GlobalDeclareStatement(*$1, *$2, $4);}  
-        | TYPE T_ID T_SEMICOLON                                 {$$ = new GlobalDeclareStatement(*$1, *$2);}
+GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR T_SEMICOLON          { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
+        | TYPE T_ID T_SEMICOLON                                 { $$ = new GlobalDeclareStatement(*$1, *$2); }
 
-FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON {$$ = new FunctionStatement(*$1,$3);}
+FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON { $$ = new FunctionStatement(*$1,$3); }
 
-IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  {$$=new IfElseList($1, $2);}
-        | IFANDORELIF                           {$$=$1;}
+IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  { $$ = new IfElseList($1, $2); }
+        | IFANDORELIF                           { $$ = $1; }
 
-IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     {$$=new IfElseList($1, $2);}
-        | IF_STATEMENT                          {$$=$1;}
+IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     { $$ = new IfElseList($1, $2); }
+        | IF_STATEMENT                          { $$ = $1; }
 
-WHILE_STATEMENT : T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new While_Statement($2,$4);}
+WHILE_STATEMENT : T_WHILE EXPR T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new While_Statement($2,$4); }
 
-DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON  {$$ = new Do_While_Statement($3,$6);}
+DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR T_SEMICOLON  { $$ = new Do_While_Statement($3,$6); }
 
-IF_STATEMENT : T_IF EXPR  T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new If_Statement($2,$4);}
+IF_STATEMENT : T_IF EXPR  T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new If_Statement($2,$4); }
 
-ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new ElIf_Statement($3,$5);}
+ELSE_IF_STATEMENT : T_ELSE T_IF EXPR T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new ElIf_Statement($3,$5); }
 
-ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   {$$ = new Else_Statement ($3);}
+ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new Else_Statement ($3); }
 
-EXPR : EXPR_1                           {$$=$1;}
+EXPR : EXPR_1                           { $$ = $1; }
 
-EXPR_1 : EXPR_2                         {$$=$1;}
-        | EXPR_1 T_COMMA EXPR_2         { $$ = new CommaOp($1, $3);}
-        | EXPR_1                        {$$=$1;}
+EXPR_1 : EXPR_2                         { $$ = $1; }
+        | EXPR_1 T_COMMA EXPR_2         { $$ = new CommaOp($1, $3); }
+        | EXPR_1                        { $$ = $1; }
 
-EXPR_2 : EXPR_3                                 {$$=$1;}
-        | T_ID T_ASSIGN EXPR_2                  {$$ = new AssignOp(*$1, $3);}
-        | T_ID T_ADDASSIGN EXPR_2               {$$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), $3));}
-        | T_ID T_SUBASSIGN EXPR_2               {$$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), $3));}
-        | T_ID T_MULASSIGN EXPR_2               {$$ = new AssignOp(*$1, new MulOperator(new Variable(*$1), $3));}
-        | T_ID T_DIVASSIGN EXPR_2               {$$ = new AssignOp(*$1, new DivOperator(new Variable(*$1), $3));}
-        | T_ID T_MODASSIGN EXPR_2               {$$ = new AssignOp(*$1, new ModOperator(new Variable(*$1), $3));}
-        | T_ID T_LSHIFTASSIGN EXPR_2            {$$ = new AssignOp(*$1, new BLShift(new Variable(*$1), $3));}
-        | T_ID T_RSHIFTASSIGN EXPR_2            {$$ = new AssignOp(*$1, new BRShift(new Variable(*$1), $3));}
-        | T_ID T_ANDASSIGN EXPR_2               {$$ = new AssignOp(*$1, new BAnd(new Variable(*$1), $3));}
-        | T_ID T_ORASSIGN EXPR_2                {$$ = new AssignOp(*$1, new BOr(new Variable(*$1), $3));}
-        | T_ID T_XORASSIGN EXPR_2               {$$ = new AssignOp(*$1, new BXor(new Variable(*$1), $3));}
+EXPR_2 : EXPR_3                                 { $$ = $1; }
+        | T_ID T_ASSIGN EXPR_2                  { $$ = new AssignOp(*$1, $3); }
+        | T_ID T_ADDASSIGN EXPR_2               { $$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), $3)); }
+        | T_ID T_SUBASSIGN EXPR_2               { $$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), $3)); }
+        | T_ID T_MULASSIGN EXPR_2               { $$ = new AssignOp(*$1, new MulOperator(new Variable(*$1), $3)); }
+        | T_ID T_DIVASSIGN EXPR_2               { $$ = new AssignOp(*$1, new DivOperator(new Variable(*$1), $3)); }
+        | T_ID T_MODASSIGN EXPR_2               { $$ = new AssignOp(*$1, new ModOperator(new Variable(*$1), $3)); }
+        | T_ID T_LSHIFTASSIGN EXPR_2            { $$ = new AssignOp(*$1, new BLShift(new Variable(*$1), $3)); }
+        | T_ID T_RSHIFTASSIGN EXPR_2            { $$ = new AssignOp(*$1, new BRShift(new Variable(*$1), $3)); }
+        | T_ID T_ANDASSIGN EXPR_2               { $$ = new AssignOp(*$1, new BAnd(new Variable(*$1), $3)); }
+        | T_ID T_ORASSIGN EXPR_2                { $$ = new AssignOp(*$1, new BOr(new Variable(*$1), $3)); }
+        | T_ID T_XORASSIGN EXPR_2               { $$ = new AssignOp(*$1, new BXor(new Variable(*$1), $3)); }
 
-EXPR_3 : EXPR_4                                         {$$=$1;}
-        | EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4          { $$ = new TenOp($1,$3,$5);}
+EXPR_3 : EXPR_4                                         { $$ = $1; }
+        | EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4          { $$ = new TenOp($1,$3,$5); }
 
-EXPR_4 : EXPR_5                         {$$=$1;}
-        | EXPR_4 T_LOR EXPR_5           {$$ = new LOr($1,$3);}
+EXPR_4 : EXPR_5                         { $$ = $1; }
+        | EXPR_4 T_LOR EXPR_5           { $$ = new LOr($1,$3); }
 
-EXPR_5 : EXPR_6                         {$$=$1;}
-        | EXPR_5 T_LAND EXPR_6          {$$ = new LAnd($1,$3);}
+EXPR_5 : EXPR_6                         { $$ = $1; }
+        | EXPR_5 T_LAND EXPR_6          { $$ = new LAnd($1,$3); }
 
-EXPR_6 : EXPR_7                         {$$=$1;}
-        | EXPR_6 T_OR EXPR_7            {$$ = new BOr($1,$3);}
+EXPR_6 : EXPR_7                         { $$ = $1; }
+        | EXPR_6 T_OR EXPR_7            { $$ = new BOr($1,$3); }
 
-EXPR_7 : EXPR_8                         {$$=$1;}
-        | EXPR_7 T_XOR EXPR_8           {$$ = new BXor($1,$3);}
+EXPR_7 : EXPR_8                         { $$ = $1; }
+        | EXPR_7 T_XOR EXPR_8           { $$ = new BXor($1,$3); }
 
-EXPR_8 : EXPR_9                         {$$=$1;}
-        | EXPR_8 T_AND EXPR_9           {$$ = new BAnd($1,$3);}
+EXPR_8 : EXPR_9                         { $$ = $1; }
+        | EXPR_8 T_AND EXPR_9           { $$ = new BAnd($1,$3); }
 
-EXPR_9 : EXPR_10                        {$$=$1;}
-        | EXPR_9 T_LEQUAL EXPR_10       {$$ = new LEqual($1,$3);}
-        | EXPR_9 T_LNEQUAL EXPR_10      {$$ = new LNotEqual($1,$3);}
+EXPR_9 : EXPR_10                        { $$ = $1; }
+        | EXPR_9 T_LEQUAL EXPR_10       { $$ = new LEqual($1,$3); }
+        | EXPR_9 T_LNEQUAL EXPR_10      { $$ = new LNotEqual($1,$3); }
 
-EXPR_10 : EXPR_11                       { $$=$1;}
-        | EXPR_10 T_MORE EXPR_11        { $$ = new LMore($1,$3);}
-        | EXPR_10 T_LESS EXPR_11        { $$ = new LLess($1,$3);}
-        | EXPR_10 T_LMOREEQ EXPR_11     { $$ = new LMoreEqual($1,$3);}
-        | EXPR_10 T_LLESSEQ EXPR_11     { $$ = new LLessEqual($1,$3);}
+EXPR_10 : EXPR_11                       { $$ = $1; }
+        | EXPR_10 T_MORE EXPR_11        { $$ = new LMore($1,$3); }
+        | EXPR_10 T_LESS EXPR_11        { $$ = new LLess($1,$3); }
+        | EXPR_10 T_LMOREEQ EXPR_11     { $$ = new LMoreEqual($1,$3); }
+        | EXPR_10 T_LLESSEQ EXPR_11     { $$ = new LLessEqual($1,$3); }
 
-EXPR_11 : EXPR_12                       { $$=$1;}
-        | EXPR_11 T_LSHIFT EXPR_12      { $$ = new BLShift($1,$3);}
-        | EXPR_11 T_RSHIFT EXPR_12      { $$ = new BRShift($1,$3);}
+EXPR_11 : EXPR_12                       { $$ = $1; }
+        | EXPR_11 T_LSHIFT EXPR_12      { $$ = new BLShift($1,$3); }
+        | EXPR_11 T_RSHIFT EXPR_12      { $$ = new BRShift($1,$3); }
 
-EXPR_12 : EXPR_13                       {$$=$1;}
-        | EXPR_12 T_PLUS EXPR_13        { $$ = new AddOperator( $1 , $3 );}
+EXPR_12 : EXPR_13                       { $$ = $1; }
+        | EXPR_12 T_PLUS EXPR_13        { $$ = new AddOperator( $1 , $3 ); }
         | EXPR_12 T_MINUS EXPR_13       { $$ = new SubOperator( $1 , $3 ); }
 
-EXPR_13 : EXPR_14                       {$$=$1;}
+EXPR_13 : EXPR_14                       { $$ = $1; }
         | EXPR_13 T_TIMES EXPR_14       { $$ = new MulOperator( $1 , $3 ); }
         | EXPR_13 T_DIVIDE EXPR_14      { $$ = new DivOperator( $1 , $3 ); }
         | EXPR_13 T_MODULUS EXPR_14     { $$ = new ModOperator( $1 , $3 ); }
 
-EXPR_14 : EXPR_15                       { $$=$1;}
-        | T_SIZE_OF T_ID                { $$ = new SizeOf(*$2);}
-        | T_NOT EXPR_14                 { $$ = new LNot($2);}
-        | T_TILDA EXPR_14               { $$ = new BNot($2);}
-        | T_INC T_ID                    { $$ = new AssignOp(*$2, new AddOperator(new Variable(*$2), new Number(1,0)));}
-        | T_DEC T_ID                    { $$ = new AssignOp(*$2, new SubOperator(new Variable(*$2), new Number(1,0)));}
+EXPR_14 : EXPR_15                       { $$ = $1; }
+        | T_SIZE_OF T_ID                { $$ = new SizeOf(*$2); }
+        | T_NOT EXPR_14                 { $$ = new LNot($2); }
+        | T_TILDA EXPR_14               { $$ = new BNot($2); }
+        | T_INC T_ID                    { $$ = new AssignOp(*$2, new AddOperator(new Variable(*$2), new Number(1,0))); }
+        | T_DEC T_ID                    { $$ = new AssignOp(*$2, new SubOperator(new Variable(*$2), new Number(1,0))); }
 
-EXPR_15 : PRIMATIVES                                                 {$$=$1;}
-        | T_ID T_INC                                            { $$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0)));}
-        | T_ID T_DEC                                            { $$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0)));}
-        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1,$3);}
+EXPR_15 : PRIMATIVES                                            { $$ = $1; }
+        | T_ID T_INC                                            { $$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0))); }
+        | T_ID T_DEC                                            { $$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0))); }
+        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1,$3); }
 
-PRIMATIVES : T_ID                    { $$ = new Variable( *$1 );}
+PRIMATIVES : T_ID                       { $$ = new Variable( *$1 ); }
         | T_NUMBER                      { $$ = new Number( $1 , 0 ); }
-        | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 );}
+        | T_MINUS T_NUMBER              { $$ = new Number( 0 , $2 ); }
 %%
 
 const ASTNode *g_root; // Definition of variable (to match declaration earlier)
