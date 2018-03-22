@@ -191,11 +191,14 @@ EXPR_14 : EXPR_15                       { $$ = $1; }
         | T_TILDA EXPR_14               { $$ = new BNot($2); }
         | T_INC T_ID                    { $$ = new AssignOp(*$2, new AddOperator(new Variable(*$2), new Number(1,0))); }
         | T_DEC T_ID                    { $$ = new AssignOp(*$2, new SubOperator(new Variable(*$2), new Number(1,0))); }
+        | T_PLUS EXPR_15                { $$ = new PosOp($2);}
+        | T_MINUS EXPR_15               { $$ = new NegOp($2);}
 
 EXPR_15 : PRIMATIVES                                            { $$ = $1; }
         | T_ID T_INC                                            { $$ = new AssignOp(*$1, new AddOperator(new Variable(*$1), new Number(1,0))); }
         | T_ID T_DEC                                            { $$ = new AssignOp(*$1, new SubOperator(new Variable(*$1), new Number(1,0))); }
         | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET      { $$ = new FunctionStatementInExpr(*$1,$3); }
+        | T_LBRACKET EXPR_1 T_RBRACKET                          { $$ = $2; }
 
 PRIMATIVES : T_ID                       { $$ = new Variable( *$1 ); }
         | T_NUMBER                      { $$ = new Number( $1 , 0 ); }

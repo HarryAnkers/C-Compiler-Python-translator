@@ -509,5 +509,73 @@ public:
     }
 };
 
+class NegOp
+    : public ASTNode
+{
+public:
+    node expr;
+
+    NegOp(node _expr)
+        : expr(_expr)
+    {}
+
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
+        dst<<"-(";
+        expr->print(dst,state);
+        dst<<")";
+    }
+
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+        dst<<"-(";
+        expr->translate(dst,state);
+        dst<<")";
+    }
+
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        int reg1 = state.getTempReg(1);
+        int reg2 = state.getTempReg(0);
+        expr->compile(dst,state);
+        state.registers[reg2]=0;
+        int reg3 = state.getTempReg(0);
+
+        dst<<"addi"<<" "<<reg3<<" , "<<reg3<<" , "<<"0xFFFFFFFF"<<std::endl;
+        dst<<"mult"<<" "<<reg2<<" , "<<reg3<<std::endl;
+        dst<<"mflo"<<" "<<reg1<<std::endl;
+    }
+};
+
+class PosOp
+    : public ASTNode
+{
+public:
+    node expr;
+    PosOp(node _expr)
+        : expr(_expr)
+    {}
+
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
+        dst<<"+(";
+        expr->print(dst,state);
+        dst<<")";
+    }
+
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+        dst<<"+(";
+        expr->translate(dst,state);
+        dst<<")";
+    }
+
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        int reg1 = state.getTempReg(1);
+        int reg2 = state.getTempReg(0);
+        expr->compile(dst,state);
+        state.registers[reg2]=0;
+        int reg3 = state.getTempReg(0);
+
+        dst<<"addi"<<" "<<reg3<<" , "<<reg3<<" , "<<"0x1"<<std::endl;
+        dst<<"mult"<<" "<<reg2<<" , "<<reg3<<std::endl;
+        dst<<"mflo"<<" "<<reg1<<std::endl;
+    }
+};
 
 #endif
