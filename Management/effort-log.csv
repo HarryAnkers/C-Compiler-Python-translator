@@ -1,7 +1,5 @@
 Date,Effort,Developers,Milestones
-10/02/2018,Proposed plan of action,Both,Developed Planning
-,Looked for a starting place (lexer),Both,
-,Learned some python,Both,
+10/02/2018,Proposed plan of action and did some python learning,Both,Developed Planning
 13/02/2018,Planned a basic AST token and type structure,haa516,Planned  work
 22/02/2018,Implimented a AST off lab 2,haa516,
 ,tried to get an AST structure and finish the flex file before doing any input output,haa516,finished flex translator for the most
@@ -17,3 +15,11 @@ Date,Effort,Developers,Milestones
 28/02/2018,Cleaned and fixed code (now passes 8/9 tests),haa516,passed 8/9 tests and now all use node class
 03/03/2018,Fixed globals and now pass all test,haa516,passed all tests
 12/03/2018,Made some notes to plan how to perform a stack,haa516,Planning
+14/03/2018,Reviewed how the AST could handle MIPS,haa516,Planning
+15&16/03/2018,Removed global variables added states,haa516,Intro to compiler
+17/03/2018,Added Stack pointer stuff and dec function mips,haa516,
+18/03/2018,Arthimatic mips done,haa516,Some functions completed
+19/03/2018,Added conditions and if while etc.,haa516,Half functions
+19/03/2018,Fixed a assign bug,both,
+20/03/2018,Assign added bitwise added and some bonus ops added,haa516,
+21/03/2018,Added all data types to parser and did precedence for all operators,haa516,
