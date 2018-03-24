@@ -8,6 +8,24 @@
 #include <memory>
 #include <sstream>
 
+class FunctionBind
+{
+    public:
+    std::string type;
+    std::string id;
+    std::vector<std::string> arguments;
+    int labelNo;
+    int argSize;
+
+    FunctionBind(std::string _type, std::string _id, int _labelNo):
+        type(_type),id(_id),labelNo(_labelNo){}
+
+    friend std::ostream& operator<< (std::ostream &o, FunctionBind b){
+        o << "type: "<<b.type<< "id: "<<b.id<< ", labelNo: " << b.labelNo;
+        return o;
+    }
+};
+
 class VariableBind
 {
 public:
@@ -32,11 +50,20 @@ class CompilerState
 public:
     int labelId;
     std::vector<VariableBind> varVector;
+    std::vector<FunctionBind> funcVector;
     std::vector<int> ifVector;
+    
     int currentScope;
+    int currentArgCount;
+    int currentFCall;
+    int currentArgSize;
     int registers[32];
     int currentOffset;
     int returnId;
+    int varCount;
+    int argCount;
+    int argSpace;
+    int functionOffset;
 
     CompilerState():
         labelId(0), currentScope(0), currentOffset(-4), returnId(0) {
@@ -151,7 +178,7 @@ public:
     virtual void compile(std::ostream &dst, CompilerState &state) const =0;
 
     //for counting elements in tree
-    virtual void count(int &varCount) const{}
+    virtual void count(CompilerState &state) const =0;
 
     //these are all for first time called from cpp files
     void translate(std::ostream &dst) const{

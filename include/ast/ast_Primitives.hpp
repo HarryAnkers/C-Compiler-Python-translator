@@ -34,6 +34,8 @@ public:
         }
         throw std::invalid_argument( "variable used was not found (previously declared)" );
     }
+
+    virtual void count(CompilerState &state) const override {}
 };
 
 class Number
@@ -61,6 +63,8 @@ public:
         int reg1 = state.getTempReg(1);
         dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(value)<<std::endl;
     }
+
+    virtual void count(CompilerState &state) const override {}
 };
 
 

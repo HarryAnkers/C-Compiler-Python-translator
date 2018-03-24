@@ -39,6 +39,8 @@ class IfElseList : public ASTNode
                 state.varVector.pop_back();
             }
         }
+
+        virtual void count(CompilerState &state) const override {}
 };
 
 

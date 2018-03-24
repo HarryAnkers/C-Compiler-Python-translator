@@ -3,32 +3,13 @@
 
 #include "ast_ASTNode.hpp"
 
-class Statement : public ASTNode{
-    virtual std::string getStateType() const {return "";};
-    virtual std::string getVarType() const {return "";};
-
-    void count(int &cnt) const {
-        std::string type = getStateType();
-        if(!type.compare("declare")){
-            type = getVarType();
-            if(!type.compare("int")){
-                cnt++;
-            } else if(!type.compare("long")){
-                cnt=cnt+2;
-            }
-        }
-    }
-};
-
-class ReturnStatement : public Statement
+class ReturnStatement : public ASTNode
 {
     public:
         node expression;
 
         ReturnStatement(node _expression):
         expression(_expression){}
-
-        virtual std::string getStateType() const override { return "return"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -59,17 +40,20 @@ class ReturnStatement : public Statement
             state.registers[reg1]=0;
             dst<<"b"<<" "<<"$E"<<state.returnId<<std::endl;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            expression->count(state);
+        }
 };
 
-class ExprStatement : public Statement
+class ExprStatement : public ASTNode
 {
     public:
         node expression;
 
         ExprStatement(node _expression):
         expression(_expression){}
-
-        virtual std::string getStateType() const override { return "expr"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -96,9 +80,14 @@ class ExprStatement : public Statement
             expression->compile(dst,state);
             state.registers[reg1]=0;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            expression->count(state);
+        }
 };
 
-class DeclareStatement : public Statement
+class DeclareStatement : public ASTNode
 {
     public:
         std::string type;
@@ -109,9 +98,6 @@ class DeclareStatement : public Statement
         type(_type), id(_id), expression(_expression){}
         DeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
-
-        virtual std::string getStateType() const override { return "declare"; }
-        virtual std::string getVarType() const override { return type; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -158,9 +144,36 @@ class DeclareStatement : public Statement
                 state.registers[reg1]=0;
             }
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            if(expression!=NULL){
+                expression->count(state);
+            }
+            int size;
+
+            if(!type.compare("char")){ size = 4; /*techincally 1*/ }
+            else if(!type.compare("signed char")){ size = 4; /*techincally 1*/ }
+            else if(!type.compare("unsigned char")){ size = 4; /*techincally 1*/ }
+            else if(!type.compare("short")){ size = 4; /*techincally 2*/ }
+            else if(!type.compare("unsigned short")){ size = 4; /*techincally 2*/ }
+            else if(!type.compare("int")){ size = 4; }
+            else if(!type.compare("unsigned int")){ size = 4; }
+            else if(!type.compare("long")){ size = 8; }
+            else if(!type.compare("unsigned long")){ size = 8; }
+            else if(!type.compare("long long")){ size = 16; }
+            else if(!type.compare("unsigned long long")){ size = 16; }
+            else if(!type.compare("float")){ size = 4; }
+            else if(!type.compare("double")){ size = 8; }
+            else if(!type.compare("long double")){ size = 32; }
+            else if(!type.compare("void")){ size = 0; }
+            else{ throw std::invalid_argument( "type not defined" );}
+
+            state.varCount=state.varCount+size;
+        }
 };
 
-class GlobalDeclareStatement : public Statement
+class GlobalDeclareStatement : public ASTNode
 {
     public:
         std::string type;
@@ -171,8 +184,6 @@ class GlobalDeclareStatement : public Statement
         type(_type), id(_id), expression(_expression){}
         GlobalDeclareStatement(std::string &_type, std::string &_id):
         type(_type), id(_id), expression(NULL){}
-
-        virtual std::string getStateType() const override { return "global_declare"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -221,54 +232,18 @@ class GlobalDeclareStatement : public Statement
             }
             //not sure if correct
         }
-};
 
-class FunctionStatement : public Statement
-{
-    public:
-        std::string id;
-        node arguments;
-
-        FunctionStatement(std::string &_id, node _arguments):
-        id(_id), arguments(_arguments){}
-
-        virtual std::string getStateType() const override { return "function"; }
-
-        //print tester
-        virtual void print(std::ostream &dst, PrintTransState &state) const override
-        {
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<id<<"(";
-            arguments->print(dst, state);
-            dst<<");";
-        }
-
-        //translator 
-        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<id<<"(";
-            arguments->translate(dst, state);
-            dst<<");";
-        }
-
-        //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void count(CompilerState &state) const override {}
 };
 
 
-class NewScope : public Statement
+class NewScope : public ASTNode
 {
     public:
         node body;
 
         NewScope(node _body): 
             body(_body){}
-
-        virtual std::string getStateType() const override { return "new_scope"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -298,9 +273,14 @@ class NewScope : public Statement
             state.popScope();
             state.currentScope--;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            body->count(state);
+        }
 };
 
-class If_Statement : public Statement
+class If_Statement : public ASTNode
 {
     public:
         node condition;
@@ -308,8 +288,6 @@ class If_Statement : public Statement
     
         If_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
-
-        virtual std::string getStateType() const override { return "if"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -362,9 +340,15 @@ class If_Statement : public Statement
 
             dst<<"$L"<<state.label()<<std::endl;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            condition->count(state);
+            body->count(state);
+        }
 };
 
-class ElIf_Statement : public Statement
+class ElIf_Statement : public ASTNode
 {
     public:
         node condition;
@@ -372,8 +356,6 @@ class ElIf_Statement : public Statement
     
         ElIf_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
-
-        virtual std::string getStateType() const override { return "elif"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -425,17 +407,21 @@ class ElIf_Statement : public Statement
 
             dst<<"$L"<<state.label()<<std::endl;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            condition->count(state);
+            body->count(state);
+        }
 };
 
-class Else_Statement : public Statement
+class Else_Statement : public ASTNode
 {
     public:
         node body;
     
         Else_Statement(node _body):
         body(_body){}
-
-        virtual std::string getStateType() const override { return "else"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -471,9 +457,14 @@ class Else_Statement : public Statement
             state.popScope();
             state.currentScope--;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            body->count(state);
+        }
 };
 
-class While_Statement : public Statement
+class While_Statement : public ASTNode
 {
     public:
         node condition;
@@ -481,8 +472,6 @@ class While_Statement : public Statement
     
         While_Statement(node _condition, node _body):
         condition(_condition), body(_body){}
-
-        virtual std::string getStateType() const override { return "while"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -538,9 +527,15 @@ class While_Statement : public Statement
             dst<<"nop"<<std::endl;
             dst<<"$L"<<exitLabel<<":"<<std::endl;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            condition->count(state);
+            body->count(state);
+        }
 };
 
-class Do_While_Statement : public Statement
+class Do_While_Statement : public ASTNode
 {
     public:
         node body;
@@ -548,8 +543,6 @@ class Do_While_Statement : public Statement
     
         Do_While_Statement(node _body, node _condition):
         body(_body), condition(_condition){}
-
-        virtual std::string getStateType() const override { return "do_while"; }
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -606,6 +599,12 @@ class Do_While_Statement : public Statement
             dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
             dst<<"nop"<<std::endl;
             dst<<"$L"<<exitLabel<<":"<<std::endl;
+        }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            condition->count(state);
+            body->count(state);
         }
 };
 

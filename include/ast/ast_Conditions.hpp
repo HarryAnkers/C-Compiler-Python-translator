@@ -45,6 +45,10 @@ class LNot : public ASTNode
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
         }
+
+        virtual void count(CompilerState &state) const override {
+            cond->count(state);
+        }
 };
 
 class ConditionOp : public ASTNode
@@ -85,6 +89,11 @@ class ConditionOp : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+
+        virtual void count(CompilerState &state) const override {
+            condA->count(state);
+            condB->count(state);
+        }
 };
 
 class LEqual : public ConditionOp

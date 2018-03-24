@@ -45,12 +45,12 @@ class Body : public ASTNode
             }
         }
 
-        void count(int &cnt) const {
+        void count(CompilerState &state) const {
             if(statement!=NULL){
                 if(nextBody!=NULL){
-                    nextBody->count(cnt);
+                    nextBody->count(state);
                 }
-                statement->count(cnt);
+                statement->count(state);
             }
         }
 };

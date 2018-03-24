@@ -38,6 +38,12 @@ public:
         dst<<")";
     }
 
+    //for frame size
+        void count(CompilerState &state) const override {
+            left->count(state);
+            right->count(state);
+        }
+
     //compiler
     // Looks like we still need a function to differentiate 
     // between getSignInst() and getUnsignInst()?
@@ -51,13 +57,13 @@ public:
         int reg1 = state.getTempReg(1);
 
         std::string type = getOpcode();
-        if(type.compare("*")){
+        if(!type.compare("*")){
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
-        } else if(type.compare("/")){
+        } else if(!type.compare("/")){
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
-        } else if(type.compare("%")){
+        } else if(!type.compare("%")){
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mfhi"<<" "<<"$"<<reg1<<std::endl;
         } else{
@@ -301,6 +307,11 @@ class AssignOp
             }
             throw std::invalid_argument( "variable used was not found (previously declared)" );
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            expression->count(state);
+        }
 };
 
 class TenOp
@@ -367,6 +378,13 @@ class TenOp
 
             dst<<"$L"<<state.label()<<std::endl;
         }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            condition->count(state);
+            expression1->count(state);
+            expression2->count(state);
+        }
 };
 
 class CommaOp
@@ -404,13 +422,17 @@ class CommaOp
             int reg2 = state.getTempReg(0);
             expression1->compile(dst,state);
             state.registers[reg2]=0;
-
-            dst<<" , ";
             
             reg2 = state.getTempReg(0);
             expression2->compile(dst, state);
             state.registers[reg2]=0;
             dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+        }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            expression1->count(state);
+            expression2->count(state);
         }
 };
 
@@ -438,7 +460,67 @@ class FunctionStatementInExpr : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            for(unsigned int i=0;i<state.funcVector.size();i++){
+                if(!state.funcVector[i].id.compare(id)){
+                    state.currentArgCount=((signed)state.funcVector[i].arguments.size()-1);
+                    state.currentArgSize=state.funcVector[i].argSize;
+                    arguments->compile(dst,state);
+                    if(state.currentArgCount!=-1){
+                        throw std::invalid_argument( "argument sizes don't match" );
+                    }
+                    dst<<"jal"<<" "<<"F"<<state.funcVector[i].labelNo<<std::endl;
+                    dst<<"nop"<<std::endl;
+                    int reg1 = state.getTempReg(1);
+                    if(state.funcVector[i].type.compare("void")){
+                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"$"<<"2"<<std::endl<<std::endl;
+                    }
+                    return;
+                }
+            }
+            throw std::invalid_argument( "function not defined" );
+        }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            int argCount=0;
+            int argSpace=0;
+            std::string type;
+            int size;
+
+            for(unsigned int i=0;i<state.funcVector.size();i++){
+                if(!state.funcVector[i].id.compare(id)){
+                    argCount=state.funcVector[i].arguments.size();
+                    if(state.argCount>argCount){ state.argCount = argCount; }
+                    for(int j=0;j<argCount;j++){
+                        type=state.funcVector[i].arguments[j];
+                        if(!type.compare("char")){ size = 4; /*techincally 1*/ }
+                        else if(!type.compare("signed char")){ size = 4; /*techincally 1*/ }
+                        else if(!type.compare("unsigned char")){ size = 4; /*techincally 1*/ }
+                        else if(!type.compare("short")){ size = 4; /*techincally 2*/ }
+                        else if(!type.compare("unsigned short")){ size = 4; /*techincally 2*/ }
+                        else if(!type.compare("int")){ size = 4; }
+                        else if(!type.compare("unsigned int")){ size = 4; }
+                        else if(!type.compare("long")){ size = 8; }
+                        else if(!type.compare("unsigned long")){ size = 8; }
+                        else if(!type.compare("long long")){ size = 16; }
+                        else if(!type.compare("unsigned long long")){ size = 16; }
+                        else if(!type.compare("float")){ size = 4; }
+                        else if(!type.compare("double")){ size = 8; }
+                        else if(!type.compare("long double")){ size = 32; }
+                        else if(!type.compare("void")){ size = 0; }
+                        else{ throw std::invalid_argument( "type not defined" );}
+
+                        argSpace+=size;
+                    }
+                    if(argSpace>state.argSpace){
+                        state.argSpace=argSpace;
+                    }
+                    return;
+                }
+            }
+            throw std::invalid_argument( "function not defined" );
+        }
 };
 
 class SizeOf
@@ -478,7 +560,7 @@ public:
             else if(!temp.compare("double")){ size = 8; }
             else if(!temp.compare("long double")){ size = 32; }
             else if(!temp.compare("void")){ size = 0; }
-            else{ throw std::invalid_argument( "type size not defined" );}
+            else{ throw std::invalid_argument( "type not defined" );}
             dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
             return;
         }
@@ -500,13 +582,16 @@ public:
                 else if(!temp.compare("double")){ size = 8; }
                 else if(!temp.compare("long double")){ size = 32; }
                 else if(!temp.compare("void")){ size = 0; }
-                else{ throw std::invalid_argument( "type size not defined" );}
+                else{ throw std::invalid_argument( "type not defined" );}
                 dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                 return;
             }
         }
         throw std::invalid_argument( "variable used was not found (previously declared)" );
     }
+
+    //for frame size
+    void count(CompilerState &state) const override {}
 };
 
 class NegOp
@@ -542,6 +627,11 @@ public:
         dst<<"mult"<<" "<<reg2<<" , "<<reg3<<std::endl;
         dst<<"mflo"<<" "<<reg1<<std::endl;
     }
+
+    //for frame size
+    void count(CompilerState &state) const override {
+        expr->count(state);
+    }
 };
 
 class PosOp
@@ -575,6 +665,11 @@ public:
         dst<<"addi"<<" "<<reg3<<" , "<<reg3<<" , "<<"0x1"<<std::endl;
         dst<<"mult"<<" "<<reg2<<" , "<<reg3<<std::endl;
         dst<<"mflo"<<" "<<reg1<<std::endl;
+    }
+
+    //for frame size
+    void count(CompilerState &state) const override {
+        expr->count(state);
     }
 };
 

@@ -42,6 +42,7 @@
         "unordered_map": "cpp",
         "ostream": "cpp",
         "string_view": "cpp",
-        "__string": "cpp"
+        "__string": "cpp",
+        "sstream": "cpp"
     }
 }

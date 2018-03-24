@@ -38,7 +38,9 @@ public:
             dst<<std::endl;
         }
         function->compile(dst, state);
-    };
+    }
+
+    virtual void count(CompilerState &state) const override {}
 };
 
 

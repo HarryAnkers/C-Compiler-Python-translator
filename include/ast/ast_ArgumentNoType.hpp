@@ -40,7 +40,25 @@ class ArgumentNoType : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            if(arg!=NULL){
+                int reg1=state.getTempReg(0);
+                arg->compile(dst,state);
+                state.registers[reg1]=0;
+
+                if(state.currentArgCount<4){
+                    dst<<"lw"<<" "<<"$"<<(state.currentArgCount+4)<<" , "<<"$"<<reg1<<std::endl;
+                } else {
+                    dst<<"sw"<<" "<<"$"<<reg1<<" , "<<(state.currentArgSize-state.currentArgCount*4)<<"(sp)"<<std::endl;
+                }
+                state.currentArgCount--;
+                if(nextArguments!=NULL){
+                    nextArguments->compile(dst, state);
+                }
+            }
+        }
+
+        virtual void count(CompilerState &state) const override {}
 };
 
 #endif

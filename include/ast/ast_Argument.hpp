@@ -42,18 +42,26 @@ class Argument : public ASTNode
         }
 
         //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{}
-
-        virtual void count(int &cnt) const override{
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(run){
                 if(nextArguments!=NULL){
-                    nextArguments->count(cnt);
+                    nextArguments->compile(dst,state);
                 }
+                int count =state.argCount;
+                state.varVector.push_back(VariableBind(argId, argType, state.currentScope,((count*4)+state.functionOffset)));
+                if(count<4){
+                    dst<<"sw"<<" "<<"$"<<(count+4)<<" "<<((count*4)+state.functionOffset)<<"($fp)"<<std::endl;
+                }
+                state.argCount++;
             }
-            if(!argType.compare("int")){
-                cnt++;
-            } else if(!argType.compare("long")){
-                cnt=cnt+2;
+        }
+
+        virtual void count(CompilerState &state) const override {
+            if(run){
+                if(nextArguments!=NULL){
+                    nextArguments->count(state);
+                }
+                state.funcVector[(state.funcVector.size()-1)].arguments.push_back(argType);
             }
         }
 };

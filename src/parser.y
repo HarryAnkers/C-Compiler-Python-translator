@@ -33,7 +33,7 @@
 %token T_RETURN T_SIZE_OF T_ELSE T_IF T_WHILE T_DO
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
-%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE FUNCTION_STATEMENT
+%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE 
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
@@ -65,8 +65,8 @@ ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3,
         | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }
         | %empty                                        { $$ = new Argument(); }
 
-ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR_1    { $$ = new ArgumentNoType($3, $1); }
-        | EXPR_1                                                { $$ = new ArgumentNoType($1); }
+ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR_2    { $$ = new ArgumentNoType($3, $1); }
+        | EXPR_2                                                { $$ = new ArgumentNoType($1); }
         | %empty                                                { $$ = new ArgumentNoType(); }
 
 TYPE : T_CHAR                   { $$ = $1; }
@@ -91,7 +91,6 @@ BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
     
 STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
         | DEC_VARIABLE                  { $$ = $1; }
-        | FUNCTION_STATEMENT            { $$ = $1; }
         | EXPR_1 T_SEMICOLON            { $$ = new ExprStatement($1); }
         | IFANDORELSEORELIF             { $$ = $1; }
         | WHILE_STATEMENT               { $$ = $1; }
@@ -108,8 +107,6 @@ DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON      { $$ = new DeclareStat
 
 GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON          { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
         | TYPE T_ID T_SEMICOLON                                 { $$ = new GlobalDeclareStatement(*$1, *$2); }
-
-FUNCTION_STATEMENT : T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET T_SEMICOLON { $$ = new FunctionStatement(*$1,$3); }
 
 IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  { $$ = new IfElseList($1, $2); }
         | IFANDORELIF                           { $$ = $1; }
