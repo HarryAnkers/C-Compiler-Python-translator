@@ -465,6 +465,8 @@ class FunctionStatementInExpr : public ASTNode
                 if(!state.funcVector[i].id.compare(id)){
                     state.currentArgCount=((signed)state.funcVector[i].arguments.size()-1);
                     state.currentArgSize=state.funcVector[i].argSize;
+                    state.currentFCall=i;
+
                     arguments->compile(dst,state);
                     if(state.currentArgCount!=-1){
                         throw std::invalid_argument( "argument sizes don't match" );

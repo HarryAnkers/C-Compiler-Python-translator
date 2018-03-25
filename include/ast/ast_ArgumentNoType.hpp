@@ -51,6 +51,7 @@ class ArgumentNoType : public ASTNode
                 } else {
                     dst<<"sw"<<" "<<"$"<<reg1<<" , "<<(state.currentArgSize-state.currentArgCount*4)<<"(sp)"<<std::endl;
                 }
+
                 state.currentArgCount--;
                 if(nextArguments!=NULL){
                     nextArguments->compile(dst, state);
