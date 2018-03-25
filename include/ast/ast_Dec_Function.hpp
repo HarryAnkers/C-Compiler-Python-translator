@@ -92,7 +92,7 @@ class Function : public ASTNode
             dst<<"j"<<" "<<"31"<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
 
-            dst<<state;
+            //dst<<state;
         }
 
         virtual void count(CompilerState &state) const override {}
