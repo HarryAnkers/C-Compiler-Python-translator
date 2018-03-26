@@ -246,7 +246,7 @@ class GlobalDeclare : public ASTNode
             state.gloVarVector.push_back(GloVarBind(id,state.currentType));
 
             dst<<id<<":"<<std::endl;
-            if((state.currentType!="float")||(state.currentType!="double")||(state.currentType!="long double")){
+            if((!state.currentType.compare("float"))||(!state.currentType.compare("double"))||(!state.currentType.compare("long double"))){
                 //input-=(input%temp);
             }
 
@@ -256,7 +256,7 @@ class GlobalDeclare : public ASTNode
                 dst<<".word "<<"0"<<std::endl;   
             }
 
-            if((state.currentType!="char")||(state.currentType!="signed char")||(state.currentType!="unsigned char")){
+            if((!state.currentType.compare("char"))||(!state.currentType.compare("signed char"))||(!state.currentType.compare("unsigned char"))){
                 dst<<".align 1"<<std::endl;
             } else {
                 dst<<".align 2"<<std::endl;
@@ -283,7 +283,7 @@ class GlobalDeclare : public ASTNode
             else if(!type.compare("void")){ size = 0; }
             else{ throw std::invalid_argument( "type not defined" );}
 
-            dst<<".size "<<id<<", "<<size<<std::endl;
+            dst<<".size "<<id<<", "<<size<<std::endl<<std::endl;
         }
 
         virtual void count(CompilerState &state) const override {}
@@ -316,7 +316,9 @@ class NewScope : public ASTNode
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -348,16 +350,10 @@ class If_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"if ";
+            dst<<"if (";
             condition->print(dst, state);
-            dst<<" {"<<std::endl;
-            state.indent++;
+            dst<<")"<<std::endl;
             body->print(dst, state);
-            state.indent--;
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}";
         }
 
         //translator 
@@ -368,15 +364,12 @@ class If_Statement : public ASTNode
             dst<<"if ";
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            state.indent++;
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             state.ifVector.push_back(state.label());
-            state.currentScope++;
 
             int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
@@ -386,10 +379,9 @@ class If_Statement : public ASTNode
             dst<<"nop"<<std::endl;
 
             body->compile(dst,state);
-            state.popScope();
-            state.currentScope--;
 
             dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
+            dst<<"nop"<<std::endl;
 
             dst<<"$L"<<state.label()<<std::endl;
         }
@@ -418,14 +410,8 @@ class ElIf_Statement : public ASTNode
             }
             dst<<"else if (";
             condition->print(dst, state);
-            dst<<") {"<<std::endl;
-            state.indent++;
+            dst<<")"<<std::endl;
             body->print(dst, state);
-            state.indent--;
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}";
         }
 
         //translator 
@@ -436,15 +422,11 @@ class ElIf_Statement : public ASTNode
             dst<<"elif(";
             condition->translate(dst, state);
             dst<<") :"<<std::endl;
-            state.indent++;
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.currentScope++;
-
             int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
             state.registers[reg1]=0;
@@ -453,10 +435,9 @@ class ElIf_Statement : public ASTNode
             dst<<"nop"<<std::endl;
 
             body->compile(dst,state);
-            state.popScope();
-            state.currentScope--;
 
             dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
+            dst<<"nop"<<std::endl;
 
             dst<<"$L"<<state.label()<<std::endl;
         }
@@ -482,14 +463,8 @@ class Else_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"else {"<<std::endl;
-            state.indent++;
+            dst<<"else"<<std::endl;
             body->print(dst, state);
-            state.indent--;
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}";
         }
 
         //translator 
@@ -498,17 +473,12 @@ class Else_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"else :"<<std::endl;
-            state.indent++;
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.currentScope++;
             body->compile(dst,state);
-            state.popScope();
-            state.currentScope--;
         }
 
         //for frame size
@@ -534,14 +504,8 @@ class While_Statement : public ASTNode
             }
             dst<<"While ";
             condition->print(dst, state);
-            dst<<" {"<<std::endl;
-            state.indent++;
+            dst<<std::endl;
             body->print(dst, state);
-            state.indent--;
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}";
         }
 
         //translator 
@@ -552,15 +516,11 @@ class While_Statement : public ASTNode
             dst<<"While ";
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            state.indent++;
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.currentScope++;
-
             int loopLabel = state.label();
             int exitLabel = state.label();
             dst<<"$L"<<loopLabel<<":"<<std::endl;
@@ -573,8 +533,6 @@ class While_Statement : public ASTNode
             dst<<"nop"<<std::endl;
 
             body->compile(dst,state);
-            state.popScope();
-            state.currentScope--;
 
             dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
             dst<<"nop"<<std::endl;
@@ -603,15 +561,12 @@ class Do_While_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"do";
-            dst<<" {"<<std::endl;
-            state.indent++;
+            dst<<"do"<<std::endl;
             body->print(dst, state);
-            state.indent--;
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"} while ";
+            dst<<"while ";
             condition->print(dst, state);
             dst<<";";
         }
@@ -632,15 +587,12 @@ class Do_While_Statement : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.currentScope++;
             
             int loopLabel = state.label();
             int exitLabel = state.label();
             dst<<"$L"<<loopLabel<<":"<<std::endl;
 
             body->compile(dst,state);
-            state.popScope();
-            state.currentScope--;
 
             int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
@@ -684,14 +636,9 @@ class For_Statement : public ASTNode
             statement1->print(dst, state);
             condition->print(dst, state);
             if(statement2!=NULL){ statement2->print(dst, state); }
-            dst<<"){"<<std::endl;
-            state.indent++;
+            dst<<")"<<std::endl;
+
             body->print(dst, state);
-            state.indent--;
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"}";
         }
 
         //translator 
@@ -707,11 +654,10 @@ class For_Statement : public ASTNode
             dst<<"While ";
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
-            state.indent++;
+            
             body->translate(dst, state);
             if(statement2!=NULL){ statement2->translate(dst,state); }
             dst<<std::endl;
-            state.indent--;
         }
 
         //compiler 

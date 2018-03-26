@@ -111,12 +111,13 @@ extern "C" int fileno(FILE *stream);
 [-]             { return T_MINUS; }
 [%]             { return T_MODULUS; }
 
-"return"            { return T_RETURN; }
-"while"            { return T_WHILE; }
-"for"            { return T_FOR; }
+"return"        { return T_RETURN; }
+"while"         { return T_WHILE; }
+"for"           { return T_FOR; }
 "do"            { return T_DO; }
 "if"            { return T_IF; }
-"else"            { return T_ELSE; }
+"else"          { return T_ELSE; }
+"else if"          { return T_ELIF; }
 
 [0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 

@@ -131,9 +131,10 @@ extern int yydebug;
     T_SIZE_OF = 325,
     T_ELSE = 326,
     T_IF = 327,
-    T_WHILE = 328,
-    T_DO = 329,
-    T_FOR = 330
+    T_ELIF = 328,
+    T_WHILE = 329,
+    T_DO = 330,
+    T_FOR = 331
   };
 #endif
 
@@ -148,7 +149,7 @@ union YYSTYPE
   double number;
   std::string *string;
 
-#line 152 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 153 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

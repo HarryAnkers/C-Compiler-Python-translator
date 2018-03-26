@@ -30,7 +30,7 @@
 %token T_LSHIFTASSIGN T_RSHIFTASSIGN T_ANDASSIGN T_XORASSIGN T_ORASSIGN
 %token T_LAND T_LOR T_LEQUAL T_LNEQUAL T_LLESSEQ T_LMOREEQ T_LSHIFT T_RSHIFT
 %token T_NUMBER T_ID T_COMMENT
-%token T_RETURN T_SIZE_OF T_ELSE T_IF T_WHILE T_DO T_FOR
+%token T_RETURN T_SIZE_OF T_ELSE T_IF T_ELIF T_WHILE T_DO T_FOR
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
 %type <node> DEC_VAR_LIST DEC_VARIABLE DEC_STATEMENT
@@ -61,7 +61,7 @@ TOP_LIST : TOP_LIST DEC_FUNCTION        {$$ = new Top_List($2,$1); }
         | DEC_FUNCTION                  {$$ = $1; }
         | GLO_DEC_STATEMENT             {$$ = $1; }
 
-DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
+DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET BODY                                    { $$ = new Function(*$1, *$2, $4, $6); }
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3, *$4, $1); }
         | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }
@@ -88,7 +88,7 @@ TYPE : T_CHAR                   { $$ = $1; }
         | T_VOID                { $$ = $1; }
 
 BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
-        | STATEMENT             { $$ = $1; }
+        | STATEMENT             { $$ = new Body($1); }
         | %empty                { $$ = new Body(); }
     
 STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
@@ -104,13 +104,12 @@ STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
 EXPR_STATEMENT : EXPR_1 T_SEMICOLON             { $$ = new ExprStatement($1); }
         | T_SEMICOLON                           { ; }
 
-FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8,$5);}
-        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8,$5);}
-        | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$7);}
-        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$7);}
+FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET BODY          { new For_Statement($3,$4,$7,$5);}
+        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET BODY         { new For_Statement($3,$4,$7,$5);}
+        | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET BODY                 { new For_Statement($3,$4,$6);}
+        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET BODY                { new For_Statement($3,$4,$6);}
 
 NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      { $$ = new NewScope($2); }
-        | T_LCUBRACKET T_RCUBRACKET             { ; }
 
 RETURN_STATEMENT : T_RETURN EXPR_1 T_SEMICOLON            { $$ = new ReturnStatement($2); }
 
@@ -139,15 +138,15 @@ IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  { $$ = new IfElseList($1, $2); }
 IFANDORELIF : IFANDORELIF ELSE_IF_STATEMENT     { $$ = new IfElseList($1, $2); }
         | IF_STATEMENT                          { $$ = $1; }
 
-WHILE_STATEMENT : T_WHILE EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new While_Statement($2,$4); }
+WHILE_STATEMENT : T_WHILE EXPR_1 BODY                           { $$ = new While_Statement($2,$3); }
 
-DO_STATEMENT : T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR_1 T_SEMICOLON  { $$ = new Do_While_Statement($3,$6); }
+DO_STATEMENT : T_DO BODY T_WHILE EXPR_1 T_SEMICOLON             { $$ = new Do_While_Statement($2,$4); }
 
-IF_STATEMENT : T_IF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new If_Statement($2,$4); }
+IF_STATEMENT : T_IF EXPR_1 BODY                                 { $$ = new If_Statement($2,$3); }
 
-ELSE_IF_STATEMENT : T_ELSE T_IF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new ElIf_Statement($3,$5); }
+ELSE_IF_STATEMENT : T_ELIF EXPR_1 BODY                          { $$ = new ElIf_Statement($2,$3); }
 
-ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET   { $$ = new Else_Statement ($3); }
+ELSE_STATEMENT : T_ELSE BODY                                    { $$ = new Else_Statement ($2); }
 
 EXPR_1 : EXPR_2                         { $$ = $1; }
         | EXPR_1 T_COMMA EXPR_2         { $$ = new CommaOp($1, $3); }

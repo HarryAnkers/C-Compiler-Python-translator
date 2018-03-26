@@ -36,7 +36,7 @@ public:
             if(!state.gloVarVector[i].id.compare(id)){
                 int regNo = state.getTempReg(1);
                 dst<<"lui "<<"$"<<regNo<<" , "<<"%hi("<<id<<")"<<std::endl;
-                dst<<"lw "<<"$"<<regNo<<" , "<<"%lo("<<id<<")($2)"<<std::endl;
+                dst<<"lw "<<"$"<<regNo<<" , "<<"%lo("<<id<<")($"<<regNo<<")"<<std::endl;
                 return;
             }
         }

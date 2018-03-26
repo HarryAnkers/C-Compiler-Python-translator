@@ -310,7 +310,7 @@ class AssignOp
                     int reg1 = state.getTempReg(0);
                     expression->compile(dst,state);
 
-                    dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")($2)"<<std::endl;
+                    dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")("<<reg1<<")"<<std::endl;
                     return;
                 }
         }

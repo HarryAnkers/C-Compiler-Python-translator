@@ -11,6 +11,8 @@ class Body : public ASTNode
     
         Body(node _statement, node _nextBody):
             statement(_statement), nextBody(_nextBody){}
+        Body(node _statement):
+            statement(_statement), nextBody(NULL){}
         Body():
             statement(NULL), nextBody(NULL){}
 

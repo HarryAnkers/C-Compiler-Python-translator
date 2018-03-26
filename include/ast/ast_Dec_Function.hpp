@@ -19,11 +19,8 @@ class Function : public ASTNode
         {
             dst<<type<<" "<<id<<"(";
             arguments->print(dst, state);
-            dst<<"){"<<std::endl;
-            state.indent++;
+            dst<<")"<<std::endl;
             body->print(dst, state);
-            state.indent--;
-            dst<<"}"<<std::endl;
         }
 
         //translator 
@@ -31,7 +28,6 @@ class Function : public ASTNode
             dst<<"def "<<id<<"(";
             arguments->translate(dst, state);
             dst<<"):"<<std::endl;
-            state.indent++;
             for(unsigned int i=0;i<state.gloVariables.size();i++){
                 for(int i=state.indent;i!=0;i--){
                     dst<<"\t";
@@ -39,7 +35,6 @@ class Function : public ASTNode
                 dst<<"global "<<state.gloVariables[i]<<std::endl;
             }
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 
@@ -77,15 +72,12 @@ class Function : public ASTNode
             dst<<"add"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<" , "<<"$0"<<std::endl;
             
             state.adjustStack(state.functionOffset);
-            state.currentScope++;
             //then stores arguments
             arguments->compile(dst, state);
 
             //do work
             body->compile(dst, state);
 
-            state.popScope();
-            state.currentScope--;
             state.adjustStack(-state.functionOffset);
 
             //below needs to be put into the return
