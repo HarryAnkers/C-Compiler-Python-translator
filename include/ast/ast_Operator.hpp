@@ -58,9 +58,11 @@ public:
 
         std::string type = getOpcode();
         if(!type.compare("*")){
+            std::cout<<"--------------------"<<std::endl;
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
         } else if(!type.compare("/")){
+            dst<<"teq $"<<reg3<<",$0,7";
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
         } else if(!type.compare("%")){
@@ -80,7 +82,7 @@ protected:
     { return "+"; }
 
     virtual const char *getSignInst() const override
-    { return "add"; }
+    { return "addu"; }
 
     virtual const char *getUnsignInst() const override
     { return "addu"; }
@@ -99,7 +101,7 @@ protected:
     { return "-"; }
 
     virtual const char *getSignInst() const override
-    { return "sub"; }
+    { return "subu"; }
 
     virtual const char *getUnsignInst() const override
     { return "subu"; }
@@ -121,7 +123,7 @@ protected:
     { return "mult"; }
 
     virtual const char *getUnsignInst() const override
-    { return "multu"; }
+    { return "mult"; }
 public:
     MulOperator(node _left, node _right)
         : Operator(_left, _right)
@@ -244,10 +246,10 @@ protected:
     { return "<<"; }
 
     virtual const char *getSignInst() const override
-    { return "sllv"; }
+    { return "sll"; }
 
     virtual const char *getUnsignInst() const override
-    { return "sllv"; }
+    { return "sll"; }
 public:
     BLShift(node _left, node _right)
         : Operator(_left, _right)
@@ -262,10 +264,10 @@ protected:
     { return ">>"; }
 
     virtual const char *getSignInst() const override
-    { return "srlv"; }
+    { return "sra"; }
 
     virtual const char *getUnsignInst() const override
-    { return "srlv"; }
+    { return "srl"; }
 public:
     BRShift(node _left, node _right)
         : Operator(_left, _right)
@@ -657,9 +659,9 @@ public:
         state.registers[reg2]=0;
         int reg3 = state.getTempReg(0);
 
-        dst<<"addi"<<" "<<reg3<<" , "<<reg3<<" , "<<"0xFFFFFFFF"<<std::endl;
-        dst<<"mult"<<" "<<reg2<<" , "<<reg3<<std::endl;
-        dst<<"mflo"<<" "<<reg1<<std::endl;
+        dst<<"addi"<<" "<<"$"<<reg3<<" , "<<"$"<<reg3<<" , "<<"0xFFFFFFFF"<<std::endl;
+        dst<<"mult"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+        dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
     }
 
     //for frame size
