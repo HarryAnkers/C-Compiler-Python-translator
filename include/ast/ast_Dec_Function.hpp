@@ -65,7 +65,7 @@ class Function : public ASTNode
             }
 
             dst<<".global "<<id<<std::endl;
-            dst<<".ent "<<id<<std::endl;
+            dst<<".ent "<<id<<std::endl<<std::endl;
 
             dst<<"F"<<state.label()<<":"<<std::endl;
             state.returnId=state.label();
@@ -85,6 +85,7 @@ class Function : public ASTNode
 
             state.popScope();
             state.currentScope--;
+            state.adjustStack(-state.functionOffset);
 
             //below needs to be put into the return
             dst<<"E"<<state.returnId<<":"<<std::endl;
@@ -95,7 +96,7 @@ class Function : public ASTNode
             dst<<"j"<<" "<<"31"<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
 
-            dst<<".end"<<dst::endl
+            dst<<".end"<<std::endl;
 
             //dst<<state;
         }

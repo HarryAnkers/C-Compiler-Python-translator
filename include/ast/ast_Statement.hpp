@@ -89,13 +89,10 @@ class DeclareStatement : public ASTNode
 {
     public:
         std::string type;
-        std::string id;
-        node expression;
+        node decList;
 
-        DeclareStatement(std::string &_type, std::string &_id, node _expression):
-        type(_type), id(_id), expression(_expression){}
-        DeclareStatement(std::string &_type, std::string &_id):
-        type(_type), id(_id), expression(NULL){}
+        DeclareStatement(std::string &_type, node _decList):
+        type(_type), decList(_decList){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -103,11 +100,11 @@ class DeclareStatement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<type<<" "<<id;
-            if(expression!=NULL){
-                dst<<"=";
-                expression->print(dst, state);
-            }
+            dst<<type<<" ";
+            state.currentType = type;
+
+            decList->print(dst,state);
+
             dst<<";";
         }
 
@@ -116,6 +113,51 @@ class DeclareStatement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
+            dst<<type<<" ";
+            state.currentType = type;
+
+            decList->translate(dst,state);
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentType = type;
+
+            decList->compile(dst,state);
+        }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            state.currentType = type;
+            decList->count(state);
+        }
+};
+
+class Declare : public ASTNode
+{
+    public:
+        std::string id;
+        node expression;
+
+        Declare(std::string &_id, node _expression):
+        id(_id), expression(_expression){}
+        Declare(std::string &_id):
+        id(_id), expression(NULL){}
+
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {
+            dst<<id;
+            if(expression!=NULL){
+                dst<<"=";
+                expression->print(dst, state);
+            } else { 
+                dst<<"=0"; 
+            }
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             dst<<id;
             if(expression!=NULL){
                 dst<<"=";
@@ -128,7 +170,7 @@ class DeclareStatement : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             int offset=state.offset();
-            state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
+            state.varVector.push_back(VariableBind(id, state.currentType, state.currentScope,offset));
             if(expression!=NULL){
                 int reg1 = state.getTempReg(0);
                 expression->compile(dst,state);
@@ -148,6 +190,8 @@ class DeclareStatement : public ASTNode
                 expression->count(state);
             }
             int size;
+
+            std::string type=state.currentType;
 
             if(!type.compare("char")){ size = 4; /*techincally 1*/ }
             else if(!type.compare("signed char")){ size = 4; /*techincally 1*/ }

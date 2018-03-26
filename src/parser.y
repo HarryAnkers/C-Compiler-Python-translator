@@ -33,9 +33,10 @@
 %token T_RETURN T_SIZE_OF T_ELSE T_IF T_WHILE T_DO T_FOR
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
-%type <node> STATEMENT RETURN_STATEMENT DEC_VARIABLE 
+%type <node> DEC_VAR_LIST GLO_DEC_VARIABLE DEC_VARIABLE DEC_STATEMENT
+%type <node> STATEMENT RETURN_STATEMENT 
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
-%type <node> WHILE_STATEMENT DO_STATEMENT GLO_DEC_VARIABLE NEW_SCOPE FOR_STATEMENT EXPR_STATEMENT
+%type <node> WHILE_STATEMENT DO_STATEMENT NEW_SCOPE FOR_STATEMENT EXPR_STATEMENT
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <node> EXPR_1 EXPR_2 EXPR_3 EXPR_4 EXPR_5 EXPR_6 EXPR_7 EXPR_8
 %type <node> EXPR_9 EXPR_10 EXPR_11 EXPR_12 EXPR_13 EXPR_14 EXPR_15 PRIMATIVES
@@ -90,7 +91,7 @@ BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
         | %empty                { $$ = new Body(); }
     
 STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
-        | DEC_VARIABLE                  { $$ = $1; }
+        | DEC_STATEMENT                  { $$ = $1; }
         | EXPR_STATEMENT                { $$ = new ExprStatement($1); }
         | IFANDORELSEORELIF             { $$ = $1; }
         | WHILE_STATEMENT               { $$ = $1; }
@@ -102,23 +103,23 @@ STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
 EXPR_STATEMENT : EXPR_1 T_SEMICOLON             { $$ = new ExprStatement($1); }
         | T_SEMICOLON                           { ; }
 
-FOR_STATEMENT : T_FOR T_LBRACKET DEC_VARIABLE EXPR_STATEMENT EXPR_1 T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8,$5);}
+FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8,$5);}
         | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8,$5);}
-        | T_FOR T_LBRACKET DEC_VARIABLE EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8);}
-        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$8);}
+        | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$7);}
+        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET   { new For_Statement($3,$4,$7);}
 
 NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      { $$ = new NewScope($2); }
         | T_LCUBRACKET T_RCUBRACKET             { ; }
 
 RETURN_STATEMENT : T_RETURN EXPR_1 T_SEMICOLON            { $$ = new ReturnStatement($2); }
 
-DEC_STATEMENT : TYPE DEC_VARIABLE T_SEMICOLON      { $$ = new DeclareStatement(*$1, *$2, $4); }
+DEC_STATEMENT : TYPE DEC_VAR_LIST T_SEMICOLON      { $$ = new DeclareStatement(*$1, $2); }
 
-DEC_VAR_LIST : DEC_VARIABLE                     { $$ = new DeclareList($1); }
-        | DEC_VAR_LIST T_COMMA DEC_VARIABLE     { $$ = new DeclareList($1,$2); }
+DEC_VAR_LIST : DEC_VARIABLE                     { $$ = new Dec_Var_List($1); }
+        | DEC_VAR_LIST T_COMMA DEC_VARIABLE     { $$ = new Dec_Var_List($3,$1); }
 
-DEC_VARIABLE : T_ID T_ASSIGN EXPR_1             { $$ = new Declare(*$2, $4); }  
-        | T_ID                                  { $$ = new Declare(*$2); }
+DEC_VARIABLE : T_ID T_ASSIGN EXPR_2             { $$ = new Declare(*$1, $3); }  
+        | T_ID                                  { $$ = new Declare(*$1); }
 
 GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON        { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
         | TYPE T_ID T_SEMICOLON                                 { $$ = new GlobalDeclareStatement(*$1, *$2); }

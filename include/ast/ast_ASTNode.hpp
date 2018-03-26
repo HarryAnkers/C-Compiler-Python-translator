@@ -56,6 +56,8 @@ public:
     std::vector<VariableBind> varVector;
     std::vector<FunctionBind> funcVector;
     std::vector<int> ifVector;
+
+    std::string currentType;
     
     int currentScope;
     int currentArgCount;
@@ -128,7 +130,6 @@ public:
                     stop = true;
                 }
             }
-            adjustStack(-1*((i*4)+8));
         }
     }
 
@@ -155,6 +156,8 @@ class PrintTransState
 public:
     int indent;
     std::vector<std::string> gloVariables;
+
+    std::string currentType;
 
     PrintTransState():
         indent(0) {}

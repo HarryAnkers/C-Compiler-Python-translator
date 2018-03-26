@@ -23,3 +23,7 @@ Date,Effort,Developers,Milestones
 19/03/2018,Fixed a assign bug,both,
 20/03/2018,Assign added bitwise added and some bonus ops added,haa516,
 21/03/2018,Added all data types to parser and did precedence for all operators,haa516,
+22/03/2018,Implimented Precedence,haa516,
+24/03/2018,function calls and frame size,haa516,
+25/03/2018,For loops were done,haa516,
+26/03/2018,Added meta data,haa516,
