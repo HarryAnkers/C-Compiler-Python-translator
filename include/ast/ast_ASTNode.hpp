@@ -33,9 +33,13 @@ public:
     std::string type;
     int scope;
     int stackOffset;
+    bool isTemp;
 
     VariableBind(std::string _id, std::string _type, int _scope, int _stackOffset):
-        id(_id),type(_type),scope(_scope), stackOffset(_stackOffset){}
+        id(_id),type(_type),scope(_scope), stackOffset(_stackOffset), isTemp(false){}
+    
+    VariableBind(int _stackOffset, bool _isTemp):
+        stackOffset(_stackOffset), isTemp(_isTemp){}
 
     ~VariableBind(){}
 

@@ -22,6 +22,7 @@ class Body : public ASTNode
                     nextBody->print(dst, state);
                 }
                 statement->print(dst, state);
+                dst<<std::endl;
             }
         }
 
@@ -32,6 +33,7 @@ class Body : public ASTNode
                     nextBody->translate(dst, state);
                 }
                 statement->translate(dst, state);
+                dst<<std::endl;
             }
         }
 

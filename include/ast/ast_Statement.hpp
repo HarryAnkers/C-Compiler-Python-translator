@@ -19,7 +19,7 @@ class ReturnStatement : public ASTNode
             }
             dst<<"return ";
             expression->print(dst, state);
-            dst<<";"<<std::endl;
+            dst<<";";
         }
 
         //translator 
@@ -29,7 +29,6 @@ class ReturnStatement : public ASTNode
             }
             dst<<"return ";
             expression->translate(dst, state);
-            dst<<std::endl;
         }
 
         //compiler 
@@ -62,7 +61,7 @@ class ExprStatement : public ASTNode
                 dst<<"\t";
             }
             expression->print(dst, state);
-            dst<<";"<<std::endl;
+            dst<<";";
         }
 
         //translator 
@@ -71,7 +70,6 @@ class ExprStatement : public ASTNode
                 dst<<"\t";
             }
             expression->translate(dst, state);
-            dst<<std::endl;
         }
 
         //compiler 
@@ -110,7 +108,7 @@ class DeclareStatement : public ASTNode
                 dst<<"=";
                 expression->print(dst, state);
             }
-            dst<<";"<<std::endl;
+            dst<<";";
         }
 
         //translator 
@@ -122,9 +120,8 @@ class DeclareStatement : public ASTNode
             if(expression!=NULL){
                 dst<<"=";
                 expression->translate(dst, state);
-                dst<<std::endl;
             } else { 
-                dst<<"=0"<<std::endl; 
+                dst<<"=0"; 
             }
         }
 
@@ -196,7 +193,7 @@ class GlobalDeclareStatement : public ASTNode
                 dst<<"=";
                 expression->print(dst, state);
             }
-            dst<<";"<<std::endl;
+            dst<<";";
         }
 
         //translator 
@@ -209,9 +206,8 @@ class GlobalDeclareStatement : public ASTNode
             if(expression!=NULL){
                 dst<<"=";
                 expression->translate(dst, state);
-                dst<<std::endl;
             } else { 
-                dst<<"=0"<<std::endl; 
+                dst<<"=0"; 
             }
         }
 
@@ -258,7 +254,7 @@ class NewScope : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"}"<<std::endl;
+            dst<<"}";
         }
 
         //translator 
@@ -304,7 +300,7 @@ class If_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"}"<<std::endl;
+            dst<<"}";
         }
 
         //translator 
@@ -372,7 +368,7 @@ class ElIf_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"}"<<std::endl;
+            dst<<"}";
         }
 
         //translator 
@@ -436,7 +432,7 @@ class Else_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"}"<<std::endl;
+            dst<<"}";
         }
 
         //translator 
@@ -488,7 +484,7 @@ class While_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"}"<<std::endl;
+            dst<<"}";
         }
 
         //translator 
@@ -560,7 +556,7 @@ class Do_While_Statement : public ASTNode
             }
             dst<<"} while ";
             condition->print(dst, state);
-            dst<<";"<<std::endl;
+            dst<<";";
         }
 
         //translator 
@@ -605,6 +601,96 @@ class Do_While_Statement : public ASTNode
         void count(CompilerState &state) const override {
             condition->count(state);
             body->count(state);
+        }
+};
+
+class For_Statement : public ASTNode
+{
+    public:
+        node statement1;
+        node condition;
+        node body;
+        node statement2;
+    
+        For_Statement(node _statement1, node _condition, node _body, node _statement2):
+            statement1(_statement1), condition(_condition), body(_body), statement2(_statement2){}
+        For_Statement(node _statement1, node _condition, node _body):
+            statement1(_statement1), condition(_condition), body(_body), statement2(NULL){}
+
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"For (";
+            statement1->print(dst, state);
+            condition->print(dst, state);
+            if(statement2!=NULL){ statement2->print(dst, state); }
+            dst<<"){"<<std::endl;
+            state.indent++;
+            body->print(dst, state);
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"}";
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            statement1->translate(dst, state);
+            dst<<std::endl;
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"While ";
+            condition->translate(dst, state);
+            dst<<" :"<<std::endl;
+            state.indent++;
+            body->translate(dst, state);
+            if(statement2!=NULL){ statement2->translate(dst,state); }
+            dst<<std::endl;
+            state.indent--;
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.currentScope++;
+
+            int loopLabel = state.label();
+            int exitLabel = state.label();
+            dst<<"$L"<<loopLabel<<":"<<std::endl;
+
+            int reg1 = state.getTempReg(0);
+            condition->compile(dst,state);
+            state.registers[reg1]=0;
+            
+            statement1->compile(dst,state);
+
+            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+
+            body->compile(dst,state);
+            if(statement2!=NULL){ statement2->compile(dst,state); }
+
+            state.popScope();
+            state.currentScope--;
+
+            dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
+            dst<<"nop"<<std::endl;
+            dst<<"$L"<<exitLabel<<":"<<std::endl;
+        }
+
+        //for frame size
+        void count(CompilerState &state) const override {
+            statement1->count(state);
+            condition->count(state);
+            body->count(state);
+            statement2->count(state);
         }
 };
 

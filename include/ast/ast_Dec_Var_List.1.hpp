@@ -64,9 +64,6 @@ class Function : public ASTNode
                 state.currentOffset = state.argSpace - 4;
             }
 
-            dst<<".global "<<id<<std::endl;
-            dst<<".ent "<<id<<std::endl;
-
             dst<<"F"<<state.label()<<":"<<std::endl;
             state.returnId=state.label();
             //need function to count how many variables are used
@@ -94,8 +91,6 @@ class Function : public ASTNode
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<state.functionOffset<<std::endl;
             dst<<"j"<<" "<<"31"<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
-
-            dst<<".end"<<dst::endl
 
             //dst<<state;
         }

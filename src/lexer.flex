@@ -113,6 +113,7 @@ extern "C" int fileno(FILE *stream);
 
 "return"            { return T_RETURN; }
 "while"            { return T_WHILE; }
+"for"            { return T_FOR; }
 "do"            { return T_DO; }
 "if"            { return T_IF; }
 "else"            { return T_ELSE; }
