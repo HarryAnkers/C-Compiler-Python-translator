@@ -305,6 +305,15 @@ class AssignOp
                     return;
                 }
             }
+            for(int i = state.gloVarVector.size()-1;i>=0;i--){
+                if(!state.gloVarVector[i].id.compare(id)){
+                    int reg1 = state.getTempReg(0);
+                    expression->compile(dst,state);
+
+                    dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")($2)"<<std::endl;
+                    return;
+                }
+        }
             throw std::invalid_argument( "variable used was not found (previously declared)" );
         }
 
@@ -569,6 +578,29 @@ public:
         for(int i = state.varVector.size()-1;i>=0;i--){
             if(!state.varVector[i].id.compare(id)){
                 temp = state.varVector[i].type;
+                if(!temp.compare("char")){ size = 1; }
+                else if(!temp.compare("signed char")){ size = 1; }
+                else if(!temp.compare("unsigned char")){ size = 1; }
+                else if(!temp.compare("short")){ size = 2; }
+                else if(!temp.compare("unsigned short")){ size = 2; }
+                else if(!temp.compare("int")){ size = 4; }
+                else if(!temp.compare("unsigned int")){ size = 4; }
+                else if(!temp.compare("long")){ size = 8; }
+                else if(!temp.compare("unsigned long")){ size = 8; }
+                else if(!temp.compare("long long")){ size = 16; }
+                else if(!temp.compare("unsigned long long")){ size = 16; }
+                else if(!temp.compare("float")){ size = 4; }
+                else if(!temp.compare("double")){ size = 8; }
+                else if(!temp.compare("long double")){ size = 32; }
+                else if(!temp.compare("void")){ size = 0; }
+                else{ throw std::invalid_argument( "type not defined" );}
+                dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
+                return;
+            }
+        }
+        for(int i = state.gloVarVector.size()-1;i>=0;i--){
+            if(!state.gloVarVector[i].id.compare(id)){
+                temp = state.gloVarVector[i].type;
                 if(!temp.compare("char")){ size = 1; }
                 else if(!temp.compare("signed char")){ size = 1; }
                 else if(!temp.compare("unsigned char")){ size = 1; }

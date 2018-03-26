@@ -19,6 +19,7 @@ class Dec_Var_List : public ASTNode
         {
             if(nextDec!=NULL){
                 nextDec->print(dst,state);
+                dst<<",";
             }
             currDec->print(dst,state);
         }
@@ -27,7 +28,7 @@ class Dec_Var_List : public ASTNode
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
             if(nextDec!=NULL){
                 nextDec->translate(dst,state);
-                dst<<",";
+                dst<<std::endl;
             }
             currDec->translate(dst,state);
         }
@@ -36,7 +37,6 @@ class Dec_Var_List : public ASTNode
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(nextDec!=NULL){
                 nextDec->compile(dst,state);
-                dst<<",";
             }
             currDec->compile(dst,state);
         }

@@ -113,9 +113,6 @@ class DeclareStatement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<type<<" ";
-            state.currentType = type;
-
             decList->translate(dst,state);
         }
 
@@ -151,8 +148,6 @@ class Declare : public ASTNode
             if(expression!=NULL){
                 dst<<"=";
                 expression->print(dst, state);
-            } else { 
-                dst<<"=0"; 
             }
         }
 
@@ -191,8 +186,86 @@ class Declare : public ASTNode
             }
             int size;
 
-            std::string type=state.currentType;
+            std::string temp=state.currentType;
 
+            if(!temp.compare("char")){ size = 1; }
+            else if(!temp.compare("signed char")){ size = 1; }
+            else if(!temp.compare("unsigned char")){ size = 1; }
+            else if(!temp.compare("short")){ size = 2; }
+            else if(!temp.compare("unsigned short")){ size = 2; }
+            else if(!temp.compare("int")){ size = 4; }
+            else if(!temp.compare("unsigned int")){ size = 4; }
+            else if(!temp.compare("long")){ size = 8; }
+            else if(!temp.compare("unsigned long")){ size = 8; }
+            else if(!temp.compare("long long")){ size = 16; }
+            else if(!temp.compare("unsigned long long")){ size = 16; }
+            else if(!temp.compare("float")){ size = 4; }
+            else if(!temp.compare("double")){ size = 8; }
+            else if(!temp.compare("long double")){ size = 32; }
+            else if(!temp.compare("void")){ size = 0; }
+            else{ throw std::invalid_argument( "type not defined" );}
+
+            state.varCount=state.varCount+size;
+        }
+};
+
+class GlobalDeclare : public ASTNode
+{
+    public:
+        std::string id;
+        double input;
+        bool noInput;
+
+        GlobalDeclare(std::string &_id, double _input):
+        id(_id), input(_input), noInput(false){}
+        GlobalDeclare(std::string &_id):
+        id(_id), noInput(true){}
+
+        //print tester
+        virtual void print(std::ostream &dst, PrintTransState &state) const override
+        {
+            dst<<id;
+            if(noInput==false){
+                dst<<"="<<input;
+            }
+        }
+
+        //translator 
+        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+            state.gloVariables.push_back(id);
+            dst<<id;
+            if(noInput==false){
+                dst<<"="<<input;
+            } else { 
+                dst<<"=0"; 
+            }
+        }
+
+        //compiler 
+        virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            state.gloVarVector.push_back(GloVarBind(id,state.currentType));
+
+            dst<<id<<":"<<std::endl;
+            if((state.currentType!="float")||(state.currentType!="double")||(state.currentType!="long double")){
+                //input-=(input%temp);
+            }
+
+            if(noInput==false){
+                dst<<".word "<<input<<std::endl;
+            } else {
+                dst<<".word "<<"0"<<std::endl;   
+            }
+
+            if((state.currentType!="char")||(state.currentType!="signed char")||(state.currentType!="unsigned char")){
+                dst<<".align 1"<<std::endl;
+            } else {
+                dst<<".align 2"<<std::endl;
+            }
+
+            dst<<".type "<<id<<", @object"<<std::endl;
+
+            std::string type=state.currentType;
+            int size=0;
             if(!type.compare("char")){ size = 4; /*techincally 1*/ }
             else if(!type.compare("signed char")){ size = 4; /*techincally 1*/ }
             else if(!type.compare("unsigned char")){ size = 4; /*techincally 1*/ }
@@ -210,67 +283,7 @@ class Declare : public ASTNode
             else if(!type.compare("void")){ size = 0; }
             else{ throw std::invalid_argument( "type not defined" );}
 
-            state.varCount=state.varCount+size;
-        }
-};
-
-class GlobalDeclareStatement : public ASTNode
-{
-    public:
-        std::string type;
-        std::string id;
-        node expression;
-
-        GlobalDeclareStatement(std::string &_type, std::string &_id, node _expression):
-        type(_type), id(_id), expression(_expression){}
-        GlobalDeclareStatement(std::string &_type, std::string &_id):
-        type(_type), id(_id), expression(NULL){}
-
-        //print tester
-        virtual void print(std::ostream &dst, PrintTransState &state) const override
-        {
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<type<<" "<<id;
-            if(expression!=NULL){
-                dst<<"=";
-                expression->print(dst, state);
-            }
-            dst<<";";
-        }
-
-        //translator 
-        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            state.gloVariables.push_back(id);
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<id;
-            if(expression!=NULL){
-                dst<<"=";
-                expression->translate(dst, state);
-            } else { 
-                dst<<"=0"; 
-            }
-        }
-
-        //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int offset=state.offset();
-            state.varVector.push_back(VariableBind(id, type, state.currentScope,offset));
-            if(expression!=NULL){
-                int reg1 = state.getTempReg(0);
-                expression->compile(dst,state);
-                dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
-                state.registers[reg1]=0;
-            } else {
-                int reg1 = state.getTempReg(1);
-                dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-	            dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
-                state.registers[reg1]=0;
-            }
-            //not sure if correct
+            dst<<".size "<<id<<", "<<size<<std::endl;
         }
 
         virtual void count(CompilerState &state) const override {}

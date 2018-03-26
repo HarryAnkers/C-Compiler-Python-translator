@@ -32,6 +32,14 @@ public:
                 return;
             }
         }
+        for(int i = state.gloVarVector.size()-1;i>=0;i--){
+            if(!state.gloVarVector[i].id.compare(id)){
+                int regNo = state.getTempReg(1);
+                dst<<"lui "<<"$"<<regNo<<" , "<<"%hi("<<id<<")"<<std::endl;
+                dst<<"lw "<<"$"<<regNo<<" , "<<"%lo("<<id<<")($2)"<<std::endl;
+                return;
+            }
+        }
         throw std::invalid_argument( "variable used was not found (previously declared)" );
     }
 

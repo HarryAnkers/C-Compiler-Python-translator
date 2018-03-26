@@ -65,9 +65,10 @@ class Function : public ASTNode
             }
 
             dst<<".global "<<id<<std::endl;
-            dst<<".ent "<<id<<std::endl<<std::endl;
+            dst<<".ent "<<id<<std::endl;
+            dst<<".type "<<id<<", @function"<<std::endl<<std::endl;
 
-            dst<<"F"<<state.label()<<":"<<std::endl;
+            dst<<id<<":"<<std::endl;
             state.returnId=state.label();
             //need function to count how many variables are used
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*state.functionOffset)<<std::endl;

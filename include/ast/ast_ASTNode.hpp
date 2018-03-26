@@ -49,12 +49,30 @@ public:
     }
 };
 
+class GloVarBind
+{
+public:
+    std::string id;
+    std::string type;
+
+    GloVarBind(std::string _id, std::string _type):
+        id(_id),type(_type){}
+
+    ~GloVarBind(){}
+
+    friend std::ostream& operator<< (std::ostream &o, GloVarBind b){
+        o << "element: "<<b.id<<", type: "<< b.type;
+        return o;
+    }
+};
+
 class CompilerState
 {
 public:
     int labelId;
     std::vector<VariableBind> varVector;
     std::vector<FunctionBind> funcVector;
+    std::vector<GloVarBind> gloVarVector;
     std::vector<int> ifVector;
 
     std::string currentType;

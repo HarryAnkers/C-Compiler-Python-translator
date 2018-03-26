@@ -33,7 +33,8 @@
 %token T_RETURN T_SIZE_OF T_ELSE T_IF T_WHILE T_DO T_FOR
 
 %type <node> TOP_LEVEL TOP_LIST DEC_FUNCTION BODY
-%type <node> DEC_VAR_LIST GLO_DEC_VARIABLE DEC_VARIABLE DEC_STATEMENT
+%type <node> DEC_VAR_LIST DEC_VARIABLE DEC_STATEMENT
+%type <node> GLO_DEC_VAR_LIST GLO_DEC_VARIABLE GLO_DEC_STATEMENT
 %type <node> STATEMENT RETURN_STATEMENT 
 %type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
 %type <node> WHILE_STATEMENT DO_STATEMENT NEW_SCOPE FOR_STATEMENT EXPR_STATEMENT
@@ -56,9 +57,9 @@ ROOT : TOP_LEVEL { g_root = $1; }
 TOP_LEVEL : TOP_LIST                    { $$ = $1; }
 
 TOP_LIST : TOP_LIST DEC_FUNCTION        {$$ = new Top_List($2,$1); }
-        | TOP_LIST GLO_DEC_VARIABLE     {$$ = new Top_List($2,$1); }
+        | TOP_LIST GLO_DEC_STATEMENT    {$$ = new Top_List($2,$1); }
         | DEC_FUNCTION                  {$$ = $1; }
-        | GLO_DEC_VARIABLE              {$$ = $1; }
+        | GLO_DEC_STATEMENT             {$$ = $1; }
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
 
@@ -121,8 +122,16 @@ DEC_VAR_LIST : DEC_VARIABLE                     { $$ = new Dec_Var_List($1); }
 DEC_VARIABLE : T_ID T_ASSIGN EXPR_2             { $$ = new Declare(*$1, $3); }  
         | T_ID                                  { $$ = new Declare(*$1); }
 
-GLO_DEC_VARIABLE : TYPE T_ID T_ASSIGN EXPR_1 T_SEMICOLON        { $$ = new GlobalDeclareStatement(*$1, *$2, $4); }  
-        | TYPE T_ID T_SEMICOLON                                 { $$ = new GlobalDeclareStatement(*$1, *$2); }
+GLO_DEC_STATEMENT : TYPE GLO_DEC_VAR_LIST T_SEMICOLON   { $$ = new DeclareStatement(*$1, $2); }
+
+GLO_DEC_VAR_LIST : GLO_DEC_VARIABLE                     { $$ = new Dec_Var_List($1); }
+        | GLO_DEC_VAR_LIST T_COMMA GLO_DEC_VARIABLE     { $$ = new Dec_Var_List($3,$1); }
+
+GLO_DEC_VARIABLE : T_ID T_ASSIGN T_NUMBER                       { $$ = new GlobalDeclare(*$1, $3); } 
+        | T_ID T_ASSIGN T_MINUS T_NUMBER                        { $$ = new GlobalDeclare(*$1, -$4); }
+        | T_ID T_ASSIGN T_LBRACKET T_NUMBER T_RBRACKET          { $$ = new GlobalDeclare(*$1, $4); } 
+        | T_ID T_ASSIGN T_LBRACKET T_MINUS T_NUMBER T_RBRACKET  { $$ = new GlobalDeclare(*$1, -$5); } 
+        | T_ID                                                  { $$ = new GlobalDeclare(*$1); }
 
 IFANDORELSEORELIF : IFANDORELIF ELSE_STATEMENT  { $$ = new IfElseList($1, $2); }
         | IFANDORELIF                           { $$ = $1; }
