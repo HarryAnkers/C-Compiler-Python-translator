@@ -1,4 +1,8 @@
+def f0():
+	return
+
 def main():
+	f0()
 	return 10
 
 # Boilerplat

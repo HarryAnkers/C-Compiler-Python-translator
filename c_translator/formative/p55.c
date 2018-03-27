@@ -1,4 +1,4 @@
-int main(int a, int b, int c, int d)
+int f(int a, int b, int c, int d)
 {
     if(a)
         a=1;
@@ -21,4 +21,8 @@ int main(int a, int b, int c, int d)
     else
         a=8;
         return a;
+}
+
+int main(){
+    return f(1,2,3,4);
 }

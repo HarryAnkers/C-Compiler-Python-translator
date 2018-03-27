@@ -1,7 +1,14 @@
+x=1
+def f0():
+	global x
+	if x :
+		return
+
+
 def main():
-	z=0
-	z=7
-	return z
+	global x
+	f0()
+	return 10
 
 # Boilerplat
 if __name__ == "__main__":

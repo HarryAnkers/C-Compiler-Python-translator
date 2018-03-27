@@ -1,4 +1,4 @@
-def main(a,b):
+def f(a,b):
 	x=0
 	While (1 and (x > 50)) :
 		x=(x+1)
@@ -8,7 +8,8 @@ def main(a,b):
 
 	return x
 
-
+def main():
+	return f(1,2)
 
 # Boilerplat
 if __name__ == "__main__":

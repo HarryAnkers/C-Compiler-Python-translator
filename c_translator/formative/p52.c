@@ -1,4 +1,4 @@
-int main(int a, int b, int c, int d)
+int f(int a, int b, int c, int d)
 {
     if(a){
         return 1;
@@ -12,4 +12,8 @@ int main(int a, int b, int c, int d)
     if(d){
         return 50;
     }
+}
+
+int main(){
+    return f(1,2,3,4);
 }

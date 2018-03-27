@@ -1,4 +1,4 @@
-int main(int a, int b)
+int f(int a, int b)
 {
     if(a){
         return 1;
@@ -9,4 +9,8 @@ int main(int a, int b)
     } else if(b-1){
         return 15;
     }
+}
+
+int main(){
+    return f(1,2);
 }

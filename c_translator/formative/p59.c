@@ -1,4 +1,4 @@
-int main(int a, int b)
+int f(int a, int b)
 {
     int x=0;
     while(1&&(x<50)){
@@ -8,4 +8,8 @@ int main(int a, int b)
         x=x-1;
     }
     return x;
+}
+
+int main(){
+    return f(1,2);
 }

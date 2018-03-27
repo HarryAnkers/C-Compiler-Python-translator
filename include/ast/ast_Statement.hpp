@@ -9,7 +9,9 @@ class ReturnStatement : public ASTNode
         node expression;
 
         ReturnStatement(node _expression):
-        expression(_expression){}
+            expression(_expression){}
+        ReturnStatement():
+            expression(){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -17,8 +19,11 @@ class ReturnStatement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"return ";
-            expression->print(dst, state);
+            dst<<"return";
+            if(expression!=NULL){
+                dst<<" ";
+                expression->print(dst, state);
+            }
             dst<<";";
         }
 
@@ -27,22 +32,29 @@ class ReturnStatement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"return ";
-            expression->translate(dst, state);
+            dst<<"return";
+            if(expression!=NULL){
+                dst<<" ";
+                expression->translate(dst, state);
+            }
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg1 = state.getTempReg(0);
-            expression->compile(dst,state);
-            dst<<"add"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
-            state.registers[reg1]=0;
+            if(expression!=NULL){
+                int reg1 = state.getTempReg(0);
+                expression->compile(dst,state);
+                dst<<"add"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
+                state.registers[reg1]=0;
+            }
             dst<<"b"<<" "<<"$E"<<state.returnId<<std::endl;
         }
 
         //for frame size
         void count(CompilerState &state) const override {
-            expression->count(state);
+            if(expression!=NULL){
+                expression->count(state);
+            }
         }
 };
 
@@ -52,36 +64,46 @@ class ExprStatement : public ASTNode
         node expression;
 
         ExprStatement(node _expression):
-        expression(_expression){}
+            expression(_expression){}
+        ExprStatement():
+            expression(NULL){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
+            if(expression!=NULL){
+                for(int i=state.indent;i!=0;i--){
+                    dst<<"\t";
+                }
+                expression->print(dst, state);
+                dst<<";";
             }
-            expression->print(dst, state);
-            dst<<";";
         }
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
+            if(expression!=NULL){
+                for(int i=state.indent;i!=0;i--){
+                    dst<<"\t";
+                }
+                expression->translate(dst, state);
             }
-            expression->translate(dst, state);
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg1 = state.getTempReg(0);
-            expression->compile(dst,state);
-            state.registers[reg1]=0;
+            if(expression!=NULL){
+                int reg1 = state.getTempReg(0);
+                expression->compile(dst,state);
+                state.registers[reg1]=0;
+            }
         }
 
         //for frame size
         void count(CompilerState &state) const override {
-            expression->count(state);
+            if(expression!=NULL){
+                expression->count(state);
+            }
         }
 };
 
@@ -351,7 +373,9 @@ class If_Statement : public ASTNode
             dst<<"if (";
             condition->print(dst, state);
             dst<<")"<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
         }
 
         //translator 
@@ -362,7 +386,9 @@ class If_Statement : public ASTNode
             dst<<"if ";
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -409,7 +435,9 @@ class ElIf_Statement : public ASTNode
             dst<<"else if (";
             condition->print(dst, state);
             dst<<")"<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
         }
 
         //translator 
@@ -420,7 +448,9 @@ class ElIf_Statement : public ASTNode
             dst<<"elif(";
             condition->translate(dst, state);
             dst<<") :"<<std::endl;
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -462,7 +492,9 @@ class Else_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"else"<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
         }
 
         //translator 
@@ -471,7 +503,9 @@ class Else_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"else :"<<std::endl;
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -503,7 +537,9 @@ class While_Statement : public ASTNode
             dst<<"While ";
             condition->print(dst, state);
             dst<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
         }
 
         //translator 
@@ -514,7 +550,9 @@ class While_Statement : public ASTNode
             dst<<"While ";
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
@@ -560,7 +598,9 @@ class Do_While_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"do"<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
@@ -636,7 +676,9 @@ class For_Statement : public ASTNode
             if(statement2!=NULL){ statement2->print(dst, state); }
             dst<<")"<<std::endl;
 
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
         }
 
         //translator 
@@ -653,7 +695,9 @@ class For_Statement : public ASTNode
             condition->translate(dst, state);
             dst<<" :"<<std::endl;
             
+            state.indent++;
             body->translate(dst, state);
+            state.indent--;
             if(statement2!=NULL){ statement2->translate(dst,state); }
             dst<<std::endl;
         }

@@ -2,10 +2,10 @@ def main():
 	z=0
 	x=4
 	y=5
-		z=(x+y)
+	z=(x+y)
 
 	a=34
-		z=(a+z)
+	z=(a+z)
 
 	return z
 

@@ -19,8 +19,11 @@ class Function : public ASTNode
         {
             dst<<type<<" "<<id<<"(";
             arguments->print(dst, state);
-            dst<<")"<<std::endl;
+            dst<<"){"<<std::endl;
+            state.indent++;
             body->print(dst, state);
+            state.indent--;
+            dst<<"}"<<std::endl;
         }
 
         //translator 

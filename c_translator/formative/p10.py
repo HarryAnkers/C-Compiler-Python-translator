@@ -6,7 +6,7 @@ def f1(a):
 
 def main():
     f1(f0(1,2,3,4,5,6))
-    return f(1,2,3,4,5,6)
+    return f0(1,2,3,4,5,6)
 
 # Boilerplat
 if __name__ == "__main__":
