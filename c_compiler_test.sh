@@ -25,21 +25,30 @@ for i in ${input_dir}/*.c ; do
     for j in ${driver_dir}/*.c ; do
         
         base=$(echo $i | sed -E -e "s|${input_dir}/([^.]+)[.]c|\1|g");
-        driver=$(echo $i | sed -E -e "s|${driver_dir}/([^.]+)[.]c|\1|g");
+        driver=$(echo $j | sed -E -e "s|${driver_dir}/([^.]+)[.]c|\1|g");
         
             if [[ ${have_compiler} -eq 0 ]] ; then
                 
                 # Compile ${NAME}.c using the compiler under test into assembly.
                 echo "compiling $i using ${compiler}..."
                 $compiler --compile $i -o ${working}/$base-got.s
+                if [[ ! -f ${working}/$base-got.s ]] ; then
+                    >&2 echo "ERROR : Your C Compiler failed to compile $i into $base-got.s"
+                fi
 
                 #Compile ${NAME}_driver.c using MIPS GCC. 
                 echo "compiling $j using mips-linux-gnu-gcc..."                               
                 mips-linux-gnu-gcc -c $j -o ${working}/$driver-got.o
+                if [[ ! -f ${working}/$driver-got.o ]] ; then
+                    >&2 echo "ERROR : mips-linux-gnu-gcc failed to compile $j into $driver-got.o"
+                fi
 
                 #Link the generated assembly and the driver object into a MIPS executable.
                 echo "linking assembly and driver object..."
-                mips-linux-gnu-gcc -static ${working}/$base-got.s ${working}/$driver-got.s -o ${working_exec}/$base-got
+                mips-linux-gnu-gcc -static ${working}/$base-got.s ${working}/$driver-got.o -o ${working_exec}/$base-got
+                if [[ ! -f ${working_exec}/$base-got ]] ; then
+                    >&2 echo "ERROR : mips-linux-gnu-gcc failed in linking $base-got.s and $driver-got.o into an executable"
+                fi
 
                 # Run the executable under QEMU
                 qemu-mips ${working_exec}/$base-got
