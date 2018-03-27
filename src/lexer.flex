@@ -121,7 +121,7 @@ extern "C" int fileno(FILE *stream);
 
 [0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
-([A-Z]|[a-z]|[0-9])+          { yylval.string=new std::string(yytext); return T_ID; }
+([A-Z]|[a-z]|[_])([A-Z]|[a-z]|[_]|[0-9])*          { yylval.string=new std::string(yytext); return T_ID; }
 
 [ \t\r\n]+		{;}
 

@@ -51,17 +51,17 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : TOP_LEVEL { g_root = $1; }
+ROOT : TOP_LIST { g_root = $1; }
 
 //choose main in main body so it gets priority
 TOP_LEVEL : TOP_LIST                    { $$ = $1; }
 
-TOP_LIST : TOP_LIST DEC_FUNCTION        {$$ = new Top_List($2,$1); }
-        | TOP_LIST GLO_DEC_STATEMENT    {$$ = new Top_List($2,$1); }
-        | DEC_FUNCTION                  {$$ = $1; }
-        | GLO_DEC_STATEMENT             {$$ = $1; }
+TOP_LIST : TOP_LIST DEC_FUNCTION        { $$ = new Top_List($2,$1); }
+        | TOP_LIST GLO_DEC_STATEMENT    { $$ = new Top_List($2,$1); }
+        | DEC_FUNCTION                  { $$ = new Top_List($1); }
+        | GLO_DEC_STATEMENT             { $$ = new Top_List($1); }
 
-DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET BODY                                    { $$ = new Function(*$1, *$2, $4, $6); }
+DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3, *$4, $1); }
         | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }

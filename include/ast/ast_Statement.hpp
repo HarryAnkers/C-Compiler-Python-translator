@@ -157,8 +157,8 @@ class Declare : public ASTNode
             if(expression!=NULL){
                 dst<<"=";
                 expression->translate(dst, state);
-            } else { 
-                dst<<"=0"; 
+            } else {
+                dst<<"=0";
             }
         }
 
@@ -236,8 +236,8 @@ class GlobalDeclare : public ASTNode
             dst<<id;
             if(noInput==false){
                 dst<<"="<<input;
-            } else { 
-                dst<<"=0"; 
+            } else {
+                dst<<"=0";
             }
         }
 
@@ -316,9 +316,7 @@ class NewScope : public ASTNode
 
         //translator 
         virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            state.indent++;
             body->translate(dst, state);
-            state.indent--;
         }
 
         //compiler 

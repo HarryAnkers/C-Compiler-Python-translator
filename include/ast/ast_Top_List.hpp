@@ -11,6 +11,8 @@ public:
 
     Top_List(node _function, node _nextFunction):
         function(_function), nextFunction(_nextFunction){}
+    Top_List(node _function):
+        function(_function), nextFunction(NULL){}
 
     //print tester
     virtual void print(std::ostream &dst, PrintTransState &state) const override

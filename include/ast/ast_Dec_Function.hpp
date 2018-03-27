@@ -28,6 +28,7 @@ class Function : public ASTNode
             dst<<"def "<<id<<"(";
             arguments->translate(dst, state);
             dst<<"):"<<std::endl;
+            state.indent++;
             for(unsigned int i=0;i<state.gloVariables.size();i++){
                 for(int i=state.indent;i!=0;i--){
                     dst<<"\t";
@@ -35,6 +36,7 @@ class Function : public ASTNode
                 dst<<"global "<<state.gloVariables[i]<<std::endl;
             }
             body->translate(dst, state);
+            state.indent--;
         }
 
         //compiler 
