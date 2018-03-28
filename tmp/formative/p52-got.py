@@ -1,14 +1,14 @@
 def f(a,b,c,d):
-	if a :
+	if (a) :
 		return 1
 
-	if b :
+	if (b) :
 		return 15
 
-	if c :
+	if (c) :
 		return 22
 
-	if d :
+	if (d) :
 		return 50
 
 

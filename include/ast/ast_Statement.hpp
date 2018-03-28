@@ -360,10 +360,10 @@ class If_Statement : public ASTNode
 {
     public:
         node condition;
-        node body;
+        node statement1;
     
-        If_Statement(node _condition, node _body):
-        condition(_condition), body(_body){}
+        If_Statement(node _condition, node _statement1):
+        condition(_condition), statement1(_statement1){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -372,10 +372,10 @@ class If_Statement : public ASTNode
                 dst<<"\t";
             }
             dst<<"if (";
-            condition->print(dst, state);
+            condition->print(dst,state);
             dst<<")"<<std::endl;
             state.indent++;
-            body->print(dst, state);
+            statement1->print(dst,state);
             state.indent--;
         }
 
@@ -384,18 +384,16 @@ class If_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"if ";
-            condition->translate(dst, state);
-            dst<<" :"<<std::endl;
+            dst<<"if (";
+            condition->translate(dst,state);
+            dst<<") :"<<std::endl;
             state.indent++;
-            body->translate(dst, state);
+            statement1->translate(dst,state);
             state.indent--;
         }
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.ifVector.push_back(state.label());
-
             int reg1 = state.getTempReg(0);
             condition->compile(dst,state);
             state.registers[reg1]=0;
@@ -403,10 +401,7 @@ class If_Statement : public ASTNode
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
 
-            body->compile(dst,state);
-
-            dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
-            dst<<"nop"<<std::endl;
+            statement1->compile(dst,state);
 
             dst<<"$L"<<state.label()<<std::endl;
         }
@@ -414,18 +409,19 @@ class If_Statement : public ASTNode
         //for frame size
         void count(CompilerState &state) const override {
             condition->count(state);
-            body->count(state);
+            statement1->count(state);
         }
 };
 
-class ElIf_Statement : public ASTNode
+class IfElse_Statement : public ASTNode
 {
     public:
         node condition;
-        node body;
+        node statement1;
+        node statement2;
     
-        ElIf_Statement(node _condition, node _body):
-        condition(_condition), body(_body){}
+        IfElse_Statement(node _condition, node _statement1, node _statement2):
+        condition(_condition), statement1(_statement1), statement2(_statement2){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -433,11 +429,21 @@ class ElIf_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"else if (";
-            condition->print(dst, state);
+            dst<<"if (";
+            condition->print(dst,state);
             dst<<")"<<std::endl;
             state.indent++;
-            body->print(dst, state);
+            statement1->print(dst,state);
+            dst<<std::endl;
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"else";
+            dst<<std::endl;
+            state.indent++;
+            statement2->print(dst,state);
+            dst<<std::endl;
             state.indent--;
         }
 
@@ -446,11 +452,21 @@ class ElIf_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"elif(";
-            condition->translate(dst, state);
+            dst<<"if (";
+            condition->translate(dst,state);
             dst<<") :"<<std::endl;
             state.indent++;
-            body->translate(dst, state);
+            statement1->translate(dst,state);
+            dst<<std::endl;
+            state.indent--;
+            for(int i=state.indent;i!=0;i--){
+                dst<<"\t";
+            }
+            dst<<"else :";
+            dst<<std::endl;
+            state.indent++;
+            statement2->translate(dst,state);
+            dst<<std::endl;
             state.indent--;
         }
 
@@ -463,60 +479,21 @@ class ElIf_Statement : public ASTNode
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
 
-            body->compile(dst,state);
+            statement1->compile(dst,state);
 
-            dst<<"b"<<" "<<"$L"<<state.ifVector[state.ifVector.size()-1]<<std::endl;
+            dst<<"b"<<" "<<"$L"<<state.labelId+1<<std::endl;
             dst<<"nop"<<std::endl;
 
+            dst<<"$L"<<state.label()<<std::endl;
+            statement2->compile(dst,state);
             dst<<"$L"<<state.label()<<std::endl;
         }
 
         //for frame size
         void count(CompilerState &state) const override {
             condition->count(state);
-            body->count(state);
-        }
-};
-
-class Else_Statement : public ASTNode
-{
-    public:
-        node body;
-    
-        Else_Statement(node _body):
-        body(_body){}
-
-        //print tester
-        virtual void print(std::ostream &dst, PrintTransState &state) const override
-        {
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"else"<<std::endl;
-            state.indent++;
-            body->print(dst, state);
-            state.indent--;
-        }
-
-        //translator 
-        virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-            for(int i=state.indent;i!=0;i--){
-                dst<<"\t";
-            }
-            dst<<"else :"<<std::endl;
-            state.indent++;
-            body->translate(dst, state);
-            state.indent--;
-        }
-
-        //compiler 
-        virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            body->compile(dst,state);
-        }
-
-        //for frame size
-        void count(CompilerState &state) const override {
-            body->count(state);
+            statement1->count(state);
+            statement2->count(state);
         }
 };
 
