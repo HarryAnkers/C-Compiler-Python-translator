@@ -501,10 +501,10 @@ class While_Statement : public ASTNode
 {
     public:
         node condition;
-        node body;
+        node statement;
     
-        While_Statement(node _condition, node _body):
-        condition(_condition), body(_body){}
+        While_Statement(node _condition, node _statement):
+        condition(_condition), statement(_statement){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -512,11 +512,11 @@ class While_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"While ";
+            dst<<"While (";
             condition->print(dst, state);
-            dst<<std::endl;
+            dst<<")"<<std::endl;
             state.indent++;
-            body->print(dst, state);
+            statement->print(dst, state);
             state.indent--;
         }
 
@@ -525,11 +525,11 @@ class While_Statement : public ASTNode
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            dst<<"While ";
+            dst<<"While (";
             condition->translate(dst, state);
-            dst<<" :"<<std::endl;
+            dst<<") :"<<std::endl;
             state.indent++;
-            body->translate(dst, state);
+            statement->translate(dst, state);
             state.indent--;
         }
 
@@ -556,7 +556,7 @@ class While_Statement : public ASTNode
         //for frame size
         void count(CompilerState &state) const override {
             condition->count(state);
-            body->count(state);
+            statement->count(state);
         }
 };
 
