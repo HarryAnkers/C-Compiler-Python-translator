@@ -31,7 +31,7 @@ for i in ${input_dir}/*.c ; do
                 
                 # Compile ${NAME}.c using the compiler under test into assembly.
                 echo "compiling $i using ${compiler}..."
-                $compiler --compile $i -o ${working}/$base-got.s
+                $compiler -S $i -o ${working}/$base-got.s
                 if [[ ! -f ${working}/$base-got.s ]] ; then
                     >&2 echo "ERROR : Your C Compiler failed to compile $i into $base-got.s"
                 fi
