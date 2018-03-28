@@ -117,7 +117,6 @@ extern "C" int fileno(FILE *stream);
 "do"            { return T_DO; }
 "if"            { return T_IF; }
 "else"          { return T_ELSE; }
-"else if"          { return T_ELIF; }
 
 [0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 

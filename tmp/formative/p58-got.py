@@ -1,8 +1,13 @@
+def f(a,b,c,d):
+	if (a) :
+		return 12
+	else :
+		if (c) :
+			return 214
+
+
 def main():
-	x=0
-	y=1
-	z=((y < x) and x)
-	return z
+	return f(1,2,3,4)
 
 # Boilerplat
 if __name__ == "__main__":

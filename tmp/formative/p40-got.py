@@ -1,7 +1,7 @@
 def main():
 	x=0
 	y=1
-	z=(y == (x > x))
+	z=(y == (x < x))
 	return z
 
 # Boilerplat

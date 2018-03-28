@@ -1,15 +1,14 @@
-def f(a,b):
+def f(a,b,c,d):
 	if (a) :
-		return 1
-
-	else :
-		if ((b-1)) :
-			return 15
-
+		if (b) :
+			return 23
+		else :
+			if (c) :
+				return 7
 
 
 def main():
-	return f(1,2)
+	return f(1,2,3,4)
 
 # Boilerplat
 if __name__ == "__main__":

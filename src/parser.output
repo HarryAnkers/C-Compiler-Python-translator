@@ -1,11 +1,3 @@
-Nonterminals useless in grammar
-
-   ELSE_IF_STATEMENT
-   ELSE_STATEMENT
-   IFANDORELIF
-   IF_STATEMENT
-
-
 Terminals unused in grammar
 
    T_LSQBRACKET
@@ -78,7 +70,7 @@ Grammar
    34 STATEMENT: RETURN_STATEMENT
    35          | DEC_STATEMENT
    36          | EXPR_STATEMENT
-   37          | IFANDORELSEORELIF
+   37          | IF_OR_ELSE
    38          | WHILE_STATEMENT
    39          | DO_STATEMENT
    40          | NEW_SCOPE
@@ -116,8 +108,8 @@ Grammar
    62                 | T_ID T_ASSIGN T_LBRACKET T_MINUS T_NUMBER T_RBRACKET
    63                 | T_ID
 
-   64 IFANDORELSEORELIF: T_IF EXPR_1 STATEMENT T_ELSE STATEMENT
-   65                  | T_IF EXPR_1 STATEMENT
+   64 IF_OR_ELSE: T_IF EXPR_1 STATEMENT T_ELSE STATEMENT
+   65           | T_IF EXPR_1 STATEMENT
 
    66 WHILE_STATEMENT: T_WHILE EXPR_1 STATEMENT
 
@@ -326,7 +318,7 @@ GLO_DEC_VAR_LIST (95)
     on left: 57 58, on right: 56 58
 GLO_DEC_VARIABLE (96)
     on left: 59 60 61 62 63, on right: 57 58
-IFANDORELSEORELIF (97)
+IF_OR_ELSE (97)
     on left: 64 65, on right: 37
 WHILE_STATEMENT (98)
     on left: 66, on right: 38
@@ -878,33 +870,33 @@ State 46
     T_FOR              [reduce using rule 33 (BODY)]
     $default           reduce using rule 33 (BODY)
 
-    TYPE               go to state 68
-    BODY               go to state 69
-    STATEMENT          go to state 70
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    BODY              go to state 69
+    STATEMENT         go to state 70
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 47
@@ -1006,33 +998,33 @@ State 51
     T_FOR              [reduce using rule 33 (BODY)]
     $default           reduce using rule 33 (BODY)
 
-    TYPE               go to state 68
-    BODY               go to state 97
-    STATEMENT          go to state 70
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    BODY              go to state 97
+    STATEMENT         go to state 70
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 52
@@ -1248,8 +1240,8 @@ State 63
 
 State 64
 
-   64 IFANDORELSEORELIF: T_IF . EXPR_1 STATEMENT T_ELSE STATEMENT
-   65                  | T_IF . EXPR_1 STATEMENT
+   64 IF_OR_ELSE: T_IF . EXPR_1 STATEMENT T_ELSE STATEMENT
+   65           | T_IF . EXPR_1 STATEMENT
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -1350,32 +1342,32 @@ State 66
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 128
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 128
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 67
@@ -1437,32 +1429,32 @@ State 69
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 134
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 134
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 70
@@ -1509,7 +1501,7 @@ State 75
 
 State 76
 
-   37 STATEMENT: IFANDORELSEORELIF .
+   37 STATEMENT: IF_OR_ELSE .
 
     $default  reduce using rule 37 (STATEMENT)
 
@@ -1746,32 +1738,32 @@ State 97
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 134
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 134
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 98
@@ -2410,8 +2402,8 @@ State 125
 
 State 126
 
-   64 IFANDORELSEORELIF: T_IF EXPR_1 . STATEMENT T_ELSE STATEMENT
-   65                  | T_IF EXPR_1 . STATEMENT
+   64 IF_OR_ELSE: T_IF EXPR_1 . STATEMENT T_ELSE STATEMENT
+   65           | T_IF EXPR_1 . STATEMENT
    69 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_LCUBRACKET       shift, and go to state 51
@@ -2448,32 +2440,32 @@ State 126
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 174
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 174
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 127
@@ -2515,32 +2507,32 @@ State 127
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 175
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 175
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 128
@@ -3268,13 +3260,13 @@ State 173
 
 State 174
 
-   64 IFANDORELSEORELIF: T_IF EXPR_1 STATEMENT . T_ELSE STATEMENT
-   65                  | T_IF EXPR_1 STATEMENT .
+   64 IF_OR_ELSE: T_IF EXPR_1 STATEMENT . T_ELSE STATEMENT
+   65           | T_IF EXPR_1 STATEMENT .
 
     T_ELSE  shift, and go to state 205
 
-    T_ELSE    [reduce using rule 65 (IFANDORELSEORELIF)]
-    $default  reduce using rule 65 (IFANDORELSEORELIF)
+    T_ELSE    [reduce using rule 65 (IF_OR_ELSE)]
+    $default  reduce using rule 65 (IF_OR_ELSE)
 
 
 State 175
@@ -3710,7 +3702,7 @@ State 204
 
 State 205
 
-   64 IFANDORELSEORELIF: T_IF EXPR_1 STATEMENT T_ELSE . STATEMENT
+   64 IF_OR_ELSE: T_IF EXPR_1 STATEMENT T_ELSE . STATEMENT
 
     T_LCUBRACKET       shift, and go to state 51
     T_LBRACKET         shift, and go to state 52
@@ -3745,32 +3737,32 @@ State 205
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 213
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 213
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 206
@@ -3905,9 +3897,9 @@ State 212
 
 State 213
 
-   64 IFANDORELSEORELIF: T_IF EXPR_1 STATEMENT T_ELSE STATEMENT .
+   64 IF_OR_ELSE: T_IF EXPR_1 STATEMENT T_ELSE STATEMENT .
 
-    $default  reduce using rule 64 (IFANDORELSEORELIF)
+    $default  reduce using rule 64 (IF_OR_ELSE)
 
 
 State 214
@@ -3954,32 +3946,32 @@ State 215
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 220
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 220
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 216
@@ -4028,32 +4020,32 @@ State 217
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 222
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 222
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 218
@@ -4119,32 +4111,32 @@ State 221
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 224
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 224
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 222
@@ -4191,32 +4183,32 @@ State 223
     T_DO               shift, and go to state 66
     T_FOR              shift, and go to state 67
 
-    TYPE               go to state 68
-    STATEMENT          go to state 225
-    EXPR_STATEMENT     go to state 71
-    FOR_STATEMENT      go to state 72
-    NEW_SCOPE          go to state 73
-    RETURN_STATEMENT   go to state 74
-    DEC_STATEMENT      go to state 75
-    IFANDORELSEORELIF  go to state 76
-    WHILE_STATEMENT    go to state 77
-    DO_STATEMENT       go to state 78
-    EXPR_1             go to state 79
-    EXPR_2             go to state 80
-    EXPR_3             go to state 81
-    EXPR_4             go to state 82
-    EXPR_5             go to state 83
-    EXPR_6             go to state 84
-    EXPR_7             go to state 85
-    EXPR_8             go to state 86
-    EXPR_9             go to state 87
-    EXPR_10            go to state 88
-    EXPR_11            go to state 89
-    EXPR_12            go to state 90
-    EXPR_13            go to state 91
-    EXPR_14            go to state 92
-    EXPR_15            go to state 93
-    PRIMATIVES         go to state 94
+    TYPE              go to state 68
+    STATEMENT         go to state 225
+    EXPR_STATEMENT    go to state 71
+    FOR_STATEMENT     go to state 72
+    NEW_SCOPE         go to state 73
+    RETURN_STATEMENT  go to state 74
+    DEC_STATEMENT     go to state 75
+    IF_OR_ELSE        go to state 76
+    WHILE_STATEMENT   go to state 77
+    DO_STATEMENT      go to state 78
+    EXPR_1            go to state 79
+    EXPR_2            go to state 80
+    EXPR_3            go to state 81
+    EXPR_4            go to state 82
+    EXPR_5            go to state 83
+    EXPR_6            go to state 84
+    EXPR_7            go to state 85
+    EXPR_8            go to state 86
+    EXPR_9            go to state 87
+    EXPR_10           go to state 88
+    EXPR_11           go to state 89
+    EXPR_12           go to state 90
+    EXPR_13           go to state 91
+    EXPR_14           go to state 92
+    EXPR_15           go to state 93
+    PRIMATIVES        go to state 94
 
 
 State 224

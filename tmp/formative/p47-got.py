@@ -1,8 +1,11 @@
 def f(a):
-	if a :
+	if (a) :
 		return 1
-	elif((a-1)) :
-		return 0
+
+	else :
+		if ((a-1)) :
+			return 0
+
 
 
 def main():

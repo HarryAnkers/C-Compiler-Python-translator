@@ -199,7 +199,7 @@ union YYSTYPE
 #line 17 "src/parser.y" /* yacc.c:355  */
 
   const ASTNode *node;
-  double number;
+  float number;
   std::string *string;
 
 #line 206 "src/parser.tab.cpp" /* yacc.c:355  */
@@ -564,10 +564,10 @@ static const char *const yytname[] =
   "STATEMENT", "EXPR_STATEMENT", "FOR_STATEMENT", "NEW_SCOPE",
   "RETURN_STATEMENT", "DEC_STATEMENT", "DEC_VAR_LIST", "DEC_VARIABLE",
   "GLO_DEC_STATEMENT", "GLO_DEC_VAR_LIST", "GLO_DEC_VARIABLE",
-  "IFANDORELSEORELIF", "WHILE_STATEMENT", "DO_STATEMENT", "EXPR_1",
-  "EXPR_2", "EXPR_3", "EXPR_4", "EXPR_5", "EXPR_6", "EXPR_7", "EXPR_8",
-  "EXPR_9", "EXPR_10", "EXPR_11", "EXPR_12", "EXPR_13", "EXPR_14",
-  "EXPR_15", "PRIMATIVES", YY_NULLPTR
+  "IF_OR_ELSE", "WHILE_STATEMENT", "DO_STATEMENT", "EXPR_1", "EXPR_2",
+  "EXPR_3", "EXPR_4", "EXPR_5", "EXPR_6", "EXPR_7", "EXPR_8", "EXPR_9",
+  "EXPR_10", "EXPR_11", "EXPR_12", "EXPR_13", "EXPR_14", "EXPR_15",
+  "PRIMATIVES", YY_NULLPTR
 };
 #endif
 

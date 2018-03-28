@@ -546,7 +546,7 @@ class While_Statement : public ASTNode
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
             dst<<"nop"<<std::endl;
 
-            body->compile(dst,state);
+            statement->compile(dst,state);
 
             dst<<"b"<<" "<<"$L"<<(loopLabel)<<std::endl;
             dst<<"nop"<<std::endl;

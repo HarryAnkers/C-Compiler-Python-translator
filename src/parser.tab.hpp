@@ -146,7 +146,7 @@ union YYSTYPE
 #line 17 "src/parser.y" /* yacc.c:1909  */
 
   const ASTNode *node;
-  double number;
+  float number;
   std::string *string;
 
 #line 153 "src/parser.tab.hpp" /* yacc.c:1909  */

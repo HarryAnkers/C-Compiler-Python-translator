@@ -16,7 +16,7 @@
 // AST node.
 %union{
   const ASTNode *node;
-  double number;
+  float number;
   std::string *string;
 }
 
@@ -36,7 +36,7 @@
 %type <node> DEC_VAR_LIST DEC_VARIABLE DEC_STATEMENT
 %type <node> GLO_DEC_VAR_LIST GLO_DEC_VARIABLE GLO_DEC_STATEMENT
 %type <node> STATEMENT RETURN_STATEMENT 
-%type <node> IFANDORELIF IF_STATEMENT ELSE_IF_STATEMENT ELSE_STATEMENT IFANDORELSEORELIF
+%type <node> IF_OR_ELSE
 %type <node> WHILE_STATEMENT DO_STATEMENT NEW_SCOPE FOR_STATEMENT EXPR_STATEMENT
 %type <node> ARGUMENT_LIST ARGUMENT_LIST_NO_TYPE
 %type <node> EXPR_1 EXPR_2 EXPR_3 EXPR_4 EXPR_5 EXPR_6 EXPR_7 EXPR_8
@@ -95,7 +95,7 @@ BODY : BODY STATEMENT           { $$ = new Body($2,$1); }
 STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
         | DEC_STATEMENT                 { $$ = $1; }
         | EXPR_STATEMENT                { $$ = $1; }
-        | IFANDORELSEORELIF             { $$ = $1; }
+        | IF_OR_ELSE                    { $$ = $1; }
         | WHILE_STATEMENT               { $$ = $1; }
         | DO_STATEMENT                  { $$ = $1; }
         | NEW_SCOPE                     { $$ = $1; }
@@ -133,7 +133,7 @@ GLO_DEC_VARIABLE : T_ID T_ASSIGN T_NUMBER                       { $$ = new Globa
         | T_ID T_ASSIGN T_LBRACKET T_MINUS T_NUMBER T_RBRACKET  { $$ = new GlobalDeclare(*$1, -$5); } 
         | T_ID                                                  { $$ = new GlobalDeclare(*$1); }
 
-IFANDORELSEORELIF : T_IF EXPR_1 STATEMENT T_ELSE STATEMENT      { $$ = new IfElse_Statement ($2,$3,$5); }
+IF_OR_ELSE : T_IF EXPR_1 STATEMENT T_ELSE STATEMENT      { $$ = new IfElse_Statement ($2,$3,$5); }
         | T_IF EXPR_1 STATEMENT                                 { $$ = new If_Statement($2,$3); }
 
 WHILE_STATEMENT : T_WHILE EXPR_1 STATEMENT                              { $$ = new While_Statement($2,$3); }

@@ -1,14 +1,25 @@
 def f(a,b):
-	if a :
+	if (a) :
 		return 1
-	elif((a-1)) :
-		return 0
-	elif(b) :
-		return 10
-	elif((b-1)) :
-		return 15
+
 	else :
-		return 5
+		if ((a-1)) :
+			return 0
+
+		else :
+			if (b) :
+				return 10
+
+			else :
+				if ((b-1)) :
+					return 15
+
+				else :
+					return 5
+
+
+
+
 
 
 def main():

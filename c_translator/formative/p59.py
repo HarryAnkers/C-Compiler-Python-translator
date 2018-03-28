@@ -1,8 +1,8 @@
 def f(a, b):
     x=0
-    while(1 and (x<50)):
+    while(a and x<50):
         x=x+1
-    while(0 or (x==0)):
+    while(a or x==0):
         x=x-1
     return x
 
