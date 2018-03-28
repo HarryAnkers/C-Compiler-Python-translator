@@ -1,6 +1,5 @@
-int assign(int x);
-
-int main(){
-    int x = 1;
-    return assign(x);
+int main(int x){
+    x = 0;
+    return x;
 }
+

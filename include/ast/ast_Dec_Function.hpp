@@ -91,8 +91,8 @@ class Function : public ASTNode
             dst<<"lw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
             dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<state.functionOffset<<std::endl;
-            dst<<"j"<<" "<<"31"<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
+            dst<<"j"<<" "<<"$31"<<std::endl;
+            dst<<"nop"<<std::endl;
 
             dst<<".end "<<id<<std::endl;
 

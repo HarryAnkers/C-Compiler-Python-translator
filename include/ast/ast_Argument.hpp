@@ -50,7 +50,7 @@ class Argument : public ASTNode
                 int count =state.argCount;
                 state.varVector.push_back(VariableBind(argId, argType, state.currentScope,((count*4)+state.functionOffset)));
                 if(count<4){
-                    dst<<"sw"<<" "<<"$"<<(count+4)<<" "<<((count*4)+state.functionOffset)<<"($fp)"<<std::endl;
+                    dst<<"sw"<<" "<<"$"<<(count+4)<<" , "<<((count*4)+state.functionOffset)<<"($fp)"<<std::endl;
                 }
                 state.argCount++;
             }
