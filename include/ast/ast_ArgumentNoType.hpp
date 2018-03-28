@@ -47,7 +47,7 @@ class ArgumentNoType : public ASTNode
                 state.registers[reg1]=0;
 
                 if(state.currentArgCount<4){
-                    dst<<"lw"<<" "<<"$"<<(state.currentArgCount+4)<<" , "<<"$"<<reg1<<std::endl;
+                    dst<<"addu"<<" "<<"$"<<(state.currentArgCount+4)<<" , "<<"$"<<reg1<<" , "<<"$0"<<std::endl;
                 } else {
                     dst<<"sw"<<" "<<"$"<<reg1<<" , "<<(state.currentArgSize-state.currentArgCount*4)<<"(sp)"<<std::endl;
                 }

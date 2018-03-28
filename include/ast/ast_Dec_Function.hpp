@@ -44,7 +44,7 @@ class Function : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            state.funcVector.push_back(FunctionBind(type,id,state.labelId));
+            state.funcVector.push_back(FunctionBind(type,id));
 
             state.varCount = 0;
             state.argCount = 0;

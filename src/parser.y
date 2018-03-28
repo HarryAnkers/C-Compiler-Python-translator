@@ -32,7 +32,7 @@
 %token T_NUMBER T_ID T_COMMENT
 %token T_RETURN T_SIZE_OF T_ELSE T_IF T_ELIF T_WHILE T_DO T_FOR
 
-%type <node> TOP_LIST DEC_FUNCTION BODY
+%type <node> TOP_LIST DEC_FUNCTION BODY FUTURE_DEC
 %type <node> DEC_VAR_LIST DEC_VARIABLE DEC_STATEMENT
 %type <node> GLO_DEC_VAR_LIST GLO_DEC_VARIABLE GLO_DEC_STATEMENT
 %type <node> STATEMENT RETURN_STATEMENT 
@@ -55,8 +55,12 @@ ROOT : TOP_LIST { g_root = $1; }
 
 TOP_LIST : TOP_LIST DEC_FUNCTION        { $$ = new Top_List($2,$1); }
         | TOP_LIST GLO_DEC_STATEMENT    { $$ = new Top_List($2,$1); }
+        | TOP_LIST FUTURE_DEC           { $$ = new Top_List($2,$1); }
+        | FUTURE_DEC                    { $$ = new Top_List($1); }
         | DEC_FUNCTION                  { $$ = new Top_List($1); }
         | GLO_DEC_STATEMENT             { $$ = new Top_List($1); }
+
+FUTURE_DEC : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_SEMICOLON { $$ = new Future_Func(*$1, *$2, $4); }
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
 

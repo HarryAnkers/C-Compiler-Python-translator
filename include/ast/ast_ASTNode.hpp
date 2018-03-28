@@ -14,14 +14,13 @@ class FunctionBind
     std::string type;
     std::string id;
     std::vector<std::string> arguments;
-    int labelNo;
     int argSize;
 
-    FunctionBind(std::string _type, std::string _id, int _labelNo):
-        type(_type),id(_id),labelNo(_labelNo){}
+    FunctionBind(std::string _type, std::string _id):
+        type(_type),id(_id){}
 
     friend std::ostream& operator<< (std::ostream &o, FunctionBind b){
-        o << "type: "<<b.type<< "id: "<<b.id<< ", labelNo: " << b.labelNo;
+        o << "type: "<<b.type<< "id: "<<b.id;
         return o;
     }
 };

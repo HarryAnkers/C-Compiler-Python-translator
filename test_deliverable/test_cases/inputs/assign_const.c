@@ -1,4 +1,5 @@
-int main(int x){
-    x = 0;
-    return x;
+int assign(int x);
+
+int main(){
+    return assign(1);
 }

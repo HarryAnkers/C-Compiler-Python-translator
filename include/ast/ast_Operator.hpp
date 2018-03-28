@@ -482,11 +482,11 @@ class FunctionStatementInExpr : public ASTNode
                     if(state.currentArgCount!=-1){
                         throw std::invalid_argument( "argument sizes don't match" );
                     }
-                    dst<<"jal"<<" "<<"F"<<state.funcVector[i].labelNo<<std::endl;
+                    dst<<"jal"<<" "<<state.funcVector[i].id<<std::endl;
                     dst<<"nop"<<std::endl;
                     int reg1 = state.getTempReg(1);
                     if(state.funcVector[i].type.compare("void")){
-                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"$"<<"2"<<std::endl<<std::endl;
+                        dst<<"addu"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$0"<<std::endl<<std::endl;
                     }
                     return;
                 }

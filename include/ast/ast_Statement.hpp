@@ -48,6 +48,7 @@ class ReturnStatement : public ASTNode
                 state.registers[reg1]=0;
             }
             dst<<"b"<<" "<<"$E"<<state.returnId<<std::endl;
+            dst<<"nop"<<std::endl;
         }
 
         //for frame size

@@ -1,5 +1,5 @@
-int main(int x){
-    x = 0;
+int assign(int x){
+    x = 10;
     return x;
 }
 
