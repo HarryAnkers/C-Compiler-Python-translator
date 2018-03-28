@@ -86,7 +86,7 @@ class Function : public ASTNode
             state.adjustStack(-state.functionOffset);
 
             //below needs to be put into the return
-            dst<<"E"<<state.returnId<<":"<<std::endl;
+            dst<<"$E"<<state.returnId<<":"<<std::endl;
             dst<<"add"<<" "<<"$"<<"sp"<<" , "<<"$"<<"fp"<<" , "<<"$0"<<std::endl;
             dst<<"lw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
             dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
@@ -94,7 +94,7 @@ class Function : public ASTNode
             dst<<"j"<<" "<<"31"<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
 
-            dst<<".end"<<std::endl;
+            dst<<".end "<<id<<std::endl;
 
             //dst<<state;
         }
