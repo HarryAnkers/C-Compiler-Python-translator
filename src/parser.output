@@ -10,14 +10,8 @@ Terminals unused in grammar
    T_COMMENT
 
 
-Rules useless in parser due to conflicts
-
-   72 ELSE_STATEMENT: %empty
-
-
 State 46 conflicts: 32 shift/reduce
 State 51 conflicts: 32 shift/reduce
-State 77 conflicts: 33 reduce/reduce
 State 106 conflicts: 24 reduce/reduce
 State 130 conflicts: 32 shift/reduce
 State 180 conflicts: 32 shift/reduce
@@ -134,85 +128,84 @@ Grammar
 
    71 ELSE_IF_STATEMENT: T_ELIF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET
 
-   72 ELSE_STATEMENT: %empty
-   73               | T_ELSE T_LCUBRACKET BODY T_RCUBRACKET
+   72 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET
 
-   74 EXPR_1: EXPR_2
-   75       | EXPR_1 T_COMMA EXPR_2
+   73 EXPR_1: EXPR_2
+   74       | EXPR_1 T_COMMA EXPR_2
 
-   76 EXPR_2: EXPR_3
-   77       | T_ID T_ASSIGN EXPR_2
-   78       | T_ID T_ADDASSIGN EXPR_2
-   79       | T_ID T_SUBASSIGN EXPR_2
-   80       | T_ID T_MULASSIGN EXPR_2
-   81       | T_ID T_DIVASSIGN EXPR_2
-   82       | T_ID T_MODASSIGN EXPR_2
-   83       | T_ID T_LSHIFTASSIGN EXPR_2
-   84       | T_ID T_RSHIFTASSIGN EXPR_2
-   85       | T_ID T_ANDASSIGN EXPR_2
-   86       | T_ID T_ORASSIGN EXPR_2
-   87       | T_ID T_XORASSIGN EXPR_2
+   75 EXPR_2: EXPR_3
+   76       | T_ID T_ASSIGN EXPR_2
+   77       | T_ID T_ADDASSIGN EXPR_2
+   78       | T_ID T_SUBASSIGN EXPR_2
+   79       | T_ID T_MULASSIGN EXPR_2
+   80       | T_ID T_DIVASSIGN EXPR_2
+   81       | T_ID T_MODASSIGN EXPR_2
+   82       | T_ID T_LSHIFTASSIGN EXPR_2
+   83       | T_ID T_RSHIFTASSIGN EXPR_2
+   84       | T_ID T_ANDASSIGN EXPR_2
+   85       | T_ID T_ORASSIGN EXPR_2
+   86       | T_ID T_XORASSIGN EXPR_2
 
-   88 EXPR_3: EXPR_4
-   89       | EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4
+   87 EXPR_3: EXPR_4
+   88       | EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4
 
-   90 EXPR_4: EXPR_5
-   91       | EXPR_4 T_LOR EXPR_5
+   89 EXPR_4: EXPR_5
+   90       | EXPR_4 T_LOR EXPR_5
 
-   92 EXPR_5: EXPR_6
-   93       | EXPR_5 T_LAND EXPR_6
+   91 EXPR_5: EXPR_6
+   92       | EXPR_5 T_LAND EXPR_6
 
-   94 EXPR_6: EXPR_7
-   95       | EXPR_6 T_OR EXPR_7
+   93 EXPR_6: EXPR_7
+   94       | EXPR_6 T_OR EXPR_7
 
-   96 EXPR_7: EXPR_8
-   97       | EXPR_7 T_XOR EXPR_8
+   95 EXPR_7: EXPR_8
+   96       | EXPR_7 T_XOR EXPR_8
 
-   98 EXPR_8: EXPR_9
-   99       | EXPR_8 T_AND EXPR_9
+   97 EXPR_8: EXPR_9
+   98       | EXPR_8 T_AND EXPR_9
 
-  100 EXPR_9: EXPR_10
-  101       | EXPR_9 T_LEQUAL EXPR_10
-  102       | EXPR_9 T_LNEQUAL EXPR_10
+   99 EXPR_9: EXPR_10
+  100       | EXPR_9 T_LEQUAL EXPR_10
+  101       | EXPR_9 T_LNEQUAL EXPR_10
 
-  103 EXPR_10: EXPR_11
-  104        | EXPR_10 T_MORE EXPR_11
-  105        | EXPR_10 T_LESS EXPR_11
-  106        | EXPR_10 T_LMOREEQ EXPR_11
-  107        | EXPR_10 T_LLESSEQ EXPR_11
+  102 EXPR_10: EXPR_11
+  103        | EXPR_10 T_MORE EXPR_11
+  104        | EXPR_10 T_LESS EXPR_11
+  105        | EXPR_10 T_LMOREEQ EXPR_11
+  106        | EXPR_10 T_LLESSEQ EXPR_11
 
-  108 EXPR_11: EXPR_12
-  109        | EXPR_11 T_LSHIFT EXPR_12
-  110        | EXPR_11 T_RSHIFT EXPR_12
+  107 EXPR_11: EXPR_12
+  108        | EXPR_11 T_LSHIFT EXPR_12
+  109        | EXPR_11 T_RSHIFT EXPR_12
 
-  111 EXPR_12: EXPR_13
-  112        | EXPR_12 T_PLUS EXPR_13
-  113        | EXPR_12 T_MINUS EXPR_13
+  110 EXPR_12: EXPR_13
+  111        | EXPR_12 T_PLUS EXPR_13
+  112        | EXPR_12 T_MINUS EXPR_13
 
-  114 EXPR_13: EXPR_14
-  115        | EXPR_13 T_TIMES EXPR_14
-  116        | EXPR_13 T_DIVIDE EXPR_14
-  117        | EXPR_13 T_MODULUS EXPR_14
+  113 EXPR_13: EXPR_14
+  114        | EXPR_13 T_TIMES EXPR_14
+  115        | EXPR_13 T_DIVIDE EXPR_14
+  116        | EXPR_13 T_MODULUS EXPR_14
 
-  118 EXPR_14: EXPR_15
-  119        | T_SIZE_OF T_ID
-  120        | T_SIZE_OF T_LBRACKET TYPE T_RBRACKET
-  121        | T_NOT EXPR_14
-  122        | T_TILDA EXPR_14
-  123        | T_INC T_ID
-  124        | T_DEC T_ID
-  125        | T_PLUS EXPR_15
-  126        | T_MINUS EXPR_15
+  117 EXPR_14: EXPR_15
+  118        | T_SIZE_OF T_ID
+  119        | T_SIZE_OF T_LBRACKET TYPE T_RBRACKET
+  120        | T_NOT EXPR_14
+  121        | T_TILDA EXPR_14
+  122        | T_INC T_ID
+  123        | T_DEC T_ID
+  124        | T_PLUS EXPR_15
+  125        | T_MINUS EXPR_15
 
-  127 EXPR_15: PRIMATIVES
-  128        | T_ID T_INC
-  129        | T_ID T_DEC
-  130        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-  131        | T_LBRACKET EXPR_1 T_RBRACKET
+  126 EXPR_15: PRIMATIVES
+  127        | T_ID T_INC
+  128        | T_ID T_DEC
+  129        | T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+  130        | T_LBRACKET EXPR_1 T_RBRACKET
 
-  132 PRIMATIVES: T_ID
-  133           | T_NUMBER
-  134           | T_MINUS T_NUMBER
+  131 PRIMATIVES: T_ID
+  132           | T_NUMBER
+  133           | T_MINUS T_NUMBER
 
 
 Terminals, with rules where they appear
@@ -221,27 +214,27 @@ $end (0) 0
 error (256)
 T_LSQBRACKET (258)
 T_RSQBRACKET (259)
-T_LCUBRACKET (260) 9 48 68 69 70 71 73
-T_RCUBRACKET (261) 9 48 68 69 70 71 73
+T_LCUBRACKET (260) 9 48 68 69 70 71 72
+T_RCUBRACKET (261) 9 48 68 69 70 71 72
 T_LTRIBRACKET (262)
 T_RTRIBRACKET (263)
-T_LBRACKET (264) 8 9 44 45 46 47 61 62 120 130 131
-T_RBRACKET (265) 8 9 44 45 46 47 61 62 120 130 131
-T_ASSIGN (266) 54 59 60 61 62 77
+T_LBRACKET (264) 8 9 44 45 46 47 61 62 119 129 130
+T_RBRACKET (265) 8 9 44 45 46 47 61 62 119 129 130
+T_ASSIGN (266) 54 59 60 61 62 76
 T_DOT (267)
-T_COMMA (268) 10 13 53 58 75
-T_COLON (269) 89
-T_QMARK (270) 89
+T_COMMA (268) 10 13 53 58 74
+T_COLON (269) 88
+T_QMARK (270) 88
 T_SEMICOLON (271) 8 42 43 49 50 51 56 69
 T_SPEACHMARK (272)
 T_APOSTROPHE (273)
-T_NOT (274) 121
-T_AND (275) 99
-T_OR (276) 95
-T_MORE (277) 104
-T_LESS (278) 105
-T_XOR (279) 97
-T_TILDA (280) 122
+T_NOT (274) 120
+T_AND (275) 98
+T_OR (276) 94
+T_MORE (277) 103
+T_LESS (278) 104
+T_XOR (279) 96
+T_TILDA (280) 121
 T_CHAR (281) 16
 T_SIGN_CHAR (282) 17
 T_UNSIGN_CHAR (283) 18
@@ -257,38 +250,38 @@ T_FLOAT (292) 27
 T_DOUBLE (293) 28
 T_LONGDOUBLE (294) 29
 T_VOID (295) 30
-T_TIMES (296) 115
-T_DIVIDE (297) 116
-T_PLUS (298) 112 125
-T_MINUS (299) 60 62 113 126 134
-T_MODULUS (300) 117
-T_INC (301) 123 128
-T_DEC (302) 124 129
-T_ADDASSIGN (303) 78
-T_SUBASSIGN (304) 79
-T_MULASSIGN (305) 80
-T_DIVASSIGN (306) 81
-T_MODASSIGN (307) 82
-T_LSHIFTASSIGN (308) 83
-T_RSHIFTASSIGN (309) 84
-T_ANDASSIGN (310) 85
-T_XORASSIGN (311) 87
-T_ORASSIGN (312) 86
-T_LAND (313) 93
-T_LOR (314) 91
-T_LEQUAL (315) 101
-T_LNEQUAL (316) 102
-T_LLESSEQ (317) 107
-T_LMOREEQ (318) 106
-T_LSHIFT (319) 109
-T_RSHIFT (320) 110
-T_NUMBER (321) 59 60 61 62 133 134
-T_ID (322) 8 9 10 11 54 55 59 60 61 62 63 77 78 79 80 81 82 83 84 85
-    86 87 119 123 124 128 129 130 132
+T_TIMES (296) 114
+T_DIVIDE (297) 115
+T_PLUS (298) 111 124
+T_MINUS (299) 60 62 112 125 133
+T_MODULUS (300) 116
+T_INC (301) 122 127
+T_DEC (302) 123 128
+T_ADDASSIGN (303) 77
+T_SUBASSIGN (304) 78
+T_MULASSIGN (305) 79
+T_DIVASSIGN (306) 80
+T_MODASSIGN (307) 81
+T_LSHIFTASSIGN (308) 82
+T_RSHIFTASSIGN (309) 83
+T_ANDASSIGN (310) 84
+T_XORASSIGN (311) 86
+T_ORASSIGN (312) 85
+T_LAND (313) 92
+T_LOR (314) 90
+T_LEQUAL (315) 100
+T_LNEQUAL (316) 101
+T_LLESSEQ (317) 106
+T_LMOREEQ (318) 105
+T_LSHIFT (319) 108
+T_RSHIFT (320) 109
+T_NUMBER (321) 59 60 61 62 132 133
+T_ID (322) 8 9 10 11 54 55 59 60 61 62 63 76 77 78 79 80 81 82 83 84
+    85 86 118 122 123 127 128 129 131
 T_COMMENT (323)
 T_RETURN (324) 49 50
-T_SIZE_OF (325) 119 120
-T_ELSE (326) 73
+T_SIZE_OF (325) 118 119
+T_ELSE (326) 72
 T_IF (327) 70
 T_ELIF (328) 71
 T_WHILE (329) 68 69
@@ -311,12 +304,12 @@ DEC_FUNCTION (81)
 ARGUMENT_LIST (82)
     on left: 10 11 12, on right: 8 9 10
 ARGUMENT_LIST_NO_TYPE (83)
-    on left: 13 14 15, on right: 13 130
+    on left: 13 14 15, on right: 13 129
 TYPE (84)
     on left: 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30, on right:
-    8 9 10 11 51 56 120
+    8 9 10 11 51 56 119
 BODY (85)
-    on left: 31 32 33, on right: 9 31 44 45 46 47 48 68 69 70 71 73
+    on left: 31 32 33, on right: 9 31 44 45 46 47 48 68 69 70 71 72
 STATEMENT (86)
     on left: 34 35 36 37 38 39 40 41, on right: 31 32
 EXPR_STATEMENT (87)
@@ -352,42 +345,42 @@ IF_STATEMENT (101)
 ELSE_IF_STATEMENT (102)
     on left: 71, on right: 66
 ELSE_STATEMENT (103)
-    on left: 72 73, on right: 64
+    on left: 72, on right: 64
 EXPR_1 (104)
-    on left: 74 75, on right: 42 44 45 49 68 69 70 71 75 89 131
+    on left: 73 74, on right: 42 44 45 49 68 69 70 71 74 88 130
 EXPR_2 (105)
-    on left: 76 77 78 79 80 81 82 83 84 85 86 87, on right: 13 14 54
-    74 75 77 78 79 80 81 82 83 84 85 86 87
+    on left: 75 76 77 78 79 80 81 82 83 84 85 86, on right: 13 14 54
+    73 74 76 77 78 79 80 81 82 83 84 85 86
 EXPR_3 (106)
-    on left: 88 89, on right: 76 89
+    on left: 87 88, on right: 75 88
 EXPR_4 (107)
-    on left: 90 91, on right: 88 89 91
+    on left: 89 90, on right: 87 88 90
 EXPR_5 (108)
-    on left: 92 93, on right: 90 91 93
+    on left: 91 92, on right: 89 90 92
 EXPR_6 (109)
-    on left: 94 95, on right: 92 93 95
+    on left: 93 94, on right: 91 92 94
 EXPR_7 (110)
-    on left: 96 97, on right: 94 95 97
+    on left: 95 96, on right: 93 94 96
 EXPR_8 (111)
-    on left: 98 99, on right: 96 97 99
+    on left: 97 98, on right: 95 96 98
 EXPR_9 (112)
-    on left: 100 101 102, on right: 98 99 101 102
+    on left: 99 100 101, on right: 97 98 100 101
 EXPR_10 (113)
-    on left: 103 104 105 106 107, on right: 100 101 102 104 105 106
-    107
+    on left: 102 103 104 105 106, on right: 99 100 101 103 104 105
+    106
 EXPR_11 (114)
-    on left: 108 109 110, on right: 103 104 105 106 107 109 110
+    on left: 107 108 109, on right: 102 103 104 105 106 108 109
 EXPR_12 (115)
-    on left: 111 112 113, on right: 108 109 110 112 113
+    on left: 110 111 112, on right: 107 108 109 111 112
 EXPR_13 (116)
-    on left: 114 115 116 117, on right: 111 112 113 115 116 117
+    on left: 113 114 115 116, on right: 110 111 112 114 115 116
 EXPR_14 (117)
-    on left: 118 119 120 121 122 123 124 125 126, on right: 114 115
-    116 117 121 122
+    on left: 117 118 119 120 121 122 123 124 125, on right: 113 114
+    115 116 120 121
 EXPR_15 (118)
-    on left: 127 128 129 130 131, on right: 118 125 126
+    on left: 126 127 128 129 130, on right: 117 124 125
 PRIMATIVES (119)
-    on left: 132 133 134, on right: 127
+    on left: 131 132 133, on right: 126
 
 
 State 0
@@ -1063,7 +1056,7 @@ State 51
 
 State 52
 
-  131 EXPR_15: T_LBRACKET . EXPR_1 T_RBRACKET
+  130 EXPR_15: T_LBRACKET . EXPR_1 T_RBRACKET
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -1103,7 +1096,7 @@ State 53
 
 State 54
 
-  121 EXPR_14: T_NOT . EXPR_14
+  120 EXPR_14: T_NOT . EXPR_14
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -1123,7 +1116,7 @@ State 54
 
 State 55
 
-  122 EXPR_14: T_TILDA . EXPR_14
+  121 EXPR_14: T_TILDA . EXPR_14
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -1143,7 +1136,7 @@ State 55
 
 State 56
 
-  125 EXPR_14: T_PLUS . EXPR_15
+  124 EXPR_14: T_PLUS . EXPR_15
 
     T_LBRACKET  shift, and go to state 52
     T_MINUS     shift, and go to state 104
@@ -1156,8 +1149,8 @@ State 56
 
 State 57
 
-  126 EXPR_14: T_MINUS . EXPR_15
-  134 PRIMATIVES: T_MINUS . T_NUMBER
+  125 EXPR_14: T_MINUS . EXPR_15
+  133 PRIMATIVES: T_MINUS . T_NUMBER
 
     T_LBRACKET  shift, and go to state 52
     T_MINUS     shift, and go to state 104
@@ -1170,42 +1163,42 @@ State 57
 
 State 58
 
-  123 EXPR_14: T_INC . T_ID
+  122 EXPR_14: T_INC . T_ID
 
     T_ID  shift, and go to state 108
 
 
 State 59
 
-  124 EXPR_14: T_DEC . T_ID
+  123 EXPR_14: T_DEC . T_ID
 
     T_ID  shift, and go to state 109
 
 
 State 60
 
-  133 PRIMATIVES: T_NUMBER .
+  132 PRIMATIVES: T_NUMBER .
 
-    $default  reduce using rule 133 (PRIMATIVES)
+    $default  reduce using rule 132 (PRIMATIVES)
 
 
 State 61
 
-   77 EXPR_2: T_ID . T_ASSIGN EXPR_2
-   78       | T_ID . T_ADDASSIGN EXPR_2
-   79       | T_ID . T_SUBASSIGN EXPR_2
-   80       | T_ID . T_MULASSIGN EXPR_2
-   81       | T_ID . T_DIVASSIGN EXPR_2
-   82       | T_ID . T_MODASSIGN EXPR_2
-   83       | T_ID . T_LSHIFTASSIGN EXPR_2
-   84       | T_ID . T_RSHIFTASSIGN EXPR_2
-   85       | T_ID . T_ANDASSIGN EXPR_2
-   86       | T_ID . T_ORASSIGN EXPR_2
-   87       | T_ID . T_XORASSIGN EXPR_2
-  128 EXPR_15: T_ID . T_INC
-  129        | T_ID . T_DEC
-  130        | T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-  132 PRIMATIVES: T_ID .
+   76 EXPR_2: T_ID . T_ASSIGN EXPR_2
+   77       | T_ID . T_ADDASSIGN EXPR_2
+   78       | T_ID . T_SUBASSIGN EXPR_2
+   79       | T_ID . T_MULASSIGN EXPR_2
+   80       | T_ID . T_DIVASSIGN EXPR_2
+   81       | T_ID . T_MODASSIGN EXPR_2
+   82       | T_ID . T_LSHIFTASSIGN EXPR_2
+   83       | T_ID . T_RSHIFTASSIGN EXPR_2
+   84       | T_ID . T_ANDASSIGN EXPR_2
+   85       | T_ID . T_ORASSIGN EXPR_2
+   86       | T_ID . T_XORASSIGN EXPR_2
+  127 EXPR_15: T_ID . T_INC
+  128        | T_ID . T_DEC
+  129        | T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+  131 PRIMATIVES: T_ID .
 
     T_LBRACKET      shift, and go to state 110
     T_ASSIGN        shift, and go to state 111
@@ -1222,7 +1215,7 @@ State 61
     T_XORASSIGN     shift, and go to state 122
     T_ORASSIGN      shift, and go to state 123
 
-    $default  reduce using rule 132 (PRIMATIVES)
+    $default  reduce using rule 131 (PRIMATIVES)
 
 
 State 62
@@ -1262,8 +1255,8 @@ State 62
 
 State 63
 
-  119 EXPR_14: T_SIZE_OF . T_ID
-  120        | T_SIZE_OF . T_LBRACKET TYPE T_RBRACKET
+  118 EXPR_14: T_SIZE_OF . T_ID
+  119        | T_SIZE_OF . T_LBRACKET TYPE T_RBRACKET
 
     T_LBRACKET  shift, and go to state 126
     T_ID        shift, and go to state 127
@@ -1489,73 +1482,7 @@ State 77
     T_ELSE  shift, and go to state 137
     T_ELIF  shift, and go to state 138
 
-    T_LCUBRACKET       reduce using rule 65 (IFANDORELSEORELIF)
-    T_LCUBRACKET       [reduce using rule 72 (ELSE_STATEMENT)]
-    T_RCUBRACKET       reduce using rule 65 (IFANDORELSEORELIF)
-    T_RCUBRACKET       [reduce using rule 72 (ELSE_STATEMENT)]
-    T_LBRACKET         reduce using rule 65 (IFANDORELSEORELIF)
-    T_LBRACKET         [reduce using rule 72 (ELSE_STATEMENT)]
-    T_SEMICOLON        reduce using rule 65 (IFANDORELSEORELIF)
-    T_SEMICOLON        [reduce using rule 72 (ELSE_STATEMENT)]
-    T_NOT              reduce using rule 65 (IFANDORELSEORELIF)
-    T_NOT              [reduce using rule 72 (ELSE_STATEMENT)]
-    T_TILDA            reduce using rule 65 (IFANDORELSEORELIF)
-    T_TILDA            [reduce using rule 72 (ELSE_STATEMENT)]
-    T_CHAR             reduce using rule 65 (IFANDORELSEORELIF)
-    T_CHAR             [reduce using rule 72 (ELSE_STATEMENT)]
-    T_SIGN_CHAR        reduce using rule 65 (IFANDORELSEORELIF)
-    T_SIGN_CHAR        [reduce using rule 72 (ELSE_STATEMENT)]
-    T_UNSIGN_CHAR      reduce using rule 65 (IFANDORELSEORELIF)
-    T_UNSIGN_CHAR      [reduce using rule 72 (ELSE_STATEMENT)]
-    T_SHORT            reduce using rule 65 (IFANDORELSEORELIF)
-    T_SHORT            [reduce using rule 72 (ELSE_STATEMENT)]
-    T_UNSIGN_SHORT     reduce using rule 65 (IFANDORELSEORELIF)
-    T_UNSIGN_SHORT     [reduce using rule 72 (ELSE_STATEMENT)]
-    T_INT              reduce using rule 65 (IFANDORELSEORELIF)
-    T_INT              [reduce using rule 72 (ELSE_STATEMENT)]
-    T_UNSIGN_INT       reduce using rule 65 (IFANDORELSEORELIF)
-    T_UNSIGN_INT       [reduce using rule 72 (ELSE_STATEMENT)]
-    T_LONG             reduce using rule 65 (IFANDORELSEORELIF)
-    T_LONG             [reduce using rule 72 (ELSE_STATEMENT)]
-    T_UNSIGN_LONG      reduce using rule 65 (IFANDORELSEORELIF)
-    T_UNSIGN_LONG      [reduce using rule 72 (ELSE_STATEMENT)]
-    T_LONGLONG         reduce using rule 65 (IFANDORELSEORELIF)
-    T_LONGLONG         [reduce using rule 72 (ELSE_STATEMENT)]
-    T_UNSIGN_LONGLONG  reduce using rule 65 (IFANDORELSEORELIF)
-    T_UNSIGN_LONGLONG  [reduce using rule 72 (ELSE_STATEMENT)]
-    T_FLOAT            reduce using rule 65 (IFANDORELSEORELIF)
-    T_FLOAT            [reduce using rule 72 (ELSE_STATEMENT)]
-    T_DOUBLE           reduce using rule 65 (IFANDORELSEORELIF)
-    T_DOUBLE           [reduce using rule 72 (ELSE_STATEMENT)]
-    T_LONGDOUBLE       reduce using rule 65 (IFANDORELSEORELIF)
-    T_LONGDOUBLE       [reduce using rule 72 (ELSE_STATEMENT)]
-    T_VOID             reduce using rule 65 (IFANDORELSEORELIF)
-    T_VOID             [reduce using rule 72 (ELSE_STATEMENT)]
-    T_PLUS             reduce using rule 65 (IFANDORELSEORELIF)
-    T_PLUS             [reduce using rule 72 (ELSE_STATEMENT)]
-    T_MINUS            reduce using rule 65 (IFANDORELSEORELIF)
-    T_MINUS            [reduce using rule 72 (ELSE_STATEMENT)]
-    T_INC              reduce using rule 65 (IFANDORELSEORELIF)
-    T_INC              [reduce using rule 72 (ELSE_STATEMENT)]
-    T_DEC              reduce using rule 65 (IFANDORELSEORELIF)
-    T_DEC              [reduce using rule 72 (ELSE_STATEMENT)]
-    T_NUMBER           reduce using rule 65 (IFANDORELSEORELIF)
-    T_NUMBER           [reduce using rule 72 (ELSE_STATEMENT)]
-    T_ID               reduce using rule 65 (IFANDORELSEORELIF)
-    T_ID               [reduce using rule 72 (ELSE_STATEMENT)]
-    T_RETURN           reduce using rule 65 (IFANDORELSEORELIF)
-    T_RETURN           [reduce using rule 72 (ELSE_STATEMENT)]
-    T_SIZE_OF          reduce using rule 65 (IFANDORELSEORELIF)
-    T_SIZE_OF          [reduce using rule 72 (ELSE_STATEMENT)]
-    T_IF               reduce using rule 65 (IFANDORELSEORELIF)
-    T_IF               [reduce using rule 72 (ELSE_STATEMENT)]
-    T_WHILE            reduce using rule 65 (IFANDORELSEORELIF)
-    T_WHILE            [reduce using rule 72 (ELSE_STATEMENT)]
-    T_DO               reduce using rule 65 (IFANDORELSEORELIF)
-    T_DO               [reduce using rule 72 (ELSE_STATEMENT)]
-    T_FOR              reduce using rule 65 (IFANDORELSEORELIF)
-    T_FOR              [reduce using rule 72 (ELSE_STATEMENT)]
-    $default           reduce using rule 65 (IFANDORELSEORELIF)
+    $default  reduce using rule 65 (IFANDORELSEORELIF)
 
     ELSE_IF_STATEMENT  go to state 139
     ELSE_STATEMENT     go to state 140
@@ -1585,7 +1512,7 @@ State 80
 State 81
 
    42 EXPR_STATEMENT: EXPR_1 . T_SEMICOLON
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_COMMA      shift, and go to state 141
     T_SEMICOLON  shift, and go to state 142
@@ -1593,156 +1520,156 @@ State 81
 
 State 82
 
-   74 EXPR_1: EXPR_2 .
+   73 EXPR_1: EXPR_2 .
 
-    $default  reduce using rule 74 (EXPR_1)
+    $default  reduce using rule 73 (EXPR_1)
 
 
 State 83
 
-   76 EXPR_2: EXPR_3 .
-   89 EXPR_3: EXPR_3 . T_QMARK EXPR_1 T_COLON EXPR_4
+   75 EXPR_2: EXPR_3 .
+   88 EXPR_3: EXPR_3 . T_QMARK EXPR_1 T_COLON EXPR_4
 
     T_QMARK  shift, and go to state 143
 
-    $default  reduce using rule 76 (EXPR_2)
+    $default  reduce using rule 75 (EXPR_2)
 
 
 State 84
 
-   88 EXPR_3: EXPR_4 .
-   91 EXPR_4: EXPR_4 . T_LOR EXPR_5
+   87 EXPR_3: EXPR_4 .
+   90 EXPR_4: EXPR_4 . T_LOR EXPR_5
 
     T_LOR  shift, and go to state 144
 
-    $default  reduce using rule 88 (EXPR_3)
+    $default  reduce using rule 87 (EXPR_3)
 
 
 State 85
 
-   90 EXPR_4: EXPR_5 .
-   93 EXPR_5: EXPR_5 . T_LAND EXPR_6
+   89 EXPR_4: EXPR_5 .
+   92 EXPR_5: EXPR_5 . T_LAND EXPR_6
 
     T_LAND  shift, and go to state 145
 
-    $default  reduce using rule 90 (EXPR_4)
+    $default  reduce using rule 89 (EXPR_4)
 
 
 State 86
 
-   92 EXPR_5: EXPR_6 .
-   95 EXPR_6: EXPR_6 . T_OR EXPR_7
+   91 EXPR_5: EXPR_6 .
+   94 EXPR_6: EXPR_6 . T_OR EXPR_7
 
     T_OR  shift, and go to state 146
 
-    $default  reduce using rule 92 (EXPR_5)
+    $default  reduce using rule 91 (EXPR_5)
 
 
 State 87
 
-   94 EXPR_6: EXPR_7 .
-   97 EXPR_7: EXPR_7 . T_XOR EXPR_8
+   93 EXPR_6: EXPR_7 .
+   96 EXPR_7: EXPR_7 . T_XOR EXPR_8
 
     T_XOR  shift, and go to state 147
 
-    $default  reduce using rule 94 (EXPR_6)
+    $default  reduce using rule 93 (EXPR_6)
 
 
 State 88
 
-   96 EXPR_7: EXPR_8 .
-   99 EXPR_8: EXPR_8 . T_AND EXPR_9
+   95 EXPR_7: EXPR_8 .
+   98 EXPR_8: EXPR_8 . T_AND EXPR_9
 
     T_AND  shift, and go to state 148
 
-    $default  reduce using rule 96 (EXPR_7)
+    $default  reduce using rule 95 (EXPR_7)
 
 
 State 89
 
-   98 EXPR_8: EXPR_9 .
-  101 EXPR_9: EXPR_9 . T_LEQUAL EXPR_10
-  102       | EXPR_9 . T_LNEQUAL EXPR_10
+   97 EXPR_8: EXPR_9 .
+  100 EXPR_9: EXPR_9 . T_LEQUAL EXPR_10
+  101       | EXPR_9 . T_LNEQUAL EXPR_10
 
     T_LEQUAL   shift, and go to state 149
     T_LNEQUAL  shift, and go to state 150
 
-    $default  reduce using rule 98 (EXPR_8)
+    $default  reduce using rule 97 (EXPR_8)
 
 
 State 90
 
-  100 EXPR_9: EXPR_10 .
-  104 EXPR_10: EXPR_10 . T_MORE EXPR_11
-  105        | EXPR_10 . T_LESS EXPR_11
-  106        | EXPR_10 . T_LMOREEQ EXPR_11
-  107        | EXPR_10 . T_LLESSEQ EXPR_11
+   99 EXPR_9: EXPR_10 .
+  103 EXPR_10: EXPR_10 . T_MORE EXPR_11
+  104        | EXPR_10 . T_LESS EXPR_11
+  105        | EXPR_10 . T_LMOREEQ EXPR_11
+  106        | EXPR_10 . T_LLESSEQ EXPR_11
 
     T_MORE     shift, and go to state 151
     T_LESS     shift, and go to state 152
     T_LLESSEQ  shift, and go to state 153
     T_LMOREEQ  shift, and go to state 154
 
-    $default  reduce using rule 100 (EXPR_9)
+    $default  reduce using rule 99 (EXPR_9)
 
 
 State 91
 
-  103 EXPR_10: EXPR_11 .
-  109 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
-  110        | EXPR_11 . T_RSHIFT EXPR_12
+  102 EXPR_10: EXPR_11 .
+  108 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
+  109        | EXPR_11 . T_RSHIFT EXPR_12
 
     T_LSHIFT  shift, and go to state 155
     T_RSHIFT  shift, and go to state 156
 
-    $default  reduce using rule 103 (EXPR_10)
+    $default  reduce using rule 102 (EXPR_10)
 
 
 State 92
 
-  108 EXPR_11: EXPR_12 .
-  112 EXPR_12: EXPR_12 . T_PLUS EXPR_13
-  113        | EXPR_12 . T_MINUS EXPR_13
+  107 EXPR_11: EXPR_12 .
+  111 EXPR_12: EXPR_12 . T_PLUS EXPR_13
+  112        | EXPR_12 . T_MINUS EXPR_13
 
     T_PLUS   shift, and go to state 157
     T_MINUS  shift, and go to state 158
 
-    $default  reduce using rule 108 (EXPR_11)
+    $default  reduce using rule 107 (EXPR_11)
 
 
 State 93
 
-  111 EXPR_12: EXPR_13 .
-  115 EXPR_13: EXPR_13 . T_TIMES EXPR_14
-  116        | EXPR_13 . T_DIVIDE EXPR_14
-  117        | EXPR_13 . T_MODULUS EXPR_14
+  110 EXPR_12: EXPR_13 .
+  114 EXPR_13: EXPR_13 . T_TIMES EXPR_14
+  115        | EXPR_13 . T_DIVIDE EXPR_14
+  116        | EXPR_13 . T_MODULUS EXPR_14
 
     T_TIMES    shift, and go to state 159
     T_DIVIDE   shift, and go to state 160
     T_MODULUS  shift, and go to state 161
 
-    $default  reduce using rule 111 (EXPR_12)
+    $default  reduce using rule 110 (EXPR_12)
 
 
 State 94
 
-  114 EXPR_13: EXPR_14 .
+  113 EXPR_13: EXPR_14 .
 
-    $default  reduce using rule 114 (EXPR_13)
+    $default  reduce using rule 113 (EXPR_13)
 
 
 State 95
 
-  118 EXPR_14: EXPR_15 .
+  117 EXPR_14: EXPR_15 .
 
-    $default  reduce using rule 118 (EXPR_14)
+    $default  reduce using rule 117 (EXPR_14)
 
 
 State 96
 
-  127 EXPR_15: PRIMATIVES .
+  126 EXPR_15: PRIMATIVES .
 
-    $default  reduce using rule 127 (EXPR_15)
+    $default  reduce using rule 126 (EXPR_15)
 
 
 State 97
@@ -1830,8 +1757,8 @@ State 99
 
 State 100
 
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
-  131 EXPR_15: T_LBRACKET EXPR_1 . T_RBRACKET
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+  130 EXPR_15: T_LBRACKET EXPR_1 . T_RBRACKET
 
     T_RBRACKET  shift, and go to state 163
     T_COMMA     shift, and go to state 141
@@ -1839,126 +1766,126 @@ State 100
 
 State 101
 
-  128 EXPR_15: T_ID . T_INC
-  129        | T_ID . T_DEC
-  130        | T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
-  132 PRIMATIVES: T_ID .
+  127 EXPR_15: T_ID . T_INC
+  128        | T_ID . T_DEC
+  129        | T_ID . T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET
+  131 PRIMATIVES: T_ID .
 
     T_LBRACKET  shift, and go to state 110
     T_INC       shift, and go to state 112
     T_DEC       shift, and go to state 113
 
-    $default  reduce using rule 132 (PRIMATIVES)
+    $default  reduce using rule 131 (PRIMATIVES)
 
 
 State 102
 
-  121 EXPR_14: T_NOT EXPR_14 .
+  120 EXPR_14: T_NOT EXPR_14 .
 
-    $default  reduce using rule 121 (EXPR_14)
+    $default  reduce using rule 120 (EXPR_14)
 
 
 State 103
 
-  122 EXPR_14: T_TILDA EXPR_14 .
+  121 EXPR_14: T_TILDA EXPR_14 .
 
-    $default  reduce using rule 122 (EXPR_14)
+    $default  reduce using rule 121 (EXPR_14)
 
 
 State 104
 
-  134 PRIMATIVES: T_MINUS . T_NUMBER
+  133 PRIMATIVES: T_MINUS . T_NUMBER
 
     T_NUMBER  shift, and go to state 164
 
 
 State 105
 
-  125 EXPR_14: T_PLUS EXPR_15 .
-
-    $default  reduce using rule 125 (EXPR_14)
-
-
-State 106
-
-  133 PRIMATIVES: T_NUMBER .
-  134           | T_MINUS T_NUMBER .
-
-    T_LCUBRACKET  reduce using rule 133 (PRIMATIVES)
-    T_LCUBRACKET  [reduce using rule 134 (PRIMATIVES)]
-    T_RBRACKET    reduce using rule 133 (PRIMATIVES)
-    T_RBRACKET    [reduce using rule 134 (PRIMATIVES)]
-    T_COMMA       reduce using rule 133 (PRIMATIVES)
-    T_COMMA       [reduce using rule 134 (PRIMATIVES)]
-    T_COLON       reduce using rule 133 (PRIMATIVES)
-    T_COLON       [reduce using rule 134 (PRIMATIVES)]
-    T_QMARK       reduce using rule 133 (PRIMATIVES)
-    T_QMARK       [reduce using rule 134 (PRIMATIVES)]
-    T_SEMICOLON   reduce using rule 133 (PRIMATIVES)
-    T_SEMICOLON   [reduce using rule 134 (PRIMATIVES)]
-    T_AND         reduce using rule 133 (PRIMATIVES)
-    T_AND         [reduce using rule 134 (PRIMATIVES)]
-    T_OR          reduce using rule 133 (PRIMATIVES)
-    T_OR          [reduce using rule 134 (PRIMATIVES)]
-    T_MORE        reduce using rule 133 (PRIMATIVES)
-    T_MORE        [reduce using rule 134 (PRIMATIVES)]
-    T_LESS        reduce using rule 133 (PRIMATIVES)
-    T_LESS        [reduce using rule 134 (PRIMATIVES)]
-    T_XOR         reduce using rule 133 (PRIMATIVES)
-    T_XOR         [reduce using rule 134 (PRIMATIVES)]
-    T_TIMES       reduce using rule 133 (PRIMATIVES)
-    T_TIMES       [reduce using rule 134 (PRIMATIVES)]
-    T_DIVIDE      reduce using rule 133 (PRIMATIVES)
-    T_DIVIDE      [reduce using rule 134 (PRIMATIVES)]
-    T_PLUS        reduce using rule 133 (PRIMATIVES)
-    T_PLUS        [reduce using rule 134 (PRIMATIVES)]
-    T_MINUS       reduce using rule 133 (PRIMATIVES)
-    T_MINUS       [reduce using rule 134 (PRIMATIVES)]
-    T_MODULUS     reduce using rule 133 (PRIMATIVES)
-    T_MODULUS     [reduce using rule 134 (PRIMATIVES)]
-    T_LAND        reduce using rule 133 (PRIMATIVES)
-    T_LAND        [reduce using rule 134 (PRIMATIVES)]
-    T_LOR         reduce using rule 133 (PRIMATIVES)
-    T_LOR         [reduce using rule 134 (PRIMATIVES)]
-    T_LEQUAL      reduce using rule 133 (PRIMATIVES)
-    T_LEQUAL      [reduce using rule 134 (PRIMATIVES)]
-    T_LNEQUAL     reduce using rule 133 (PRIMATIVES)
-    T_LNEQUAL     [reduce using rule 134 (PRIMATIVES)]
-    T_LLESSEQ     reduce using rule 133 (PRIMATIVES)
-    T_LLESSEQ     [reduce using rule 134 (PRIMATIVES)]
-    T_LMOREEQ     reduce using rule 133 (PRIMATIVES)
-    T_LMOREEQ     [reduce using rule 134 (PRIMATIVES)]
-    T_LSHIFT      reduce using rule 133 (PRIMATIVES)
-    T_LSHIFT      [reduce using rule 134 (PRIMATIVES)]
-    T_RSHIFT      reduce using rule 133 (PRIMATIVES)
-    T_RSHIFT      [reduce using rule 134 (PRIMATIVES)]
-    $default      reduce using rule 133 (PRIMATIVES)
-
-
-State 107
-
-  126 EXPR_14: T_MINUS EXPR_15 .
-
-    $default  reduce using rule 126 (EXPR_14)
-
-
-State 108
-
-  123 EXPR_14: T_INC T_ID .
-
-    $default  reduce using rule 123 (EXPR_14)
-
-
-State 109
-
-  124 EXPR_14: T_DEC T_ID .
+  124 EXPR_14: T_PLUS EXPR_15 .
 
     $default  reduce using rule 124 (EXPR_14)
 
 
+State 106
+
+  132 PRIMATIVES: T_NUMBER .
+  133           | T_MINUS T_NUMBER .
+
+    T_LCUBRACKET  reduce using rule 132 (PRIMATIVES)
+    T_LCUBRACKET  [reduce using rule 133 (PRIMATIVES)]
+    T_RBRACKET    reduce using rule 132 (PRIMATIVES)
+    T_RBRACKET    [reduce using rule 133 (PRIMATIVES)]
+    T_COMMA       reduce using rule 132 (PRIMATIVES)
+    T_COMMA       [reduce using rule 133 (PRIMATIVES)]
+    T_COLON       reduce using rule 132 (PRIMATIVES)
+    T_COLON       [reduce using rule 133 (PRIMATIVES)]
+    T_QMARK       reduce using rule 132 (PRIMATIVES)
+    T_QMARK       [reduce using rule 133 (PRIMATIVES)]
+    T_SEMICOLON   reduce using rule 132 (PRIMATIVES)
+    T_SEMICOLON   [reduce using rule 133 (PRIMATIVES)]
+    T_AND         reduce using rule 132 (PRIMATIVES)
+    T_AND         [reduce using rule 133 (PRIMATIVES)]
+    T_OR          reduce using rule 132 (PRIMATIVES)
+    T_OR          [reduce using rule 133 (PRIMATIVES)]
+    T_MORE        reduce using rule 132 (PRIMATIVES)
+    T_MORE        [reduce using rule 133 (PRIMATIVES)]
+    T_LESS        reduce using rule 132 (PRIMATIVES)
+    T_LESS        [reduce using rule 133 (PRIMATIVES)]
+    T_XOR         reduce using rule 132 (PRIMATIVES)
+    T_XOR         [reduce using rule 133 (PRIMATIVES)]
+    T_TIMES       reduce using rule 132 (PRIMATIVES)
+    T_TIMES       [reduce using rule 133 (PRIMATIVES)]
+    T_DIVIDE      reduce using rule 132 (PRIMATIVES)
+    T_DIVIDE      [reduce using rule 133 (PRIMATIVES)]
+    T_PLUS        reduce using rule 132 (PRIMATIVES)
+    T_PLUS        [reduce using rule 133 (PRIMATIVES)]
+    T_MINUS       reduce using rule 132 (PRIMATIVES)
+    T_MINUS       [reduce using rule 133 (PRIMATIVES)]
+    T_MODULUS     reduce using rule 132 (PRIMATIVES)
+    T_MODULUS     [reduce using rule 133 (PRIMATIVES)]
+    T_LAND        reduce using rule 132 (PRIMATIVES)
+    T_LAND        [reduce using rule 133 (PRIMATIVES)]
+    T_LOR         reduce using rule 132 (PRIMATIVES)
+    T_LOR         [reduce using rule 133 (PRIMATIVES)]
+    T_LEQUAL      reduce using rule 132 (PRIMATIVES)
+    T_LEQUAL      [reduce using rule 133 (PRIMATIVES)]
+    T_LNEQUAL     reduce using rule 132 (PRIMATIVES)
+    T_LNEQUAL     [reduce using rule 133 (PRIMATIVES)]
+    T_LLESSEQ     reduce using rule 132 (PRIMATIVES)
+    T_LLESSEQ     [reduce using rule 133 (PRIMATIVES)]
+    T_LMOREEQ     reduce using rule 132 (PRIMATIVES)
+    T_LMOREEQ     [reduce using rule 133 (PRIMATIVES)]
+    T_LSHIFT      reduce using rule 132 (PRIMATIVES)
+    T_LSHIFT      [reduce using rule 133 (PRIMATIVES)]
+    T_RSHIFT      reduce using rule 132 (PRIMATIVES)
+    T_RSHIFT      [reduce using rule 133 (PRIMATIVES)]
+    $default      reduce using rule 132 (PRIMATIVES)
+
+
+State 107
+
+  125 EXPR_14: T_MINUS EXPR_15 .
+
+    $default  reduce using rule 125 (EXPR_14)
+
+
+State 108
+
+  122 EXPR_14: T_INC T_ID .
+
+    $default  reduce using rule 122 (EXPR_14)
+
+
+State 109
+
+  123 EXPR_14: T_DEC T_ID .
+
+    $default  reduce using rule 123 (EXPR_14)
+
+
 State 110
 
-  130 EXPR_15: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
+  129 EXPR_15: T_ID T_LBRACKET . ARGUMENT_LIST_NO_TYPE T_RBRACKET
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -1993,7 +1920,7 @@ State 110
 
 State 111
 
-   77 EXPR_2: T_ID T_ASSIGN . EXPR_2
+   76 EXPR_2: T_ID T_ASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2025,21 +1952,21 @@ State 111
 
 State 112
 
-  128 EXPR_15: T_ID T_INC .
+  127 EXPR_15: T_ID T_INC .
 
-    $default  reduce using rule 128 (EXPR_15)
+    $default  reduce using rule 127 (EXPR_15)
 
 
 State 113
 
-  129 EXPR_15: T_ID T_DEC .
+  128 EXPR_15: T_ID T_DEC .
 
-    $default  reduce using rule 129 (EXPR_15)
+    $default  reduce using rule 128 (EXPR_15)
 
 
 State 114
 
-   78 EXPR_2: T_ID T_ADDASSIGN . EXPR_2
+   77 EXPR_2: T_ID T_ADDASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2071,7 +1998,7 @@ State 114
 
 State 115
 
-   79 EXPR_2: T_ID T_SUBASSIGN . EXPR_2
+   78 EXPR_2: T_ID T_SUBASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2103,7 +2030,7 @@ State 115
 
 State 116
 
-   80 EXPR_2: T_ID T_MULASSIGN . EXPR_2
+   79 EXPR_2: T_ID T_MULASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2135,7 +2062,7 @@ State 116
 
 State 117
 
-   81 EXPR_2: T_ID T_DIVASSIGN . EXPR_2
+   80 EXPR_2: T_ID T_DIVASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2167,7 +2094,7 @@ State 117
 
 State 118
 
-   82 EXPR_2: T_ID T_MODASSIGN . EXPR_2
+   81 EXPR_2: T_ID T_MODASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2199,7 +2126,7 @@ State 118
 
 State 119
 
-   83 EXPR_2: T_ID T_LSHIFTASSIGN . EXPR_2
+   82 EXPR_2: T_ID T_LSHIFTASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2231,7 +2158,7 @@ State 119
 
 State 120
 
-   84 EXPR_2: T_ID T_RSHIFTASSIGN . EXPR_2
+   83 EXPR_2: T_ID T_RSHIFTASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2263,7 +2190,7 @@ State 120
 
 State 121
 
-   85 EXPR_2: T_ID T_ANDASSIGN . EXPR_2
+   84 EXPR_2: T_ID T_ANDASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2295,7 +2222,7 @@ State 121
 
 State 122
 
-   87 EXPR_2: T_ID T_XORASSIGN . EXPR_2
+   86 EXPR_2: T_ID T_XORASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2327,7 +2254,7 @@ State 122
 
 State 123
 
-   86 EXPR_2: T_ID T_ORASSIGN . EXPR_2
+   85 EXPR_2: T_ID T_ORASSIGN . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2367,7 +2294,7 @@ State 124
 State 125
 
    49 RETURN_STATEMENT: T_RETURN EXPR_1 . T_SEMICOLON
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_COMMA      shift, and go to state 141
     T_SEMICOLON  shift, and go to state 178
@@ -2375,7 +2302,7 @@ State 125
 
 State 126
 
-  120 EXPR_14: T_SIZE_OF T_LBRACKET . TYPE T_RBRACKET
+  119 EXPR_14: T_SIZE_OF T_LBRACKET . TYPE T_RBRACKET
 
     T_CHAR             shift, and go to state 1
     T_SIGN_CHAR        shift, and go to state 2
@@ -2398,15 +2325,15 @@ State 126
 
 State 127
 
-  119 EXPR_14: T_SIZE_OF T_ID .
+  118 EXPR_14: T_SIZE_OF T_ID .
 
-    $default  reduce using rule 119 (EXPR_14)
+    $default  reduce using rule 118 (EXPR_14)
 
 
 State 128
 
    70 IF_STATEMENT: T_IF EXPR_1 . T_LCUBRACKET BODY T_RCUBRACKET
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_LCUBRACKET  shift, and go to state 180
     T_COMMA       shift, and go to state 141
@@ -2415,7 +2342,7 @@ State 128
 State 129
 
    68 WHILE_STATEMENT: T_WHILE EXPR_1 . T_LCUBRACKET BODY T_RCUBRACKET
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_LCUBRACKET  shift, and go to state 181
     T_COMMA       shift, and go to state 141
@@ -2620,7 +2547,7 @@ State 136
 
 State 137
 
-   73 ELSE_STATEMENT: T_ELSE . T_LCUBRACKET BODY T_RCUBRACKET
+   72 ELSE_STATEMENT: T_ELSE . T_LCUBRACKET BODY T_RCUBRACKET
 
     T_LCUBRACKET  shift, and go to state 188
 
@@ -2674,7 +2601,7 @@ State 140
 
 State 141
 
-   75 EXPR_1: EXPR_1 T_COMMA . EXPR_2
+   74 EXPR_1: EXPR_1 T_COMMA . EXPR_2
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2713,7 +2640,7 @@ State 142
 
 State 143
 
-   89 EXPR_3: EXPR_3 T_QMARK . EXPR_1 T_COLON EXPR_4
+   88 EXPR_3: EXPR_3 T_QMARK . EXPR_1 T_COLON EXPR_4
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2746,7 +2673,7 @@ State 143
 
 State 144
 
-   91 EXPR_4: EXPR_4 T_LOR . EXPR_5
+   90 EXPR_4: EXPR_4 T_LOR . EXPR_5
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2775,7 +2702,7 @@ State 144
 
 State 145
 
-   93 EXPR_5: EXPR_5 T_LAND . EXPR_6
+   92 EXPR_5: EXPR_5 T_LAND . EXPR_6
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2803,7 +2730,7 @@ State 145
 
 State 146
 
-   95 EXPR_6: EXPR_6 T_OR . EXPR_7
+   94 EXPR_6: EXPR_6 T_OR . EXPR_7
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2830,7 +2757,7 @@ State 146
 
 State 147
 
-   97 EXPR_7: EXPR_7 T_XOR . EXPR_8
+   96 EXPR_7: EXPR_7 T_XOR . EXPR_8
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2856,7 +2783,7 @@ State 147
 
 State 148
 
-   99 EXPR_8: EXPR_8 T_AND . EXPR_9
+   98 EXPR_8: EXPR_8 T_AND . EXPR_9
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2881,7 +2808,7 @@ State 148
 
 State 149
 
-  101 EXPR_9: EXPR_9 T_LEQUAL . EXPR_10
+  100 EXPR_9: EXPR_9 T_LEQUAL . EXPR_10
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2905,7 +2832,7 @@ State 149
 
 State 150
 
-  102 EXPR_9: EXPR_9 T_LNEQUAL . EXPR_10
+  101 EXPR_9: EXPR_9 T_LNEQUAL . EXPR_10
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2929,7 +2856,7 @@ State 150
 
 State 151
 
-  104 EXPR_10: EXPR_10 T_MORE . EXPR_11
+  103 EXPR_10: EXPR_10 T_MORE . EXPR_11
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2952,7 +2879,7 @@ State 151
 
 State 152
 
-  105 EXPR_10: EXPR_10 T_LESS . EXPR_11
+  104 EXPR_10: EXPR_10 T_LESS . EXPR_11
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2975,7 +2902,7 @@ State 152
 
 State 153
 
-  107 EXPR_10: EXPR_10 T_LLESSEQ . EXPR_11
+  106 EXPR_10: EXPR_10 T_LLESSEQ . EXPR_11
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -2998,7 +2925,7 @@ State 153
 
 State 154
 
-  106 EXPR_10: EXPR_10 T_LMOREEQ . EXPR_11
+  105 EXPR_10: EXPR_10 T_LMOREEQ . EXPR_11
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3021,7 +2948,7 @@ State 154
 
 State 155
 
-  109 EXPR_11: EXPR_11 T_LSHIFT . EXPR_12
+  108 EXPR_11: EXPR_11 T_LSHIFT . EXPR_12
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3043,7 +2970,7 @@ State 155
 
 State 156
 
-  110 EXPR_11: EXPR_11 T_RSHIFT . EXPR_12
+  109 EXPR_11: EXPR_11 T_RSHIFT . EXPR_12
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3065,7 +2992,7 @@ State 156
 
 State 157
 
-  112 EXPR_12: EXPR_12 T_PLUS . EXPR_13
+  111 EXPR_12: EXPR_12 T_PLUS . EXPR_13
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3086,7 +3013,7 @@ State 157
 
 State 158
 
-  113 EXPR_12: EXPR_12 T_MINUS . EXPR_13
+  112 EXPR_12: EXPR_12 T_MINUS . EXPR_13
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3107,7 +3034,7 @@ State 158
 
 State 159
 
-  115 EXPR_13: EXPR_13 T_TIMES . EXPR_14
+  114 EXPR_13: EXPR_13 T_TIMES . EXPR_14
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3127,7 +3054,7 @@ State 159
 
 State 160
 
-  116 EXPR_13: EXPR_13 T_DIVIDE . EXPR_14
+  115 EXPR_13: EXPR_13 T_DIVIDE . EXPR_14
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3147,7 +3074,7 @@ State 160
 
 State 161
 
-  117 EXPR_13: EXPR_13 T_MODULUS . EXPR_14
+  116 EXPR_13: EXPR_13 T_MODULUS . EXPR_14
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -3174,22 +3101,22 @@ State 162
 
 State 163
 
-  131 EXPR_15: T_LBRACKET EXPR_1 T_RBRACKET .
+  130 EXPR_15: T_LBRACKET EXPR_1 T_RBRACKET .
 
-    $default  reduce using rule 131 (EXPR_15)
+    $default  reduce using rule 130 (EXPR_15)
 
 
 State 164
 
-  134 PRIMATIVES: T_MINUS T_NUMBER .
+  133 PRIMATIVES: T_MINUS T_NUMBER .
 
-    $default  reduce using rule 134 (PRIMATIVES)
+    $default  reduce using rule 133 (PRIMATIVES)
 
 
 State 165
 
    13 ARGUMENT_LIST_NO_TYPE: ARGUMENT_LIST_NO_TYPE . T_COMMA EXPR_2
-  130 EXPR_15: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
+  129 EXPR_15: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE . T_RBRACKET
 
     T_RBRACKET  shift, and go to state 210
     T_COMMA     shift, and go to state 211
@@ -3204,79 +3131,79 @@ State 166
 
 State 167
 
-   77 EXPR_2: T_ID T_ASSIGN EXPR_2 .
+   76 EXPR_2: T_ID T_ASSIGN EXPR_2 .
 
-    $default  reduce using rule 77 (EXPR_2)
+    $default  reduce using rule 76 (EXPR_2)
 
 
 State 168
 
-   78 EXPR_2: T_ID T_ADDASSIGN EXPR_2 .
+   77 EXPR_2: T_ID T_ADDASSIGN EXPR_2 .
 
-    $default  reduce using rule 78 (EXPR_2)
+    $default  reduce using rule 77 (EXPR_2)
 
 
 State 169
 
-   79 EXPR_2: T_ID T_SUBASSIGN EXPR_2 .
+   78 EXPR_2: T_ID T_SUBASSIGN EXPR_2 .
 
-    $default  reduce using rule 79 (EXPR_2)
+    $default  reduce using rule 78 (EXPR_2)
 
 
 State 170
 
-   80 EXPR_2: T_ID T_MULASSIGN EXPR_2 .
+   79 EXPR_2: T_ID T_MULASSIGN EXPR_2 .
 
-    $default  reduce using rule 80 (EXPR_2)
+    $default  reduce using rule 79 (EXPR_2)
 
 
 State 171
 
-   81 EXPR_2: T_ID T_DIVASSIGN EXPR_2 .
+   80 EXPR_2: T_ID T_DIVASSIGN EXPR_2 .
 
-    $default  reduce using rule 81 (EXPR_2)
+    $default  reduce using rule 80 (EXPR_2)
 
 
 State 172
 
-   82 EXPR_2: T_ID T_MODASSIGN EXPR_2 .
+   81 EXPR_2: T_ID T_MODASSIGN EXPR_2 .
 
-    $default  reduce using rule 82 (EXPR_2)
+    $default  reduce using rule 81 (EXPR_2)
 
 
 State 173
 
-   83 EXPR_2: T_ID T_LSHIFTASSIGN EXPR_2 .
+   82 EXPR_2: T_ID T_LSHIFTASSIGN EXPR_2 .
 
-    $default  reduce using rule 83 (EXPR_2)
+    $default  reduce using rule 82 (EXPR_2)
 
 
 State 174
 
-   84 EXPR_2: T_ID T_RSHIFTASSIGN EXPR_2 .
+   83 EXPR_2: T_ID T_RSHIFTASSIGN EXPR_2 .
 
-    $default  reduce using rule 84 (EXPR_2)
+    $default  reduce using rule 83 (EXPR_2)
 
 
 State 175
 
-   85 EXPR_2: T_ID T_ANDASSIGN EXPR_2 .
+   84 EXPR_2: T_ID T_ANDASSIGN EXPR_2 .
 
-    $default  reduce using rule 85 (EXPR_2)
+    $default  reduce using rule 84 (EXPR_2)
 
 
 State 176
 
-   87 EXPR_2: T_ID T_XORASSIGN EXPR_2 .
+   86 EXPR_2: T_ID T_XORASSIGN EXPR_2 .
 
-    $default  reduce using rule 87 (EXPR_2)
+    $default  reduce using rule 86 (EXPR_2)
 
 
 State 177
 
-   86 EXPR_2: T_ID T_ORASSIGN EXPR_2 .
+   85 EXPR_2: T_ID T_ORASSIGN EXPR_2 .
 
-    $default  reduce using rule 86 (EXPR_2)
+    $default  reduce using rule 85 (EXPR_2)
 
 
 State 178
@@ -3288,7 +3215,7 @@ State 178
 
 State 179
 
-  120 EXPR_14: T_SIZE_OF T_LBRACKET TYPE . T_RBRACKET
+  119 EXPR_14: T_SIZE_OF T_LBRACKET TYPE . T_RBRACKET
 
     T_RBRACKET  shift, and go to state 212
 
@@ -3688,7 +3615,7 @@ State 187
 
 State 188
 
-   73 ELSE_STATEMENT: T_ELSE T_LCUBRACKET . BODY T_RCUBRACKET
+   72 ELSE_STATEMENT: T_ELSE T_LCUBRACKET . BODY T_RCUBRACKET
 
     T_LCUBRACKET       shift, and go to state 51
     T_LBRACKET         shift, and go to state 52
@@ -3791,7 +3718,7 @@ State 188
 State 189
 
    71 ELSE_IF_STATEMENT: T_ELIF EXPR_1 . T_LCUBRACKET BODY T_RCUBRACKET
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_LCUBRACKET  shift, and go to state 221
     T_COMMA       shift, and go to state 141
@@ -3799,15 +3726,15 @@ State 189
 
 State 190
 
-   75 EXPR_1: EXPR_1 T_COMMA EXPR_2 .
+   74 EXPR_1: EXPR_1 T_COMMA EXPR_2 .
 
-    $default  reduce using rule 75 (EXPR_1)
+    $default  reduce using rule 74 (EXPR_1)
 
 
 State 191
 
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
-   89 EXPR_3: EXPR_3 T_QMARK EXPR_1 . T_COLON EXPR_4
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   88 EXPR_3: EXPR_3 T_QMARK EXPR_1 . T_COLON EXPR_4
 
     T_COMMA  shift, and go to state 141
     T_COLON  shift, and go to state 222
@@ -3815,63 +3742,79 @@ State 191
 
 State 192
 
-   91 EXPR_4: EXPR_4 T_LOR EXPR_5 .
-   93 EXPR_5: EXPR_5 . T_LAND EXPR_6
+   90 EXPR_4: EXPR_4 T_LOR EXPR_5 .
+   92 EXPR_5: EXPR_5 . T_LAND EXPR_6
 
     T_LAND  shift, and go to state 145
 
-    $default  reduce using rule 91 (EXPR_4)
+    $default  reduce using rule 90 (EXPR_4)
 
 
 State 193
 
-   93 EXPR_5: EXPR_5 T_LAND EXPR_6 .
-   95 EXPR_6: EXPR_6 . T_OR EXPR_7
+   92 EXPR_5: EXPR_5 T_LAND EXPR_6 .
+   94 EXPR_6: EXPR_6 . T_OR EXPR_7
 
     T_OR  shift, and go to state 146
 
-    $default  reduce using rule 93 (EXPR_5)
+    $default  reduce using rule 92 (EXPR_5)
 
 
 State 194
 
-   95 EXPR_6: EXPR_6 T_OR EXPR_7 .
-   97 EXPR_7: EXPR_7 . T_XOR EXPR_8
+   94 EXPR_6: EXPR_6 T_OR EXPR_7 .
+   96 EXPR_7: EXPR_7 . T_XOR EXPR_8
 
     T_XOR  shift, and go to state 147
 
-    $default  reduce using rule 95 (EXPR_6)
+    $default  reduce using rule 94 (EXPR_6)
 
 
 State 195
 
-   97 EXPR_7: EXPR_7 T_XOR EXPR_8 .
-   99 EXPR_8: EXPR_8 . T_AND EXPR_9
+   96 EXPR_7: EXPR_7 T_XOR EXPR_8 .
+   98 EXPR_8: EXPR_8 . T_AND EXPR_9
 
     T_AND  shift, and go to state 148
 
-    $default  reduce using rule 97 (EXPR_7)
+    $default  reduce using rule 96 (EXPR_7)
 
 
 State 196
 
-   99 EXPR_8: EXPR_8 T_AND EXPR_9 .
-  101 EXPR_9: EXPR_9 . T_LEQUAL EXPR_10
-  102       | EXPR_9 . T_LNEQUAL EXPR_10
+   98 EXPR_8: EXPR_8 T_AND EXPR_9 .
+  100 EXPR_9: EXPR_9 . T_LEQUAL EXPR_10
+  101       | EXPR_9 . T_LNEQUAL EXPR_10
 
     T_LEQUAL   shift, and go to state 149
     T_LNEQUAL  shift, and go to state 150
 
-    $default  reduce using rule 99 (EXPR_8)
+    $default  reduce using rule 98 (EXPR_8)
 
 
 State 197
 
-  101 EXPR_9: EXPR_9 T_LEQUAL EXPR_10 .
-  104 EXPR_10: EXPR_10 . T_MORE EXPR_11
-  105        | EXPR_10 . T_LESS EXPR_11
-  106        | EXPR_10 . T_LMOREEQ EXPR_11
-  107        | EXPR_10 . T_LLESSEQ EXPR_11
+  100 EXPR_9: EXPR_9 T_LEQUAL EXPR_10 .
+  103 EXPR_10: EXPR_10 . T_MORE EXPR_11
+  104        | EXPR_10 . T_LESS EXPR_11
+  105        | EXPR_10 . T_LMOREEQ EXPR_11
+  106        | EXPR_10 . T_LLESSEQ EXPR_11
+
+    T_MORE     shift, and go to state 151
+    T_LESS     shift, and go to state 152
+    T_LLESSEQ  shift, and go to state 153
+    T_LMOREEQ  shift, and go to state 154
+
+    $default  reduce using rule 100 (EXPR_9)
+
+
+State 198
+
+  101 EXPR_9: EXPR_9 T_LNEQUAL EXPR_10 .
+  103 EXPR_10: EXPR_10 . T_MORE EXPR_11
+  104        | EXPR_10 . T_LESS EXPR_11
+  105        | EXPR_10 . T_LMOREEQ EXPR_11
+  106        | EXPR_10 . T_LLESSEQ EXPR_11
 
     T_MORE     shift, and go to state 151
     T_LESS     shift, and go to state 152
@@ -3881,27 +3824,23 @@ State 197
     $default  reduce using rule 101 (EXPR_9)
 
 
-State 198
-
-  102 EXPR_9: EXPR_9 T_LNEQUAL EXPR_10 .
-  104 EXPR_10: EXPR_10 . T_MORE EXPR_11
-  105        | EXPR_10 . T_LESS EXPR_11
-  106        | EXPR_10 . T_LMOREEQ EXPR_11
-  107        | EXPR_10 . T_LLESSEQ EXPR_11
-
-    T_MORE     shift, and go to state 151
-    T_LESS     shift, and go to state 152
-    T_LLESSEQ  shift, and go to state 153
-    T_LMOREEQ  shift, and go to state 154
-
-    $default  reduce using rule 102 (EXPR_9)
-
-
 State 199
 
-  104 EXPR_10: EXPR_10 T_MORE EXPR_11 .
-  109 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
-  110        | EXPR_11 . T_RSHIFT EXPR_12
+  103 EXPR_10: EXPR_10 T_MORE EXPR_11 .
+  108 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
+  109        | EXPR_11 . T_RSHIFT EXPR_12
+
+    T_LSHIFT  shift, and go to state 155
+    T_RSHIFT  shift, and go to state 156
+
+    $default  reduce using rule 103 (EXPR_10)
+
+
+State 200
+
+  104 EXPR_10: EXPR_10 T_LESS EXPR_11 .
+  108 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
+  109        | EXPR_11 . T_RSHIFT EXPR_12
 
     T_LSHIFT  shift, and go to state 155
     T_RSHIFT  shift, and go to state 156
@@ -3909,35 +3848,11 @@ State 199
     $default  reduce using rule 104 (EXPR_10)
 
 
-State 200
-
-  105 EXPR_10: EXPR_10 T_LESS EXPR_11 .
-  109 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
-  110        | EXPR_11 . T_RSHIFT EXPR_12
-
-    T_LSHIFT  shift, and go to state 155
-    T_RSHIFT  shift, and go to state 156
-
-    $default  reduce using rule 105 (EXPR_10)
-
-
 State 201
 
-  107 EXPR_10: EXPR_10 T_LLESSEQ EXPR_11 .
-  109 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
-  110        | EXPR_11 . T_RSHIFT EXPR_12
-
-    T_LSHIFT  shift, and go to state 155
-    T_RSHIFT  shift, and go to state 156
-
-    $default  reduce using rule 107 (EXPR_10)
-
-
-State 202
-
-  106 EXPR_10: EXPR_10 T_LMOREEQ EXPR_11 .
-  109 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
-  110        | EXPR_11 . T_RSHIFT EXPR_12
+  106 EXPR_10: EXPR_10 T_LLESSEQ EXPR_11 .
+  108 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
+  109        | EXPR_11 . T_RSHIFT EXPR_12
 
     T_LSHIFT  shift, and go to state 155
     T_RSHIFT  shift, and go to state 156
@@ -3945,11 +3860,35 @@ State 202
     $default  reduce using rule 106 (EXPR_10)
 
 
+State 202
+
+  105 EXPR_10: EXPR_10 T_LMOREEQ EXPR_11 .
+  108 EXPR_11: EXPR_11 . T_LSHIFT EXPR_12
+  109        | EXPR_11 . T_RSHIFT EXPR_12
+
+    T_LSHIFT  shift, and go to state 155
+    T_RSHIFT  shift, and go to state 156
+
+    $default  reduce using rule 105 (EXPR_10)
+
+
 State 203
 
-  109 EXPR_11: EXPR_11 T_LSHIFT EXPR_12 .
-  112 EXPR_12: EXPR_12 . T_PLUS EXPR_13
-  113        | EXPR_12 . T_MINUS EXPR_13
+  108 EXPR_11: EXPR_11 T_LSHIFT EXPR_12 .
+  111 EXPR_12: EXPR_12 . T_PLUS EXPR_13
+  112        | EXPR_12 . T_MINUS EXPR_13
+
+    T_PLUS   shift, and go to state 157
+    T_MINUS  shift, and go to state 158
+
+    $default  reduce using rule 108 (EXPR_11)
+
+
+State 204
+
+  109 EXPR_11: EXPR_11 T_RSHIFT EXPR_12 .
+  111 EXPR_12: EXPR_12 . T_PLUS EXPR_13
+  112        | EXPR_12 . T_MINUS EXPR_13
 
     T_PLUS   shift, and go to state 157
     T_MINUS  shift, and go to state 158
@@ -3957,24 +3896,26 @@ State 203
     $default  reduce using rule 109 (EXPR_11)
 
 
-State 204
-
-  110 EXPR_11: EXPR_11 T_RSHIFT EXPR_12 .
-  112 EXPR_12: EXPR_12 . T_PLUS EXPR_13
-  113        | EXPR_12 . T_MINUS EXPR_13
-
-    T_PLUS   shift, and go to state 157
-    T_MINUS  shift, and go to state 158
-
-    $default  reduce using rule 110 (EXPR_11)
-
-
 State 205
 
-  112 EXPR_12: EXPR_12 T_PLUS EXPR_13 .
-  115 EXPR_13: EXPR_13 . T_TIMES EXPR_14
-  116        | EXPR_13 . T_DIVIDE EXPR_14
-  117        | EXPR_13 . T_MODULUS EXPR_14
+  111 EXPR_12: EXPR_12 T_PLUS EXPR_13 .
+  114 EXPR_13: EXPR_13 . T_TIMES EXPR_14
+  115        | EXPR_13 . T_DIVIDE EXPR_14
+  116        | EXPR_13 . T_MODULUS EXPR_14
+
+    T_TIMES    shift, and go to state 159
+    T_DIVIDE   shift, and go to state 160
+    T_MODULUS  shift, and go to state 161
+
+    $default  reduce using rule 111 (EXPR_12)
+
+
+State 206
+
+  112 EXPR_12: EXPR_12 T_MINUS EXPR_13 .
+  114 EXPR_13: EXPR_13 . T_TIMES EXPR_14
+  115        | EXPR_13 . T_DIVIDE EXPR_14
+  116        | EXPR_13 . T_MODULUS EXPR_14
 
     T_TIMES    shift, and go to state 159
     T_DIVIDE   shift, and go to state 160
@@ -3983,46 +3924,32 @@ State 205
     $default  reduce using rule 112 (EXPR_12)
 
 
-State 206
-
-  113 EXPR_12: EXPR_12 T_MINUS EXPR_13 .
-  115 EXPR_13: EXPR_13 . T_TIMES EXPR_14
-  116        | EXPR_13 . T_DIVIDE EXPR_14
-  117        | EXPR_13 . T_MODULUS EXPR_14
-
-    T_TIMES    shift, and go to state 159
-    T_DIVIDE   shift, and go to state 160
-    T_MODULUS  shift, and go to state 161
-
-    $default  reduce using rule 113 (EXPR_12)
-
-
 State 207
 
-  115 EXPR_13: EXPR_13 T_TIMES EXPR_14 .
+  114 EXPR_13: EXPR_13 T_TIMES EXPR_14 .
 
-    $default  reduce using rule 115 (EXPR_13)
+    $default  reduce using rule 114 (EXPR_13)
 
 
 State 208
 
-  116 EXPR_13: EXPR_13 T_DIVIDE EXPR_14 .
+  115 EXPR_13: EXPR_13 T_DIVIDE EXPR_14 .
 
-    $default  reduce using rule 116 (EXPR_13)
+    $default  reduce using rule 115 (EXPR_13)
 
 
 State 209
 
-  117 EXPR_13: EXPR_13 T_MODULUS EXPR_14 .
+  116 EXPR_13: EXPR_13 T_MODULUS EXPR_14 .
 
-    $default  reduce using rule 117 (EXPR_13)
+    $default  reduce using rule 116 (EXPR_13)
 
 
 State 210
 
-  130 EXPR_15: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
+  129 EXPR_15: T_ID T_LBRACKET ARGUMENT_LIST_NO_TYPE T_RBRACKET .
 
-    $default  reduce using rule 130 (EXPR_15)
+    $default  reduce using rule 129 (EXPR_15)
 
 
 State 211
@@ -4059,9 +3986,9 @@ State 211
 
 State 212
 
-  120 EXPR_14: T_SIZE_OF T_LBRACKET TYPE T_RBRACKET .
+  119 EXPR_14: T_SIZE_OF T_LBRACKET TYPE T_RBRACKET .
 
-    $default  reduce using rule 120 (EXPR_14)
+    $default  reduce using rule 119 (EXPR_14)
 
 
 State 213
@@ -4296,7 +4223,7 @@ State 219
 State 220
 
    31 BODY: BODY . STATEMENT
-   73 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY . T_RCUBRACKET
+   72 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY . T_RCUBRACKET
 
     T_LCUBRACKET       shift, and go to state 51
     T_RCUBRACKET       shift, and go to state 231
@@ -4466,7 +4393,7 @@ State 221
 
 State 222
 
-   89 EXPR_3: EXPR_3 T_QMARK EXPR_1 T_COLON . EXPR_4
+   88 EXPR_3: EXPR_3 T_QMARK EXPR_1 T_COLON . EXPR_4
 
     T_LBRACKET  shift, and go to state 52
     T_NOT       shift, and go to state 54
@@ -4653,7 +4580,7 @@ State 227
 State 228
 
    45 FOR_STATEMENT: T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 . T_RBRACKET BODY
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_RBRACKET  shift, and go to state 236
     T_COMMA     shift, and go to state 141
@@ -4764,7 +4691,7 @@ State 229
 State 230
 
    44 FOR_STATEMENT: T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 . T_RBRACKET BODY
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_RBRACKET  shift, and go to state 238
     T_COMMA     shift, and go to state 141
@@ -4772,9 +4699,9 @@ State 230
 
 State 231
 
-   73 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET .
+   72 ELSE_STATEMENT: T_ELSE T_LCUBRACKET BODY T_RCUBRACKET .
 
-    $default  reduce using rule 73 (ELSE_STATEMENT)
+    $default  reduce using rule 72 (ELSE_STATEMENT)
 
 
 State 232
@@ -4848,18 +4775,18 @@ State 232
 
 State 233
 
-   89 EXPR_3: EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4 .
-   91 EXPR_4: EXPR_4 . T_LOR EXPR_5
+   88 EXPR_3: EXPR_3 T_QMARK EXPR_1 T_COLON EXPR_4 .
+   90 EXPR_4: EXPR_4 . T_LOR EXPR_5
 
     T_LOR  shift, and go to state 144
 
-    $default  reduce using rule 89 (EXPR_3)
+    $default  reduce using rule 88 (EXPR_3)
 
 
 State 234
 
    69 DO_STATEMENT: T_DO T_LCUBRACKET BODY T_RCUBRACKET T_WHILE EXPR_1 . T_SEMICOLON
-   75 EXPR_1: EXPR_1 . T_COMMA EXPR_2
+   74 EXPR_1: EXPR_1 . T_COMMA EXPR_2
 
     T_COMMA      shift, and go to state 141
     T_SEMICOLON  shift, and go to state 240

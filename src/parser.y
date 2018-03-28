@@ -152,7 +152,7 @@ IF_STATEMENT : T_IF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET       { $$ = new If_St
 ELSE_IF_STATEMENT : T_ELIF EXPR_1 T_LCUBRACKET BODY T_RCUBRACKET        { $$ = new ElIf_Statement($2,$4); }
         /*| T_ELIF EXPR_1 BODY                                            { $$ = new ElIf_Statement($2,$3); }*/
 
-ELSE_STATEMENT : | T_ELSE T_LCUBRACKET BODY T_RCUBRACKET                 { $$ = new Else_Statement ($3); }
+ELSE_STATEMENT : T_ELSE T_LCUBRACKET BODY T_RCUBRACKET                 { $$ = new Else_Statement ($3); }
         /*| T_ELSE BODY                                         { $$ = new Else_Statement ($2); }*/
 
 EXPR_1 : EXPR_2                         { $$ = $1; }

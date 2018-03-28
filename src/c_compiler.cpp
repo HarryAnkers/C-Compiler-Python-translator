@@ -22,7 +22,7 @@ int main(int argc = 4, char *argv[] = NULL)
     std::cout<<"    ret=main()"<<std::endl;
     std::cout<<"    sys.exit(ret)"<<std::endl;
   } 
-  else if (test == "--compile") {
+  else if (test == "-S") {
     ast->compile(std::cout);
   }
 

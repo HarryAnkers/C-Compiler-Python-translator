@@ -66,7 +66,7 @@ class Function : public ASTNode
 
             dst<<".global "<<id<<std::endl;
             dst<<".ent "<<id<<std::endl;
-            dst<<".type "<<id<<", @function"<<std::endl<<std::endl;
+            dst<<".type "<<id<<", @function"<<std::endl;
 
             dst<<id<<":"<<std::endl;
             state.returnId=state.label();
@@ -74,7 +74,7 @@ class Function : public ASTNode
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*state.functionOffset)<<std::endl;
             dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
             dst<<"sw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
-            dst<<"add"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<" , "<<"$0"<<std::endl;
+            dst<<"addu"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<" , "<<"$0"<<std::endl;
             
             state.adjustStack(state.functionOffset);
             //then stores arguments
@@ -87,7 +87,7 @@ class Function : public ASTNode
 
             //below needs to be put into the return
             dst<<"$E"<<state.returnId<<":"<<std::endl;
-            dst<<"add"<<" "<<"$"<<"sp"<<" , "<<"$"<<"fp"<<" , "<<"$0"<<std::endl;
+            dst<<"addu"<<" "<<"$"<<"sp"<<" , "<<"$"<<"fp"<<" , "<<"$0"<<std::endl;
             dst<<"lw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
             dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<state.functionOffset<<std::endl;
