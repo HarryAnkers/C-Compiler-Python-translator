@@ -46,16 +46,20 @@ for i in ${input_dir}/*.c ; do
                 #Link the generated assembly and the driver object into a MIPS executable.
                 echo "linking assembly and driver object..."
                 mips-linux-gnu-gcc -static ${working}/$base-got.s ${working}/$driver-got.o -o ${working_exec}/$base-got
+
                 if [[ ! -f ${working_exec}/$base-got ]] ; then
                     >&2 echo "ERROR : mips-linux-gnu-gcc failed in linking $base-got.s and $driver-got.o into an executable"
+                    TEST_OUTPUT=20
+                else
+                    # Run the executable under QEMU
+                    qemu-mips ${working_exec}/$base-got
+                    TEST_OUTPUT=$?
                 fi
-
-                # Run the executable under QEMU
-                qemu-mips ${working_exec}/$base-got
-                TEST_OUTPUT=$?
             fi
    
-        if [[ $TEST_OUTPUT -ne 0 ]] ; then
+        if [[ $TEST_OUTPUT -eq 20 ]] ; then
+            echo "$base, Fail, no $base-got executable in ${working_exec}"
+        elif [[ $TEST_OUTPUT -ne 0 ]] ; then
             echo "$base, Fail, Expected "0", got ${TEST_OUTPUT}"
         elif [[ ${have_compiler} -ne 0 ]] ; then
             echo "$base, Fail, No C compiler"
