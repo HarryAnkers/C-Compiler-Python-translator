@@ -1,8 +1,8 @@
-.global main
-.ent main
-.type main, @function
+.global assign
+.ent assign
+.type assign, @function
 
-main:
+assign:
 addiu $sp , $sp , -8
 sw $31 , 4($sp)
 sw $fp , 0($sp)
@@ -20,4 +20,4 @@ sw $31 , 4($sp)
 addiu $sp , $sp , 8
 j $31
 nop
-.end main
+.end assign
