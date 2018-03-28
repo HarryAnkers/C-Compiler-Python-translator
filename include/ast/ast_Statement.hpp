@@ -44,7 +44,7 @@ class ReturnStatement : public ASTNode
             if(expression!=NULL){
                 int reg1 = state.getTempReg(0);
                 expression->compile(dst,state);
-                dst<<"add"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
+                dst<<"addu"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
                 state.registers[reg1]=0;
             }
             dst<<"b"<<" "<<"$E"<<state.returnId<<std::endl;

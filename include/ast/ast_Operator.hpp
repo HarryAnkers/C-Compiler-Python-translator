@@ -374,7 +374,7 @@ class TenOp
             reg2 = state.getTempReg(0);
             expression1->compile(dst,state);
             state.registers[reg2]=0;
-            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+            dst<<"addu"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
 
 
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
@@ -385,7 +385,7 @@ class TenOp
             reg2 = state.getTempReg(0);
             expression2->compile(dst,state);
             state.registers[reg2]=0;
-            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+            dst<<"addu"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
 
             dst<<"$L"<<state.label()<<std::endl;
         }
@@ -437,7 +437,7 @@ class CommaOp
             reg2 = state.getTempReg(0);
             expression2->compile(dst, state);
             state.registers[reg2]=0;
-            dst<<"add"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
+            dst<<"addu"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<"0"<<std::endl;
         }
 
         //for frame size
