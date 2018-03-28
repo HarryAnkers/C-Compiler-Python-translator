@@ -40,3 +40,4 @@ clean :
 	rm src/*.tab.hpp
 	rm src/*.yy.cpp
 	rm src/*.output
+	rm test_tmp/*
