@@ -28,7 +28,9 @@ for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
     NAME=$(basename ${DRIVER%_driver.c})
     TESTCODE=test_deliverable/test_cases/$NAME.c
     
-    >&2 echo "Test case $NAME"
+    echo "-------------------------------"
+    echo " "
+    echo "Test case $NAME"
     echo " "
 
     # Compile ${NAME}.c using the compiler under test into assembly.
@@ -36,6 +38,7 @@ for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
     ${compiler} --compile $TESTCODE -o ${working}/$NAME-got.s
     if [[ ! -f ${working}/$NAME-got.s ]] ; then
         >&2 echo "ERROR : Your C Compiler failed to compile $TESTCODE into $NAME-got.s"
+        TEST_OUTPUT=20
     else
         #Compile ${NAME}_driver.c using MIPS GCC. 
         echo "compiling $DRIVER using mips-linux-gnu-gcc..."                               
