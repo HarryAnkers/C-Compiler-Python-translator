@@ -1,10 +1,9 @@
 def f(a, b, c, d):
     if(a):
         if(b):
-            a=23
+            return 23
         elif(c):
-            a=7
-            return a
+            return 7
 
 def main():
     return f(1,2,3,4)

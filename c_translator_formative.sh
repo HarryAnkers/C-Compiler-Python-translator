@@ -19,6 +19,8 @@ mkdir -p ${working}
 
 for i in ${input_dir}/*.c ; do
     base=$(echo $i | sed -E -e "s|${input_dir}/([^.]+)[.]c|\1|g");
+    echo "--------------------------------------------------------"
+    echo "[$base] begining test"
     
     # Compile the reference C version
     gcc $i -o $working/$base
@@ -42,12 +44,12 @@ for i in ${input_dir}/*.c ; do
     fi
     
     if [[ $REF_C_OUT -ne $REF_P_OUT ]] ; then
-        echo "$base, REF_FAIL, Expected ${REF_C_OUT}(REF_C), got ${REF_P_OUT}(REF_PY)"
+        echo "[$base] = REF_FAIL, Expected ${REF_C_OUT}(REF_C), got ${REF_P_OUT}(REF_PY)"
     elif [[ ${have_compiler} -ne 0 ]] ; then
-        echo "$base, Fail, No C compiler/translator"
+        echo "[$base] = Fail, No C compiler/translator"
     elif [[ $REF_C_OUT -ne $GOT_P_OUT ]] ; then
-        echo "$base, Fail, Expected ${REF_C_OUT}(REF_C), got ${GOT_P_OUT}(GOT_PY)"
+        echo "[$base] = Fail, Expected ${REF_C_OUT}(REF_C), got ${GOT_P_OUT}(GOT_PY)"
     else
-        echo "$base, Pass"
+        echo "[$base] = Pass"
     fi
 done

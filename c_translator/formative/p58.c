@@ -1,11 +1,9 @@
 int f(int a, int b, int c, int d)
 {
     if(a)
-        a=23;
-        return a;
+        return 12;
     else if(c)
-        a=7;
-        return a;
+        return 214;
 }
 
 int main(){

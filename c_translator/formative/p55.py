@@ -1,26 +1,17 @@
 def f(a, b, c, d):
     if(a):
-        a=1
         if(b):
-            a=2
             if(c):
-                a=3
                 if(d):
-                    a=4
-                    return a
+                    return 1
                 else:
-                    a=5
-                    return a
+                    return 2
             else:
-                a=6
-                return a
+                return 3
         else:
-            a=7
-            return a
+            return 4
     else:
-        a=8
-        return a
-}
+        return 5
 
 def main():
     return f(1,2,3,4)

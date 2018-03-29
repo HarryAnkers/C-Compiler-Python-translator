@@ -50,13 +50,13 @@ class Number
     : public ASTNode
 {
 private:
-    double value;
+    float value;
 public:
-    Number(double pos, double neg)
+    Number(float pos, float neg)
         : value(pos-neg)
     {}
 
-    double getValue() const
+    float getValue() const
     { return value; }
 
     virtual void print(std::ostream &dst, PrintTransState &state) const override{
