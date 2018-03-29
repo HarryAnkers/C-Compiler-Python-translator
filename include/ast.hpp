@@ -5,6 +5,7 @@
 #include <string>
 
 #include "ast/ast_ASTNode.hpp"
+#include "ast/ast_Arrays.hpp"
 #include "ast/ast_Top_List.hpp"
 #include "ast/ast_Dec_Function.hpp"
 #include "ast/ast_Future_Func.hpp"

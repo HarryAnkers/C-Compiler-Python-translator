@@ -50,7 +50,26 @@ class Argument : public ASTNode
                 int count =state.argCount;
                 state.varVector.push_back(VariableBind(argId, argType, state.currentScope,((count*4)+state.functionOffset)));
                 if(count<4){
-                    dst<<"sw"<<" "<<"$"<<(count+4)<<" , "<<((count*4)+state.functionOffset)<<"($fp)"<<std::endl;
+                    std::string temp= argType;
+                    int size=0;
+                    if(!temp.compare("char")){ size = 4; }
+                    else if(!temp.compare("signed char")){ size = 4; }
+                    else if(!temp.compare("unsigned char")){ size = 4; }
+                    else if(!temp.compare("short")){ size = 4; }
+                    else if(!temp.compare("unsigned short")){ size = 4; }
+                    else if(!temp.compare("int")){ size = 4; }
+                    else if(!temp.compare("unsigned int")){ size = 4; }
+                    else if(!temp.compare("long")){ size = 8; }
+                    else if(!temp.compare("unsigned long")){ size = 8; }
+                    else if(!temp.compare("long long")){ size = 16; }
+                    else if(!temp.compare("unsigned long long")){ size = 16; }
+                    else if(!temp.compare("float")){ size = 4; }
+                    else if(!temp.compare("double")){ size = 8; }
+                    else if(!temp.compare("long double")){ size = 32; }
+                    else if(!temp.compare("void")){ size = 0; }
+                    else{ throw std::invalid_argument( "type not defined" );}
+
+                    dst<<"sw"<<" "<<"$"<<(count+4)<<" , "<<((count*size)+state.functionOffset)<<"($fp)"<<std::endl;
                 }
                 state.argCount++;
             }

@@ -46,6 +46,43 @@ public:
     virtual void count(CompilerState &state) const override {}
 };
 
+class ArrayVal
+    : public ASTNode
+{
+private:
+    std::string id;
+    int arrayId;
+public:
+    ArrayVal(const std::string &_id,int _arrayId)
+        : id(_id), arrayId(_arrayId)
+    {}
+
+    const std::string getId() const
+    { return id; }
+
+    virtual void print(std::ostream &dst, PrintTransState &state) const override{
+        dst<<id<<"["<<arrayId<<"]";
+    }
+
+    virtual void translate(std::ostream &dst, PrintTransState &state) const override{
+        dst<<id<<"["<<arrayId<<"]";;
+    }
+
+    virtual void compile(std::ostream &dst, CompilerState &state) const override{
+        for(int i = state.ArrayVector.size()-1;i>=0;i--){
+            if(!state.ArrayVector[i].id.compare(id)){
+                int reg1 = state.getTempReg(1);
+
+                dst<<"lw "<<"$"<<reg1<<" , "<<state.ArrayVector[i].elementOffset[arrayId]<<"($fp)"<<std::endl;
+                return;
+            }
+        }
+        throw std::invalid_argument( "variable used was not found (previously declared)" );
+    }
+
+    virtual void count(CompilerState &state) const override {}
+};
+
 class Number
     : public ASTNode
 {

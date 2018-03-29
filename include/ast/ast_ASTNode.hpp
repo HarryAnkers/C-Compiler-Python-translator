@@ -8,6 +8,23 @@
 #include <memory>
 #include <sstream>
 
+class ArrayBind
+{
+    public:
+    std::string type;
+    std::string id;
+    std::vector<int> elementOffset;
+    int size;
+
+    ArrayBind(std::string _type, std::string _id):
+        type(_type),id(_id){}
+
+    friend std::ostream& operator<< (std::ostream &o, ArrayBind b){
+        o << "type: "<<b.type<< "id: "<<b.id;
+        return o;
+    }
+};
+
 class FunctionBind
 {
     public:
@@ -72,9 +89,11 @@ public:
     std::vector<VariableBind> varVector;
     std::vector<FunctionBind> funcVector;
     std::vector<GloVarBind> gloVarVector;
+    std::vector<ArrayBind> ArrayVector;
     std::vector<int> ifVector;
 
     std::string currentType;
+    std::string currentId;
     
     int currentScope;
     int currentArgCount;
@@ -87,6 +106,8 @@ public:
     int argCount;
     int argSpace;
     int functionOffset;
+    int arrayCounter;
+    int currentArraySize;
 
     CompilerState():
         labelId(0), currentScope(0), currentOffset(-4), returnId(0) {
@@ -107,9 +128,30 @@ public:
         return labelId-1;
     }
 
-    int offset(){
-        currentOffset+=4;
+    int offset(std::string temp){
+        currentOffset+=typeToSize(temp);
         return currentOffset;
+    }
+
+    int typeToSize(std::string temp){
+        int size;
+        if(!temp.compare("char")){ size = 4; }
+        else if(!temp.compare("signed char")){ size = 4; }
+        else if(!temp.compare("unsigned char")){ size = 4; }
+        else if(!temp.compare("short")){ size = 4; }
+        else if(!temp.compare("unsigned short")){ size = 4; }
+        else if(!temp.compare("int")){ size = 4; }
+        else if(!temp.compare("unsigned int")){ size = 4; }
+        else if(!temp.compare("long")){ size = 8; }
+        else if(!temp.compare("unsigned long")){ size = 8; }
+        else if(!temp.compare("long long")){ size = 16; }
+        else if(!temp.compare("unsigned long long")){ size = 16; }
+        else if(!temp.compare("float")){ size = 4; }
+        else if(!temp.compare("double")){ size = 8; }
+        else if(!temp.compare("long double")){ size = 32; }
+        else if(!temp.compare("void")){ size = 0; }
+        else{ throw std::invalid_argument( "type not defined" );}
+        return size;
     }
 
     int getTempReg(int x){
