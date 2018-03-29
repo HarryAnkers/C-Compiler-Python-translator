@@ -12,59 +12,61 @@ if [[ ! -f bin/c_compiler ]] ; then
     have_compiler=1
 fi
 
-input_dir="test_deliverable/test_cases/inputs"
-driver_dir="test_deliverable/test_cases/drivers"
-
-
 working="test_tmp"
 mkdir -p ${working}
 working_exec="exec_tmp"
 mkdir -p ${working_exec}
 
-for i in ${input_dir}/*.c ; do
-    for j in ${driver_dir}/*.c ; do
-        
-        base=$(echo $i | sed -E -e "s|${input_dir}/([^.]+)[.]c|\1|g");
-        driver=$(echo $j | sed -E -e "s|${driver_dir}/([^.]+)[.]c|\1|g");
-        
-            if [[ ${have_compiler} -eq 0 ]] ; then
-                
-                # Compile ${NAME}.c using the compiler under test into assembly.
-                echo "compiling $i using ${compiler}..."
-                $compiler -S $i -o ${working}/$base-got.s
-                if [[ ! -f ${working}/$base-got.s ]] ; then
-                    >&2 echo "ERROR : Your C Compiler failed to compile $i into $base-got.s"
-                fi
+for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
 
-                #Compile ${NAME}_driver.c using MIPS GCC. 
-                echo "compiling $j using mips-linux-gnu-gcc..."                               
-                mips-linux-gnu-gcc -c $j -o ${working}/$driver-got.o
-                if [[ ! -f ${working}/$driver-got.o ]] ; then
-                    >&2 echo "ERROR : mips-linux-gnu-gcc failed to compile $j into $driver-got.o"
-                fi
+    #base=$(echo $i | sed -E -e "s|${input_dir}/([^.]+)[.]c|\1|g");
+    #NAME=$(echo $DRIVER | sed -E -e "s|test_deliverable/testcases")
+    #${String%ABC}
 
-                #Link the generated assembly and the driver object into a MIPS executable.
-                echo "linking assembly and driver object..."
-                mips-linux-gnu-gcc -static ${working}/$base-got.s ${working}/$driver-got.o -o ${working_exec}/$base-got
+    #NAME=$(basename $DRIVER _driver.c)
+    driver=$(basename ${DRIVER%.c})
+    NAME=$(basename ${DRIVER%_driver.c})
+    TESTCODE=test_deliverable/test_cases/$NAME.c
+    
+    >&2 echo "Test case $NAME"
 
-                if [[ ! -f ${working_exec}/$base-got ]] ; then
-                    >&2 echo "ERROR : mips-linux-gnu-gcc failed in linking $base-got.s and $driver-got.o into an executable"
-                    TEST_OUTPUT=20
-                else
-                    # Run the executable under QEMU
-                    qemu-mips ${working_exec}/$base-got
-                    TEST_OUTPUT=$?
-                fi
-            fi
-   
-        if [[ $TEST_OUTPUT -eq 20 ]] ; then
-            echo "$base, Fail, no $base-got executable in ${working_exec}"
-        elif [[ $TEST_OUTPUT -ne 0 ]] ; then
-            echo "$base, Fail, Expected "0", got ${TEST_OUTPUT}"
-        elif [[ ${have_compiler} -ne 0 ]] ; then
-            echo "$base, Fail, No C compiler"
-        else
-            echo "$base, Pass"
-        fi
-    done
+    # Compile ${NAME}.c using the compiler under test into assembly.
+    echo "compiling $TESTCODE using ${compiler}..."
+    ${compiler} --compile $TESTCODE -o ${working}/$NAME-got.s
+    if [[ ! -f ${working}/$NAME-got.s ]] ; then
+        >&2 echo "ERROR : Your C Compiler failed to compile $TESTCODE into $NAME-got.s"
+    fi
+
+    #Compile ${NAME}_driver.c using MIPS GCC. 
+    echo "compiling $DRIVER using mips-linux-gnu-gcc..."                               
+    mips-linux-gnu-gcc -c $DRIVER -o ${working}/$driver-got.o
+    if [[ ! -f ${working}/$driver-got.o ]] ; then
+        >&2 echo "ERROR : mips-linux-gnu-gcc failed to compile $DRIVER into $driver-got.o"
+    else
+        #Link the generated assembly and the driver object into a MIPS executable.
+        echo "linking assembly and driver object..."
+        mips-linux-gnu-gcc -static ${working}/$NAME-got.s ${working}/$driver-got.o -o ${working_exec}/$NAME-got
+    fi
+
+    if [[ ! -f ${working_exec}/$NAME-got ]] ; then
+        >&2 echo "ERROR : mips-linux-gnu-gcc failed in linking $NAME-got.s and $driver-got.o into an executable"
+        TEST_OUTPUT=20
+    else
+        # Run the executable under QEMU
+        qemu-mips ${working_exec}/$NAME-got
+        TEST_OUTPUT=$?
+    fi
+
+    if [[ $TEST_OUTPUT -eq 20 ]] ; then
+        echo "$NAME, Fail, no $NAME-got executable in ${working_exec}"
+    elif [[ $TEST_OUTPUT -ne 0 ]] ; then
+        echo "$NAME, Fail, Expected "0", got ${TEST_OUTPUT}"
+    elif [[ ${have_compiler} -ne 0 ]] ; then
+        echo "$NAME, Fail, No C compiler"
+    else
+        echo "$NAME, Pass"
+    fi
+        echo " "
+        echo "-------------------------------"
+        echo " "
 done
