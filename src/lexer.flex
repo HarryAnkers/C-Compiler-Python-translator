@@ -118,6 +118,8 @@ extern "C" int fileno(FILE *stream);
 "if"            { return T_IF; }
 "else"          { return T_ELSE; }
 
+"const"         {;}
+
 [0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
 ([A-Z]|[a-z]|[_])([A-Z]|[a-z]|[_]|[0-9])*          { yylval.string=new std::string(yytext); return T_ID; }

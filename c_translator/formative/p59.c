@@ -1,10 +1,10 @@
 int f(int a, int b)
 {
     int x=0;
-    while(a&&x<50){
+    while(x<50){
         x=x+1;
     }
-    while(a||x==0){
+    while(x==0){
         x=x-1;
     }
     return x;
