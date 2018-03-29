@@ -516,7 +516,6 @@ class FunctionStatementInExpr : public ASTNode
             int argCount=0;
             int argSpace=0;
             std::string type;
-            int size;
 
             for(unsigned int i=0;i<state.funcVector.size();i++){
                 if(!state.funcVector[i].id.compare(id)){
@@ -540,26 +539,26 @@ class SizeOf
 {
 public:
     std::string id;
-    int arrayId
+    int arrayId;
 
     SizeOf(std::string _id)
         : id(_id), arrayId(-1)
     {}
-    SizeOf(std::string _id,node _arrayId)
+    SizeOf(std::string _id,int _arrayId)
         : id(_id), arrayId(_arrayId)
     {}
 
     virtual void print(std::ostream &dst, PrintTransState &state) const override{
-        if(arrayId==NULL) { dst<<"(size of "<<id<<")"; }
+        if(arrayId==-1) { dst<<"(size of "<<id<<")"; }
         else { 
-            dst<<"(size of "<<id<<"["arrayId<<"]"<<")"; 
+            dst<<"(size of "<<id<<"["<<arrayId<<"]"<<")"; 
         }
     }
 
     virtual void translate(std::ostream &dst, PrintTransState &state) const override{
-        if(arrayId==NULL) { dst<<"(size of "<<id<<")"; }
+        if(arrayId==-1) { dst<<"(size of "<<id<<")"; }
         else { 
-            dst<<"(size of "<<id<<"["arrayId<<"]"<<")"; 
+            dst<<"(size of "<<id<<"["<<arrayId<<"]"<<")"; 
         }
     }
 
@@ -678,63 +677,63 @@ public:
             if(!state.ArrayVector[i].id.compare(id)){
                 temp = state.ArrayVector[i].type;
                 if(!temp.compare("char")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("signed char")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("unsigned char")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("short")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("unsigned short")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("int")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("unsigned int")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("long")){ size = 8;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("unsigned long")){ size = 8;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("long long")){ size = 16;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("unsigned long long")){ size = 16;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("float")){ size = 4;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("double")){ size = 8;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("long double")){ size = 32;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
                 else if(!temp.compare("void")){ size = 0;
-                    size = size*state.ArrayVector.size();
+                    size = size*state.ArrayVector[i].elementOffset.size();
                     dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(size)<<std::endl;
                     return; }
             }

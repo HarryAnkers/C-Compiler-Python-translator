@@ -59,71 +59,44 @@ class DeclareArray : public ASTNode{
             state.ArrayVector.push_back(ArrayBind(type,id));
 
             if(valList!=NULL){
+                std::cout<<"hit";
                 valList->compile(dst,state);
-            }
 
-            std::cout<<"no more next val"<<std::endl;
-            if((state.currentArraySize!=-1)&&(state.arrayCounter!=state.currentArraySize)){
-                std::cout<<"didn't match"<<std::endl;
-                for(int i=state.arrayCounter;i!=state.currentArraySize;i++){
-                    for(int i=state.ArrayVector.size()-1;i>=0;i--){
-                        if(!state.ArrayVector[i].id.compare(state.currentId)){
-                            int offset = state.offset(state.currentType);
-                            state.ArrayVector[i].elementOffset.push_back(state.offset(state.currentType));
-                            dst<<"sw "<<"$"<<"0"<<" , "<<offset<<"($fp)"<<std::endl;
+                if((state.currentArraySize!=-1)&&(state.arrayCounter!=state.currentArraySize)){
+                    for(int i=state.arrayCounter;i!=state.currentArraySize;i++){
+                        for(int i=state.ArrayVector.size()-1;i>=0;i--){
+                            if(!state.ArrayVector[i].id.compare(state.currentId)){
+                                int offset = state.offset(state.currentType);
+                                state.ArrayVector[i].elementOffset.push_back(offset);
+                                dst<<"sw "<<"$"<<"0"<<" , "<<offset<<"($fp)"<<std::endl;
+                            }
+                        }
+                    }
+                }
+            } else {
+                if((state.currentArraySize!=-1)&&(state.arrayCounter!=state.currentArraySize)){
+                    for(int i=state.arrayCounter;i<=state.currentArraySize;i++){
+                        for(int i=state.ArrayVector.size()-1;i>=0;i--){
+                            if(!state.ArrayVector[i].id.compare(state.currentId)){
+                                int offset = state.offset(state.currentType);
+                                state.ArrayVector[i].elementOffset.push_back(offset);
+                            }
                         }
                     }
                 }
             }
+
+            std::cout<<state.ArrayVector[0]<<std::endl;
         }
 
         virtual void count(CompilerState &state) const override {
             if(sizeExpr!=-1){
-                int size;
-                std::string temp=type;
-
-                if(!temp.compare("char")){ size = 4; }
-                else if(!temp.compare("signed char")){ size = 4; }
-                else if(!temp.compare("unsigned char")){ size = 4; }
-                else if(!temp.compare("short")){ size = 4; }
-                else if(!temp.compare("unsigned short")){ size = 4; }
-                else if(!temp.compare("int")){ size = 4; }
-                else if(!temp.compare("unsigned int")){ size = 4; }
-                else if(!temp.compare("long")){ size = 8; }
-                else if(!temp.compare("unsigned long")){ size = 8; }
-                else if(!temp.compare("long long")){ size = 16; }
-                else if(!temp.compare("unsigned long long")){ size = 16; }
-                else if(!temp.compare("float")){ size = 4; }
-                else if(!temp.compare("double")){ size = 8; }
-                else if(!temp.compare("long double")){ size = 32; }
-                else if(!temp.compare("void")){ size = 0; }
-                else{ throw std::invalid_argument( "type not defined" );}
-
-                state.varCount=state.varCount+(size*sizeExpr);
+                state.varCount=state.varCount+(state.typeToSize(type)*sizeExpr);
             } else {
                 state.arrayCounter=0;
                 valList->count(state);
-                int size;
-                std::string temp=type;
 
-                if(!temp.compare("char")){ size = 4; }
-                else if(!temp.compare("signed char")){ size = 4; }
-                else if(!temp.compare("unsigned char")){ size = 4; }
-                else if(!temp.compare("short")){ size = 4; }
-                else if(!temp.compare("unsigned short")){ size = 4; }
-                else if(!temp.compare("int")){ size = 4; }
-                else if(!temp.compare("unsigned int")){ size = 4; }
-                else if(!temp.compare("long")){ size = 8; }
-                else if(!temp.compare("unsigned long")){ size = 8; }
-                else if(!temp.compare("long long")){ size = 16; }
-                else if(!temp.compare("unsigned long long")){ size = 16; }
-                else if(!temp.compare("float")){ size = 4; }
-                else if(!temp.compare("double")){ size = 8; }
-                else if(!temp.compare("long double")){ size = 32; }
-                else if(!temp.compare("void")){ size = 0; }
-                else{ throw std::invalid_argument( "type not defined" );}
-
-                state.varCount=state.varCount+(size*state.arrayCounter);
+                state.varCount=state.varCount+(state.typeToSize(type)*state.arrayCounter);
             }
         }
 };
@@ -167,10 +140,8 @@ class ValList : public ASTNode{
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(currentVal!=NULL){
                 if(nextVal!=NULL){
-                    std::cout<<"inside next val"<<std::endl;
                     nextVal->compile(dst,state);
                     state.arrayCounter++;
-                    std::cout<<"counter = "<<state.arrayCounter<<std::endl;
                 }
                 int reg1 = state.getTempReg(0);
                 int offset = state.offset(state.currentType);
@@ -190,6 +161,7 @@ class ValList : public ASTNode{
                             int offset = state.offset(state.currentType);
                             state.ArrayVector[j].elementOffset.push_back(offset);
                             dst<<"sw "<<"$"<<"0"<<" , "<<offset<<"($fp)"<<std::endl;
+                            state.arrayCounter++;
                         }
                         return;
                     }

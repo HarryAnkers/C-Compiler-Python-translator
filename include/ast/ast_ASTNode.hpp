@@ -20,7 +20,9 @@ class ArrayBind
         type(_type),id(_id){}
 
     friend std::ostream& operator<< (std::ostream &o, ArrayBind b){
-        o << "type: "<<b.type<< "id: "<<b.id;
+        for(int i=0;i<b.elementOffset.size();i++){
+            o << "i:"<<i<<"-type: "<<b.type<< ",id: "<<b.id<<",offset "<<b.elementOffset[i]<<std::endl;
+        }
         return o;
     }
 };

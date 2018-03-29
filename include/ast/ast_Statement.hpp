@@ -207,7 +207,6 @@ class Declare : public ASTNode
             if(expression!=NULL){
                 expression->count(state);
             }
-            int size;
 
             std::string temp=state.currentType;
 
