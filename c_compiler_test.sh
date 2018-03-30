@@ -35,7 +35,7 @@ for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
 
     # Compile ${NAME}.c using the compiler under test into assembly.
     echo "compiling $TESTCODE using ${compiler}..."
-    ${compiler} --compile $TESTCODE -o ${working}/$NAME-got.s
+    ${compiler} -S $TESTCODE -o ${working}/$NAME-got.s
     if [[ ! -f ${working}/$NAME-got.s ]] ; then
         >&2 echo "ERROR : Your C Compiler failed to compile $TESTCODE into $NAME-got.s"
         TEST_OUTPUT=20
