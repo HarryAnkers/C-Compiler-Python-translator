@@ -77,12 +77,15 @@ class Function : public ASTNode
             dst<<"addu"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<" , "<<"$0"<<std::endl;
             
             state.adjustStack(state.functionOffset);
+            state.currentScope++;
             //then stores arguments
             arguments->compile(dst, state);
 
             //do work
             body->compile(dst, state);
 
+            state.currentScope--;
+            state.popScope();
             state.adjustStack(-state.functionOffset);
 
             //below needs to be put into the return

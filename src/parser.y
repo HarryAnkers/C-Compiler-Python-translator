@@ -100,12 +100,12 @@ STATEMENT :  RETURN_STATEMENT           { $$ = $1; }
         | FOR_STATEMENT                 { $$ = $1; }
 
 EXPR_STATEMENT : EXPR_1 T_SEMICOLON             { $$ = new ExprStatement($1); }
-        | T_SEMICOLON                           { $$ = new ExprStatement; }
+        | T_SEMICOLON                           { $$ = new ExprStatement(); }
 
-FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT       { new For_Statement($3,$4,$7,$5);}
-        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT            { new For_Statement($3,$4,$7,$5);}
-        | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                    { new For_Statement($3,$4,$6);}
-        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                   { new For_Statement($3,$4,$6);}
+FOR_STATEMENT : T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT       { $$ = new ForStatement($3,$4,$5,$7);}
+        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT EXPR_1 T_RBRACKET STATEMENT            { $$ = new ForStatement($3,$4,$5,$7);}
+        | T_FOR T_LBRACKET DEC_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                    { $$ = new ForStatement($3,$4,$6);}
+        | T_FOR T_LBRACKET EXPR_STATEMENT EXPR_STATEMENT T_RBRACKET STATEMENT                   { $$ = new ForStatement($3,$4,$6);}
 
 NEW_SCOPE : T_LCUBRACKET BODY T_RCUBRACKET      { $$ = new NewScope($2); }
 

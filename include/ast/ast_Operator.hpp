@@ -843,7 +843,8 @@ public:
         state.registers[reg2]=0;
         int reg3 = state.getTempReg(0,dst);
 
-        dst<<"addiu"<<" "<<"$"<<reg3<<" , "<<"$"<<reg3<<" , "<<"0xFFFFFFFF"<<std::endl;
+        dst<<"addiu"<<" "<<"$"<<reg3<<" , "<<"$"<<"0"<<" , "<<"0xFFFF"<<std::endl;
+        dst<<"sll"<<" "<<"$"<<reg3<<" , "<<"$"<<reg3<<" , "<<"0xA"<<std::endl;
         dst<<"mult"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
         dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
         state.ifFull(dst);

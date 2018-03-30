@@ -1,8 +1,8 @@
-int FOR_N(int a,int b, int c, int d, int e, int f){
-    int i;
+int FOR_N(){
+    int i=10;
     int x=0;
-    for(i=0;i<(a+b+c+d+e+f);i++){
-        x+=5;
+    for(i=0;i<50;i++){
+        x++;
     }
-    return x;
+    return 69;
 }

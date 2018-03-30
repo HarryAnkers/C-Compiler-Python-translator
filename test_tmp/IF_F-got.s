@@ -7,7 +7,6 @@ sw $31 , 4($sp)
 sw $fp , 0($sp)
 addu $fp , $sp , $0
 sw $4 , 8($fp)
-x
 lw $2 , 8($fp)
 addiu $3 , $0 , 0x2
 beq $2 , $3 , $L1

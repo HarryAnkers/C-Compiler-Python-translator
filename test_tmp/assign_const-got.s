@@ -9,7 +9,6 @@ addu $fp , $sp , $0
 sw $4 , 8($fp)
 addiu $2 , $0 , 0x0
 sw $2 , 8($fp)
-z
 lw $2 , 8($fp)
 addu $2 , $2 , $0
 b $E0

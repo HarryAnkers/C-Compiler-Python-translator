@@ -606,18 +606,18 @@ class Do_While_Statement : public ASTNode
         }
 };
 
-class For_Statement : public ASTNode
+class ForStatement : public ASTNode
 {
     public:
         node statement1;
         node condition;
-        node body;
         node statement2;
+        node body;
     
-        For_Statement(node _statement1, node _condition, node _body, node _statement2):
-            statement1(_statement1), condition(_condition), body(_body), statement2(_statement2){}
-        For_Statement(node _statement1, node _condition, node _body):
-            statement1(_statement1), condition(_condition), body(_body), statement2(NULL){}
+        ForStatement(node _statement1, node _condition, node _statement2, node _body):
+            statement1(_statement1), condition(_condition), statement2(_statement2), body(_body){}
+        ForStatement(node _statement1, node _condition, node _body):
+            statement1(_statement1), condition(_condition), statement2(NULL), body(_body){}
 
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
@@ -660,18 +660,19 @@ class For_Statement : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             state.currentScope++;
+            
+            statement1->compile(dst,state);
 
             int loopLabel = state.label();
             int exitLabel = state.label();
             dst<<"$L"<<loopLabel<<":"<<std::endl;
 
             int reg1 = state.getTempReg(0,dst);
+
             condition->compile(dst,state);
             state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
             state.ifFull(dst);
-            
-            statement1->compile(dst,state);
 
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
             dst<<"nop"<<std::endl;

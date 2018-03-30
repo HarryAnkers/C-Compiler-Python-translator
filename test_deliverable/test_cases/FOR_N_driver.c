@@ -1,7 +1,9 @@
-int FOR_N(int a,int b,int c,int d,int e,int f);
+int FOR_N();
 
 int main(){
-    if(FOR_N(1,2,3,4,5,6)==105){
+    //note is 21*5
+    return FOR_N();
+    if(FOR_N()==50){
         return 0;
-    } else return 50;
+    } else return 20;
 }

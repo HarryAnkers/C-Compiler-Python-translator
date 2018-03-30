@@ -1841,31 +1841,31 @@ yyreduce:
 
   case 43:
 #line 103 "src/parser.y" /* yacc.c:1646  */
-    { (yyval.node) = new ExprStatement; }
+    { (yyval.node) = new ExprStatement(); }
 #line 1846 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
 #line 105 "src/parser.y" /* yacc.c:1646  */
-    { new For_Statement((yyvsp[-4].node),(yyvsp[-3].node),(yyvsp[0].node),(yyvsp[-2].node));}
+    { (yyval.node) = new ForStatement((yyvsp[-4].node),(yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
 #line 1852 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
 #line 106 "src/parser.y" /* yacc.c:1646  */
-    { new For_Statement((yyvsp[-4].node),(yyvsp[-3].node),(yyvsp[0].node),(yyvsp[-2].node));}
+    { (yyval.node) = new ForStatement((yyvsp[-4].node),(yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
 #line 1858 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
 #line 107 "src/parser.y" /* yacc.c:1646  */
-    { new For_Statement((yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
+    { (yyval.node) = new ForStatement((yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
 #line 1864 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
 #line 108 "src/parser.y" /* yacc.c:1646  */
-    { new For_Statement((yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
+    { (yyval.node) = new ForStatement((yyvsp[-3].node),(yyvsp[-2].node),(yyvsp[0].node));}
 #line 1870 "src/parser.tab.cpp" /* yacc.c:1646  */
     break;
 
