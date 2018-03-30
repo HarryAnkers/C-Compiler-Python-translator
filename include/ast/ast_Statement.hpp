@@ -42,10 +42,12 @@ class ReturnStatement : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(expression!=NULL){
-                int reg1 = state.getTempReg(0);
+                int reg1 = state.getTempReg(0,dst);
                 expression->compile(dst,state);
+                state.ifLoad(dst,reg1);
                 dst<<"addu"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
                 state.registers[reg1]=0;
+                state.ifFull(dst);
             }
             dst<<"b"<<" "<<"$E"<<state.returnId<<std::endl;
             dst<<"nop"<<std::endl;
@@ -94,9 +96,11 @@ class ExprStatement : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(expression!=NULL){
-                int reg1 = state.getTempReg(0);
+                int reg1 = state.getTempReg(0,dst);
                 expression->compile(dst,state);
+                state.ifLoad(dst,reg1);
                 state.registers[reg1]=0;
+                state.ifFull(dst);
             }
         }
 
@@ -142,7 +146,6 @@ class DeclareStatement : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             state.currentType = type;
-
             decList->compile(dst,state);
         }
 
@@ -187,18 +190,27 @@ class Declare : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
+            std::cout<<"compiling declare"<<std::endl;
             int offset=state.offset(state.currentType);
             state.varVector.push_back(VariableBind(id, state.currentType, state.currentScope,offset));
             if(expression!=NULL){
-                int reg1 = state.getTempReg(0);
+                std::cout<<"eval expr"<<std::endl;
+                int reg1 = state.getTempReg(0,dst);
                 expression->compile(dst,state);
+                std::cout<<"finished expr"<<std::endl;
+                state.ifLoad(dst,reg1);
+                std::cout<<"loaded expr in"<<std::endl;
                 dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 state.registers[reg1]=0;
+                std::cout<<"popping stuff"<<std::endl;
+                state.ifFull(dst);
+                std::cout<<"finished in declare"<<std::endl;
             } else {
-                int reg1 = state.getTempReg(1);
+                int reg1 = state.getTempReg(1,dst);
                 dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
 	            dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 state.registers[reg1]=0;
+                state.ifFull(dst);
             }
         }
 
@@ -357,9 +369,11 @@ class If_Statement : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg1 = state.getTempReg(0);
+            int reg1 = state.getTempReg(0,dst);
             condition->compile(dst,state);
+            state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
+            state.ifFull(dst);
             
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
@@ -435,9 +449,11 @@ class IfElse_Statement : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg1 = state.getTempReg(0);
+            int reg1 = state.getTempReg(0,dst);
             condition->compile(dst,state);
+            state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
+            state.ifFull(dst);
             
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
@@ -502,9 +518,11 @@ class While_Statement : public ASTNode
             int exitLabel = state.label();
             dst<<"$L"<<loopLabel<<":"<<std::endl;
 
-            int reg1 = state.getTempReg(0);
+            int reg1 = state.getTempReg(0,dst);
             condition->compile(dst,state);
+            state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
+            state.ifFull(dst);
             
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
             dst<<"nop"<<std::endl;
@@ -573,9 +591,11 @@ class Do_While_Statement : public ASTNode
 
             body->compile(dst,state);
 
-            int reg1 = state.getTempReg(0);
+            int reg1 = state.getTempReg(0,dst);
             condition->compile(dst,state);
+            state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
+            state.ifFull(dst);
             
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(exitLabel)<<std::endl;
             dst<<"nop"<<std::endl;
@@ -651,9 +671,11 @@ class For_Statement : public ASTNode
             int exitLabel = state.label();
             dst<<"$L"<<loopLabel<<":"<<std::endl;
 
-            int reg1 = state.getTempReg(0);
+            int reg1 = state.getTempReg(0,dst);
             condition->compile(dst,state);
+            state.ifLoad(dst,reg1);
             state.registers[reg1]=0;
+            state.ifFull(dst);
             
             statement1->compile(dst,state);
 

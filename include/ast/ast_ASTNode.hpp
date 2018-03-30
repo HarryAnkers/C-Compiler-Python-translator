@@ -20,7 +20,7 @@ class ArrayBind
         type(_type),id(_id){}
 
     friend std::ostream& operator<< (std::ostream &o, ArrayBind b){
-        for(int i=0;i<b.elementOffset.size();i++){
+        for(unsigned int i=0;i<b.elementOffset.size();i++){
             o << "i:"<<i<<"-type: "<<b.type<< ",id: "<<b.id<<",offset "<<b.elementOffset[i]<<std::endl;
         }
         return o;
@@ -87,16 +87,19 @@ public:
 class CompilerState
 {
 public:
-    int labelId;
     std::vector<VariableBind> varVector;
     std::vector<FunctionBind> funcVector;
     std::vector<GloVarBind> gloVarVector;
     std::vector<ArrayBind> ArrayVector;
     std::vector<int> ifVector;
+    std::vector<int> tempStack;
 
     std::string currentType;
     std::string currentId;
-    
+
+    int stackChangeNeeded;
+    int labelId;
+    int full;
     int currentScope;
     int currentArgCount;
     int currentFCall;
@@ -112,7 +115,7 @@ public:
     int currentArraySize;
 
     CompilerState():
-        labelId(0), currentScope(0), currentOffset(-4), returnId(0) {
+        stackChangeNeeded(0), labelId(0), currentScope(0), currentOffset(-4), returnId(0) {
             for(int i=0;i<32;i++){
                 registers[i]=0;
             }
@@ -156,27 +159,58 @@ public:
         return size;
     }
 
-    int getTempReg(int x){
-        for(int i=2;i<4;i++){
+    int getTempReg(int x,std::ostream &dst){
+        /*for(int i=2;i<4;i++){
             if(registers[i]==0){
                 registers[i]=x;
+                full=0;
                 return i;
             }
         } for(int i=8;i<16;i++){
             if(registers[i]==0){
                 registers[i]=x;
+                full=0;
                 return i;
             }
+        }*/
+        if(x==0){
+            if(registers[21]==0){
+                stackChangeNeeded++;
+                return 21;
+            } else {
+                stackChangeNeeded++;
+                return 22;
+            }
         }
-        return -1;
-        std::cout<<"no free registers"<<std::endl;
+        else{
+            registers[21]=1;
+            full=1;
+            int adjustment=typeToSize("int");
+            functionOffset+=adjustment;
+            dst<<"addiu"<<" "<<"$fp"<<" , "<<"$fp"<<" , "<<(-1*adjustment)<<std::endl;
+            tempStack.push_back(offset("int"));
+            adjustStack(adjustment);
+            return 21;
+        }
     }
 
-    void fullRegCheck(std::ostream &dst){
+    void ifLoad(std::ostream &dst, int x){
+        if((x==21)||(x=22)){
+            dst<<"lw"<<" "<<"$"<<x<<" , "<<tempStack[tempStack.size()-1]<<"($fp)"<<std::endl;
+        }
+    }
 
-        //NEED TO FIX THIS BUT WILL WORK FOR NOW
-
-        std::cout<<"no free registers"<<std::endl;
+    void ifFull(std::ostream &dst){
+        std::cout<<"temp stack size is "<<tempStack.size()<<std::endl;
+        std::cout<<"stackChange is "<<stackChangeNeeded<<std::endl;
+        while(stackChangeNeeded>0){
+            tempStack.pop_back();
+            stackChangeNeeded--;
+        }
+        if(full==1){
+            registers[21]=0;
+            dst<<"sw"<<" "<<"$"<<"21"<<" , "<<tempStack[tempStack.size()-1]<<"($fp)"<<std::endl;
+        }
     }
 
     void popScope(){

@@ -59,7 +59,6 @@ class DeclareArray : public ASTNode{
             state.ArrayVector.push_back(ArrayBind(type,id));
 
             if(valList!=NULL){
-                std::cout<<"hit";
                 valList->compile(dst,state);
 
                 if((state.currentArraySize!=-1)&&(state.arrayCounter!=state.currentArraySize)){
@@ -85,8 +84,6 @@ class DeclareArray : public ASTNode{
                     }
                 }
             }
-
-            std::cout<<state.ArrayVector[0]<<std::endl;
         }
 
         virtual void count(CompilerState &state) const override {
@@ -139,12 +136,14 @@ class ValList : public ASTNode{
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(currentVal!=NULL){
+                int reg1 = state.getTempReg(0,dst);
+                int offset = state.offset(state.currentType);
+
                 if(nextVal!=NULL){
                     nextVal->compile(dst,state);
                     state.arrayCounter++;
                 }
-                int reg1 = state.getTempReg(0);
-                int offset = state.offset(state.currentType);
+
                 for(int i=state.ArrayVector.size()-1;i>=0;i--){
                     if(!state.ArrayVector[i].id.compare(state.currentId)){
                         state.ArrayVector[i].elementOffset.push_back(offset);
@@ -153,6 +152,7 @@ class ValList : public ASTNode{
 
                 currentVal->compile(dst,state);
                 dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
+                state.ifFull(dst);
                 state.registers[reg1]=0;
             } else {
                 for(int j=state.ArrayVector.size()-1;j>=0;j--){

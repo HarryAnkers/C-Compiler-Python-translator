@@ -29,21 +29,22 @@ class LNot : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             cond->compile(dst, state);
             state.registers[reg2]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"beq"<<" "<<"$"<<reg2<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is false
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is true
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 
         virtual void count(CompilerState &state) const override {
@@ -106,24 +107,25 @@ class LEqual : public ConditionOp
         virtual const char *getPyOp() const override{ return "=="; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"beq"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is false
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is true
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -137,26 +139,27 @@ class LAnd : public ConditionOp
         virtual const char *getPyOp() const override{ return "and"; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"beq"<<" "<<"$"<<reg2<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             dst<<"beq"<<" "<<"$"<<reg3<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is true
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -170,26 +173,27 @@ class LOr : public ConditionOp
         virtual const char *getPyOp() const override{ return "or"; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"bne"<<" "<<"$"<<reg2<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             dst<<"bne"<<" "<<"$"<<reg3<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is false
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is true
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -203,24 +207,25 @@ class LNotEqual : public ConditionOp
         virtual const char *getPyOp() const override{ return "!="; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"bne"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is false
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is true
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -234,25 +239,26 @@ class LMore : public ConditionOp
         virtual const char *getPyOp() const override{ return ">"; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is true
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -266,25 +272,26 @@ class LLess : public ConditionOp
         virtual const char *getPyOp() const override{ return "<"; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
             dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is true
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -298,25 +305,26 @@ class LMoreEqual : public ConditionOp
         virtual const char *getPyOp() const override{ return ">="; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"bne"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is true
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 
@@ -330,25 +338,26 @@ class LLessEqual : public ConditionOp
         virtual const char *getPyOp() const override{ return "<="; }
 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            int reg2 = state.getTempReg(0);
+            int reg2 = state.getTempReg(0,dst);
             condA->compile(dst, state);
-            int reg3 = state.getTempReg(0);
+            int reg3 = state.getTempReg(0,dst);
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
-            int reg1 = state.getTempReg(1);
+            int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
             dst<<"bne"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
             dst<<"nop"<<std::endl;
             //this is true
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
             dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
             dst<<"nop"<<std::endl<<std::endl;
             //this is false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
+            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
             //this is after both true and false
             dst<<"$L"<<(state.label())<<":"<<std::endl;
+            state.ifFull(dst);
         }
 };
 

@@ -27,16 +27,18 @@ public:
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
         for(int i = state.varVector.size()-1;i>=0;i--){
             if(!state.varVector[i].id.compare(id)){
-                int regNo = state.getTempReg(1);
+                int regNo = state.getTempReg(1,dst);
                 dst<<"lw "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                state.ifFull(dst);
                 return;
             }
         }
         for(int i = state.gloVarVector.size()-1;i>=0;i--){
             if(!state.gloVarVector[i].id.compare(id)){
-                int regNo = state.getTempReg(1);
+                int regNo = state.getTempReg(1,dst);
                 dst<<"lui "<<"$"<<regNo<<" , "<<"%hi("<<id<<")"<<std::endl;
                 dst<<"lw "<<"$"<<regNo<<" , "<<"%lo("<<id<<")($"<<regNo<<")"<<std::endl;
+                state.ifFull(dst);
                 return;
             }
         }
@@ -71,9 +73,10 @@ public:
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
         for(int i = state.ArrayVector.size()-1;i>=0;i--){
             if(!state.ArrayVector[i].id.compare(id)){
-                int reg1 = state.getTempReg(1);
+                int reg1 = state.getTempReg(1,dst);
 
                 dst<<"lw "<<"$"<<reg1<<" , "<<state.ArrayVector[i].elementOffset[arrayId]<<"($fp)"<<std::endl;
+                state.ifFull(dst);
                 return;
             }
         }
@@ -105,8 +108,13 @@ public:
     }
 
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
-        int reg1 = state.getTempReg(1);
-        dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(value)<<std::endl;
+        std::cout<<"in num"<<std::endl;
+        int reg1 = state.getTempReg(1,dst);
+        std::cout<<"got num reg"<<std::endl;
+        dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(value)<<std::endl;
+        std::cout<<"popping"<<std::endl;
+        state.ifFull(dst);
+        std::cout<<"finished with num"<<std::endl;
     }
 
     virtual void count(CompilerState &state) const override {}

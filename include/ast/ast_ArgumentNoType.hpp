@@ -42,7 +42,7 @@ class ArgumentNoType : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             if(arg!=NULL){
-                int reg1=state.getTempReg(0);
+                int reg1=state.getTempReg(0,dst);
                 arg->compile(dst,state);
                 state.registers[reg1]=0;
 
