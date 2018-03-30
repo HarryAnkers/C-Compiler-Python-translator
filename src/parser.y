@@ -63,10 +63,10 @@ TOP_LIST : TOP_LIST DEC_FUNCTION        { $$ = new Top_List($2,$1); }
 FUTURE_DEC : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_SEMICOLON { $$ = new Future_Func(*$1, *$2, $4); }
 
 DEC_FUNCTION : TYPE T_ID T_LBRACKET ARGUMENT_LIST T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, $4, $7); }
+        | TYPE T_ID T_LBRACKET T_RBRACKET T_LCUBRACKET BODY T_RCUBRACKET { $$ = new Function(*$1, *$2, new Argument(), $6); }
 
 ARGUMENT_LIST : ARGUMENT_LIST T_COMMA TYPE T_ID         { $$ = new Argument(*$3, *$4, $1); }
         | TYPE T_ID                                     { $$ = new Argument(*$1, *$2); }
-        | %empty                                        { $$ = new Argument(); }
 
 ARGUMENT_LIST_NO_TYPE : ARGUMENT_LIST_NO_TYPE T_COMMA EXPR_2    { $$ = new ArgumentNoType($3, $1); }
         | EXPR_2                                                { $$ = new ArgumentNoType($1); }

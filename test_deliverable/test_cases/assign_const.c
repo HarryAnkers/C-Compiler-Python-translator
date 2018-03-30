@@ -1,4 +1,4 @@
--int assign(int z){
--    z=0;
--    return z;
--}
+int assign(int z){
+    z=0;
+    return z;
+}
