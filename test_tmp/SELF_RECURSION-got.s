@@ -13,45 +13,31 @@ subu $2 , $2 , $3
 sw $2 , 16($fp)
 lw $2 , 16($fp)
 addiu $3 , $0 , 0x0
-beq $2 , $3 , $L1
-nop
-addiu $2 , $0 , 0x0
-b $L2
-nop
-
-$L1:
-addiu $2 , $0 , 0x1
-$L2:
-beq $2 , $0 , $L3
+xor $2 , $2 , $3
+sltu $2 , $2 , 1
+beq $2 , $0 , $L1
 nop
 addiu $2 , $0 , 0x0
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
-b $L4
+b $L2
 nop
-$L3:
+$L1:
 lw $2 , 16($fp)
 addiu $3 , $0 , 0x0
 slt $2 , $3 , $2
-beq $2 , $0 , $L4
-nop
-addiu $2 , $0 , 0x1
-b $L5
-nop
-
-$L4:
-addiu $2 , $0 , 0x0
-$L5:
-beq $2 , $0 , $L6
+beq $2 , $0 , $L2
 nop
 addiu $2 , $0 , 0x2
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
-b $L7
+b $L3
 nop
-$L6:
+$L2:
 lw $2 , 16($fp)
 addu $4 , $2 , $0
 jal self
@@ -59,12 +45,14 @@ nop
 addu $2 , $2 , $0
 
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
-$L7:
-$L8:
+$L3:
+$L4:
 addiu $2 , $0 , 0x3
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
 $E0:

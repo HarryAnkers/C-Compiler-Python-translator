@@ -1,45 +1,45 @@
-.global FOR_N
-.ent FOR_N
-.type FOR_N, @function
-FOR_N:
+.global func
+.ent func
+.type func, @function
+func:
 addiu $sp , $sp , -16
 sw $31 , 12($sp)
 sw $fp , 8($sp)
 addu $fp , $sp , $0
-addiu $2 , $0 , 0xa
-sw $2 , 0($fp)
-addiu $2 , $0 , 0x0
+addiu $2 , $0 , 0x5
 sw $2 , 4($fp)
-addiu $2 , $0 , 0x0
-sw $2 , 0($fp)
 $L1:
-lw $2 , 0($fp)
-addiu $3 , $0 , 0x32
+lw $2 , 4($fp)
+addiu $8 , $0 , 0x1
+addiu $8 , $0 , 0xFFFF
+sll $8 , $8 , 0xA
+mult $8 , $8
+mflo $3
 slt $2 , $3 , $2
-beq $2 , $0 , $L3
-nop
-addiu $2 , $0 , 0x1
-b $L4
-nop
-
-$L3:
-addiu $2 , $0 , 0x0
-$L4:
 beq $2 , $0 , $L2
 nop
 lw $2 , 4($fp)
+addiu $3 , $0 , 0x0
+xor $2 , $2 , $3
+sltu $2 , $2 , 1
+beq $2 , $0 , $L3
+nop
+addiu $2 , $0 , 0x0
+addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
+b $E0
+nop
+$L3:
+lw $2 , 4($fp)
 addiu $3 , $0 , 0x1
-addu $2 , $2 , $3
+subu $2 , $2 , $3
 sw $2 , 4($fp)
-lw $2 , 0($fp)
-addiu $3 , $0 , 0x1
-addu $2 , $2 , $3
-sw $2 , 0($fp)
 b $L1
 nop
 $L2:
-addiu $3 , $0 , 0x45
+addiu $3 , $0 , 0x2
 addu $2 , $3 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
 $E0:
@@ -49,4 +49,4 @@ sw $31 , 12($sp)
 addiu $sp , $sp , 16
 j $31
 nop
-.end FOR_N
+.end func

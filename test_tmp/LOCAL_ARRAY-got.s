@@ -30,6 +30,7 @@ addu $2 , $2 , $3
 lw $3 , 0($fp)
 addu $2 , $2 , $3
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
 $E0:

@@ -335,7 +335,7 @@ class AssignOp
                         expression->compile(dst,state);
                         state.ifLoad(dst,reg1);
 
-                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")("<<reg1<<")"<<std::endl;
+                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")("<<"$"<<reg1<<")"<<std::endl;
                         state.ifFull(dst);
                         return;
                     }

@@ -30,20 +30,11 @@ class LNot : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             int reg2 = state.getTempReg(0,dst);
+            state.ifLoad(dst,reg2);
             cond->compile(dst, state);
             state.registers[reg2]=0;
             int reg1 = state.getTempReg(1,dst);
-            dst<<"beq"<<" "<<"$"<<reg2<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is false
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is true
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"sltu"<<" "<<"$"<<reg1<<" , "<<"$"<<reg1<<" , "<<"1"<<std::endl;
             state.ifFull(dst);
         }
 
@@ -113,18 +104,11 @@ class LEqual : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
-            dst<<"beq"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is false
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is true
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"xor"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+            dst<<"sltu"<<" "<<"$"<<reg1<<" , "<<"$"<<reg1<<" , "<<"1"<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -213,18 +197,11 @@ class LNotEqual : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
-            dst<<"bne"<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is false
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is true
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"xor"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
+            dst<<"sltu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$"<<reg1<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -245,19 +222,10 @@ class LMore : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
-            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
-            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is true
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -278,19 +246,10 @@ class LLess : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
-            dst<<"beq"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is true
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -311,19 +270,11 @@ class LMoreEqual : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
-            dst<<"bne"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is true
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"xori"<<" "<<"$"<<reg1<<" , "<<"$"<<reg1<<" , "<<"0x1"<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -344,19 +295,11 @@ class LLessEqual : public ConditionOp
             condB->compile(dst, state);
             state.registers[reg2]=0;
             state.registers[reg3]=0;
+            state.ifLoad(dst,reg2);
+            state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
             dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
-            dst<<"bne"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"$L"<<(state.labelId)<<std::endl;
-            dst<<"nop"<<std::endl;
-            //this is true
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x1"<<std::endl;
-            dst<<"b"<<" "<<"$L"<<(state.labelId+1)<<std::endl;
-            dst<<"nop"<<std::endl<<std::endl;
-            //this is false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
-            dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-            //this is after both true and false
-            dst<<"$L"<<(state.label())<<":"<<std::endl;
+            dst<<"xori"<<" "<<"$"<<reg1<<" , "<<"$"<<reg1<<" , "<<"0x1"<<std::endl;
             state.ifFull(dst);
         }
 };

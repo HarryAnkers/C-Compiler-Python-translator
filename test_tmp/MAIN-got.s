@@ -8,6 +8,7 @@ sw $fp , 0($sp)
 addu $fp , $sp , $0
 addiu $2 , $0 , 0x1
 addu $2 , $2 , $0
+andi $2 , $2 , 0x00ff
 b $E0
 nop
 $E0:

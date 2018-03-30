@@ -46,6 +46,7 @@ class ReturnStatement : public ASTNode
                 expression->compile(dst,state);
                 state.ifLoad(dst,reg1);
                 dst<<"addu"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$"<<"0"<<std::endl;
+                dst<<"andi"<<" "<<"$"<<"2"<<" , "<<"$"<<"2"<<" , "<<"0x00ff"<<std::endl;
                 state.registers[reg1]=0;
                 state.ifFull(dst);
             }
