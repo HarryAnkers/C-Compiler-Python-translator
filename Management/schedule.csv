@@ -7,3 +7,4 @@ Week,    DateRange,          PlannedEffort,  ActualEffort,  OtherDeadlines
 9,  5th Mar - 11th Mar,                  ,              ,"Test, Catching up before study"
 10, 12th Mar - 18th Mar,Making a Base Compiler,Compiler compiled basic files,Test
 11, 19th Mar - 27th Mar,Perfecting the compiler,what is submitted,
+,,Bug fixing and adding extra ,,
