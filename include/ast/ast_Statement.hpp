@@ -269,27 +269,16 @@ class GlobalDeclare : public ASTNode
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
             state.gloVarVector.push_back(GloVarBind(id,state.currentType));
-
+            dst<<".globl "<<id<<std::endl;
+	        dst<<".data "<<std::endl;
+	        dst<<".align 2"<<std::endl;
             dst<<id<<":"<<std::endl;
-            if((!state.currentType.compare("float"))||(!state.currentType.compare("double"))||(!state.currentType.compare("long double"))){
-                //input-=(input%temp);
-            }
-
             if(noInput==false){
-                dst<<".word "<<input<<std::endl;
+                dst<<".word "<<id<<std::endl;
             } else {
-                dst<<".word "<<"0"<<std::endl;   
+                dst<<".word "<<"0"<<std::endl;
             }
-
-            if((!state.currentType.compare("char"))||(!state.currentType.compare("signed char"))||(!state.currentType.compare("unsigned char"))){
-                dst<<".align 1"<<std::endl;
-            } else {
-                dst<<".align 2"<<std::endl;
-            }
-
-            dst<<".type "<<id<<", @object"<<std::endl;
-            
-            dst<<".size "<<id<<", "<<state.typeToSize(state.currentType)<<std::endl<<std::endl;
+            dst<<".text"<<std::endl;
         }
 
         virtual void count(CompilerState &state) const override {}

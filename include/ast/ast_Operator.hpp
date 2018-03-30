@@ -63,7 +63,7 @@ public:
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
         } else if(!type.compare("/")){
-            dst<<"teq $"<<reg3<<",$0,7";
+            dst<<"teq $"<<reg3<<",$0,7"<<std::endl;
             dst<<getSignInst()<<" "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             dst<<"mflo"<<" "<<"$"<<reg1<<std::endl;
         } else if(!type.compare("%")){
