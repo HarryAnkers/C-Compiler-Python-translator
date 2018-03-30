@@ -89,7 +89,7 @@ class Function : public ASTNode
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<(-1*state.functionOffset)<<std::endl;
             dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
             dst<<"sw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
-            dst<<"addu"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<" , "<<"$0"<<std::endl;
+            dst<<"move"<<" "<<"$"<<"fp"<<" , "<<"$"<<"sp"<<std::endl;
             
             state.adjustStack(state.functionOffset);
             state.currentScope++;
@@ -107,7 +107,7 @@ class Function : public ASTNode
             dst<<"$E"<<state.returnId<<":"<<std::endl;
             dst<<"addu"<<" "<<"$"<<"sp"<<" , "<<"$"<<"fp"<<" , "<<"$0"<<std::endl;
             dst<<"lw"<<" "<<"$fp"<<" , "<<(state.functionOffset-8)<<"($sp)"<<std::endl;
-            dst<<"sw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
+            dst<<"lw"<<" "<<"$31"<<" , "<<(state.functionOffset-4)<<"($sp)"<<std::endl;
             dst<<"addiu"<<" "<<"$sp"<<" , "<<"$sp"<<" , "<<state.functionOffset<<std::endl;
             dst<<"j"<<" "<<"$31"<<std::endl;
             dst<<"nop"<<std::endl;

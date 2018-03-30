@@ -5,7 +5,7 @@ function:
 addiu $sp , $sp , -8
 sw $31 , 4($sp)
 sw $fp , 0($sp)
-addu $fp , $sp , $0
+move $fp , $sp
 sw $4 , 8($fp)
 sw $5 , 12($fp)
 sw $6 , 16($fp)
@@ -22,13 +22,12 @@ addiu $2 , $0 , 0x0
 sw $2 , 24($fp)
 lw $2 , 24($fp)
 addu $2 , $2 , $0
-andi $2 , $2 , 0x00ff
 b $E0
 nop
 $E0:
 addu $sp , $fp , $0
 lw $fp , 0($sp)
-sw $31 , 4($sp)
+lw $31 , 4($sp)
 addiu $sp , $sp , 8
 j $31
 nop

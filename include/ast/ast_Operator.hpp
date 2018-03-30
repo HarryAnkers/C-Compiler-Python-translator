@@ -524,7 +524,7 @@ class FunctionStatementInExpr : public ASTNode
                     dst<<"nop"<<std::endl;
                     int reg1 = state.getTempReg(1,dst);
                     if(state.funcVector[i].type.compare("void")){
-                        dst<<"addu"<<" "<<"$"<<"2"<<" , "<<"$"<<reg1<<" , "<<"$0"<<std::endl<<std::endl;
+                        dst<<"addu"<<" "<<"$"<<reg1<<" , "<<"$"<<"2"<<" , "<<"$0"<<std::endl<<std::endl;
                     }
                     state.ifFull(dst);
                     return;
