@@ -64,7 +64,7 @@ class Function : public ASTNode
                 state.currentOffset = state.argSpace - 4;
             }
 
-            dst<<".global "<<id<<std::endl;
+            dst<<".globl "<<id<<std::endl;
             dst<<".ent "<<id<<std::endl;
             dst<<".type "<<id<<", @function"<<std::endl;
 
