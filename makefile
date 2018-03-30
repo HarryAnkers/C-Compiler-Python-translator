@@ -40,4 +40,11 @@ clean :
 	rm src/*.tab.hpp
 	rm src/*.yy.cpp
 	rm src/*.output
-	rm test_tmp/*
+
+clean_python :
+	rm tmp/formative/*.py 
+	rm tmp/formative/*
+
+clean_comp :
+	rm test_tmp/*.s 
+	rm test_tmp/*.o
