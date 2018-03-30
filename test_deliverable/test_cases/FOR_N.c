@@ -1,8 +1,4 @@
-int FOR_N(){
-    int i=10;
-    int x=0;
-    for(i=0;i<50;i++){
-        x++;
-    }
-    return 69;
+int func(){
+    for(int x=5; x>-1; x--){if(x==0){return 0;}}
+    return 2;
 }

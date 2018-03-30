@@ -1,9 +1,5 @@
-int FOR_N();
+int func();
 
-int main(){
-    //note is 21*5
-    return FOR_N();
-    if(FOR_N()==50){
-        return 0;
-    } else return 20;
+int main(){;
+    return func();
 }
