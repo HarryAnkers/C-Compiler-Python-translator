@@ -622,24 +622,16 @@ class For_Statement : public ASTNode
         //print tester
         virtual void print(std::ostream &dst, PrintTransState &state) const override
         {
-            std::cout<<"trying to print earlier"<<std::endl;
             for(int i=state.indent;i!=0;i--){
                 dst<<"\t";
             }
-            std::cout<<"trying to print now"<<std::endl;
             dst<<"For (";
-            std::cout<<"printing s1"<<std::endl;
             statement1->print(dst, state);
-            std::cout<<"printing condition"<<std::endl;
             condition->print(dst, state);
-            std::cout<<"if s 2"<<std::endl;
-            if(statement2!=NULL){ std::cout<<"yes"<<std::endl;
-                statement2->print(dst, state); }
+            if(statement2!=NULL){ statement2->print(dst, state); }
             dst<<")"<<std::endl;
 
-            std::cout<<"indenting"<<std::endl;
             state.indent++;
-            std::cout<<"printing body"<<std::endl;
             body->print(dst, state);
             state.indent--;
         }

@@ -51,7 +51,7 @@
 %%
 //syntax notes P_ means its a primative
 
-ROOT : FOR_STATEMENT { g_root = $1; }
+ROOT : TOP_LIST { g_root = $1; }
 
 TOP_LIST : TOP_LIST DEC_FUNCTION        { $$ = new Top_List($2,$1); }
         | TOP_LIST GLO_DEC_STATEMENT    { $$ = new Top_List($2,$1); }
