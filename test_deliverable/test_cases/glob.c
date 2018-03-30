@@ -1,5 +1,6 @@
-int x=10;
+int x=20;
 
 int global(){
+    x=10;
     return x;
 }

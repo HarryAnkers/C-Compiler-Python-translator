@@ -274,7 +274,7 @@ class GlobalDeclare : public ASTNode
 	        dst<<".align 2"<<std::endl;
             dst<<id<<":"<<std::endl;
             if(noInput==false){
-                dst<<".word "<<id<<std::endl;
+                dst<<".word "<<input<<std::endl;
             } else {
                 dst<<".word "<<"0"<<std::endl;
             }

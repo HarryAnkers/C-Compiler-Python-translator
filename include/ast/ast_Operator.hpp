@@ -338,11 +338,13 @@ class AssignOp
                 }
                 for(int i = state.gloVarVector.size()-1;i>=0;i--){
                     if(!state.gloVarVector[i].id.compare(id)){
-                        int reg1 = state.getTempReg(0,dst);
+                        int reg1 = state.getTempReg(1,dst);
+                        int reg2 = state.getTempReg(0,dst);
                         expression->compile(dst,state);
+                        state.registers[reg2]=0;
                         state.ifLoad(dst,reg1);
 
-                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<"%lo("<<id<<")("<<"$"<<reg1<<")"<<std::endl;
+                        dst<<"sw"<<" "<<"$"<<reg2<<" , "<<"%lo("<<id<<")("<<"$"<<reg1<<")"<<std::endl;
                         state.ifFull(dst);
                         return;
                     }

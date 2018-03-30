@@ -12,23 +12,6 @@
 	.size	x, 4
 x:
 	.word	1
-	.globl	y
-	.align	2
-	.type	y, @object
-	.size	y, 4
-y:
-	.word	2
-	.globl	z
-	.type	z, @object
-	.size	z, 1
-z:
-	.byte	3
-	.globl	a
-	.align	1
-	.type	a, @object
-	.size	a, 2
-a:
-	.half	44
 	.text
 	.align	2
 	.globl	main
@@ -46,13 +29,7 @@ main:
 	sw	$fp,4($sp)
 	move	$fp,$sp
 	lui	$2,%hi(x)
-	lw	$3,%lo(x)($2)
-	lui	$2,%hi(y)
-	lw	$2,%lo(y)($2)
-	addu	$2,$3,$2
-	lui	$3,%hi(z)
-	lb	$3,%lo(z)($3)
-	addu	$2,$2,$3
+	lw	$2,%lo(x)($2)
 	move	$sp,$fp
 	lw	$fp,4($sp)
 	addiu	$sp,$sp,8
