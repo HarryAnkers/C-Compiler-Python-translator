@@ -197,7 +197,7 @@ class Declare : public ASTNode
                 int reg1 = state.getTempReg(0,dst);
                 expression->compile(dst,state);
                 state.ifLoad(dst,reg1);
-                if(((!state.currentType.compare("char"))||(!sstate.currentType.compare("signed char")))||
+                if(((!state.currentType.compare("char"))||(!state.currentType.compare("signed char")))||
                     (!state.currentType.compare("unsigned char"))){
                     dst<<"sb "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 } else if((!state.currentType.compare("short"))||(!state.currentType.compare("unsigned short"))){
@@ -210,7 +210,7 @@ class Declare : public ASTNode
             } else {
                 int reg1 = state.getTempReg(1,dst);
                 dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;
-                if(((!state.currentType.compare("char"))||(!sstate.currentType.compare("signed char")))||
+                if(((!state.currentType.compare("char"))||(!state.currentType.compare("signed char")))||
                     (!state.currentType.compare("unsigned char"))){
                     dst<<"sb "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 } else if((!state.currentType.compare("short"))||(!state.currentType.compare("unsigned short"))){

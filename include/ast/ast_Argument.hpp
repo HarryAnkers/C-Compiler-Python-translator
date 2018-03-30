@@ -50,7 +50,14 @@ class Argument : public ASTNode
                 int count =state.argCount;
                 state.varVector.push_back(VariableBind(argId, argType, state.currentScope,((count*4)+state.functionOffset)));
                 if(count<4){
-                    dst<<"sw"<<" "<<"$"<<(count+4)<<" , "<<((count*state.typeToSize(argType))+state.functionOffset)<<"($fp)"<<std::endl;
+                    if(((!argType.compare("char"))||(!argType.compare("signed char")))||
+                        (!argType.compare("unsigned char"))){
+                        dst<<"sb"<<" "<<"$"<<(count+4)<<" , "<<((count*state.typeToSize(argType))+state.functionOffset)<<"($fp)"<<std::endl;
+                    } else if((!argType.compare("short"))||(!argType.compare("unsigned short"))){
+                        dst<<"sh"<<" "<<"$"<<(count+4)<<" , "<<((count*state.typeToSize(argType))+state.functionOffset)<<"($fp)"<<std::endl;
+                    } else{
+                        dst<<"sw"<<" "<<"$"<<(count+4)<<" , "<<((count*state.typeToSize(argType))+state.functionOffset)<<"($fp)"<<std::endl;
+                    }
                 }
                 state.argCount++;
             }
