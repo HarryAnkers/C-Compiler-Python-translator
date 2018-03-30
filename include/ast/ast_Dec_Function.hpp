@@ -102,6 +102,7 @@ class Function : public ASTNode
             state.currentScope--;
             state.popScope();
             state.adjustStack(-state.functionOffset);
+            
 
             //below needs to be put into the return
             dst<<"$E"<<state.returnId<<":"<<std::endl;
