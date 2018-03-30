@@ -113,6 +113,7 @@ public:
     int functionOffset;
     int arrayCounter;
     int currentArraySize;
+    int ifFuncCall;
 
     CompilerState():
         stackChangeNeeded(0), labelId(0), currentScope(0), currentOffset(-4), returnId(0) {

@@ -1,7 +1,10 @@
-.global arg8
+.globl arg8
 .ent arg8
 .type arg8, @function
 arg8:
+.frame $fp,8, $ra
+.mask 0x40000000, -4
+.fmask 0x00000000, 0
 addiu $sp , $sp , -8
 sw $31 , 4($sp)
 sw $fp , 0($sp)

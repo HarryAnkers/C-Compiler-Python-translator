@@ -535,6 +535,7 @@ class FunctionStatementInExpr : public ASTNode
 
         //for frame size
         void count(CompilerState &state) const override {
+            state.ifFuncCall=1;
             int argCount=0;
             int argSpace=0;
             std::string type;

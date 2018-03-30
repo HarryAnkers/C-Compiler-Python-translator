@@ -1,7 +1,10 @@
-.global func
+.globl func
 .ent func
 .type func, @function
 func:
+.frame $fp,24, $ra
+.mask 0x40000000, -4
+.fmask 0x00000000, 0
 addiu $sp , $sp , -24
 sw $31 , 20($sp)
 sw $fp , 16($sp)

@@ -5,10 +5,13 @@ x:
 .size x, 4
 
 
-.global global
+.globl global
 .ent global
 .type global, @function
 global:
+.frame $fp,8, $ra
+.mask 0x40000000, -4
+.fmask 0x00000000, 0
 addiu $sp , $sp , -8
 sw $31 , 4($sp)
 sw $fp , 0($sp)
