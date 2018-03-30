@@ -26,7 +26,6 @@ public:
 
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
         for(int i = state.varVector.size()-1;i>=0;i--){
-            std::cout<<state.varVector[i].id<<std::endl;
             if(!state.varVector[i].id.compare(id)){
                 int regNo = state.getTempReg(1,dst);
                 dst<<"lw "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;

@@ -679,11 +679,6 @@ class For_Statement : public ASTNode
             body->compile(dst,state);
             if(statement2!=NULL){ statement2->compile(dst,state); }
 
-            std::cout<<"scope is now"<<state.currentScope;
-            for(int i=0;i<state.varVector.size();i++){
-                std::cout<<state.varVector[i]<<std::endl;
-            }
-            std::cout<<"------";
             state.popScope();
             state.currentScope--;
 
