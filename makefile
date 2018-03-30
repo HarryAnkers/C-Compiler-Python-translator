@@ -1,6 +1,9 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
+force : clean
+	make all
+
 all : bin/print_test bin/translate_test bin/c_compiler bin/compile_test
 
 test : bin/print_test

@@ -166,7 +166,7 @@ class ValList : public ASTNode{
                         return;
                     }
                 }
-                throw std::invalid_argument( "array is not defined" );
+                throw std::invalid_argument( "array is not defined @vallist" );
             }
         }
 

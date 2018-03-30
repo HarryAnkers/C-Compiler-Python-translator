@@ -341,7 +341,7 @@ class AssignOp
                     }
                 }
             }
-            throw std::invalid_argument( "variable used was not found (previously declared)" );
+            throw std::invalid_argument( "variable ["+id+"] used was not found (previously declared) @assign" );
         }
 
         //for frame size
@@ -511,7 +511,7 @@ class FunctionStatementInExpr : public ASTNode
 
                     arguments->compile(dst,state);
                     if(state.currentArgCount!=-1){
-                        throw std::invalid_argument( "argument sizes don't match" );
+                        throw std::invalid_argument( "argument sizes don't match @funccall" );
                     }
                     dst<<"jal"<<" "<<state.funcVector[i].id<<std::endl;
                     dst<<"nop"<<std::endl;
@@ -523,7 +523,7 @@ class FunctionStatementInExpr : public ASTNode
                     return;
                 }
             }
-            throw std::invalid_argument( "function not defined" );
+            throw std::invalid_argument( "function["+id+"] not defined @funccall" );
         }
 
         //for frame size
@@ -545,7 +545,7 @@ class FunctionStatementInExpr : public ASTNode
                     return;
                 }
             }
-            throw std::invalid_argument( "function not defined" );
+            throw std::invalid_argument( "function ["+id+"] not defined @funccall(count)" );
         }
 };
 
@@ -806,7 +806,7 @@ public:
                 return;
             }
         }
-        throw std::invalid_argument( "variable used was not found (previously declared)" );
+        throw std::invalid_argument( "variable used ["+id+"] was not found (previously declared) @size" );
     }
 
     //for frame size
