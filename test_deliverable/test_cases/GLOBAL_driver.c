@@ -1,5 +1,5 @@
-int glob();
+int global();
 
 int main(){
-    return glob();
+    return global();
 }

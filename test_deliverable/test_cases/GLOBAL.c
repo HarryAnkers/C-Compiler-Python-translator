@@ -1,6 +1,6 @@
 int x=10;
 
-int glob(){
+int global(){
     x = 0;
     return x;
 }

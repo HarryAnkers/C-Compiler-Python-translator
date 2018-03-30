@@ -28,7 +28,14 @@ public:
         for(int i = state.varVector.size()-1;i>=0;i--){
             if(!state.varVector[i].id.compare(id)){
                 int regNo = state.getTempReg(1,dst);
-                dst<<"lw "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                if(((!state.varVector[i].type.compare("char"))||(!state.varVector[i].type.compare("signed char")))||
+                (!state.varVector[i].type.compare("unsigned char"))){
+                    dst<<"lb "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                } else if((!state.varVector[i].type.compare("short"))||(!state.varVector[i].type.compare("unsigned short"))){
+                    dst<<"lh "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                } else{
+                    dst<<"lw "<<"$"<<regNo<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                }
                 state.ifFull(dst);
                 return;
             }

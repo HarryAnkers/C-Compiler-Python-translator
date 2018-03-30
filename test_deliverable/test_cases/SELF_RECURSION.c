@@ -1,9 +1,8 @@
 int self(int x){
-    x--;
-    if(x==0){ return 0; }
-    else if(x<0){return 2; }
-    else{
+    if(x>0){
+        x--;
         return self(x);
+    } else {
+        return x;
     }
-    return 3;
 }

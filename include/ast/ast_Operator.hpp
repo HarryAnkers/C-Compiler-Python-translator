@@ -324,7 +324,14 @@ class AssignOp
                         int reg1 = state.getTempReg(0,dst);
                         expression->compile(dst,state);
                         state.ifLoad(dst,reg1);
-                        dst<<"sw"<<" "<<"$"<<reg1<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                        if(((!state.varVector[i].type.compare("char"))||(!state.varVector[i].type.compare("signed char")))||
+                            (!state.varVector[i].type.compare("unsigned char"))){
+                            dst<<"sb"<<" "<<"$"<<reg1<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                        } else if((!state.varVector[i].type.compare("short"))||(!state.varVector[i].type.compare("unsigned short"))){
+                            dst<<"sh"<<" "<<"$"<<reg1<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                        } else{
+                            dst<<"sw"<<" "<<"$"<<reg1<<" , "<<state.varVector[i].stackOffset<<"($fp)"<<std::endl;
+                        }
                         state.ifFull(dst);
                         return;
                     }
