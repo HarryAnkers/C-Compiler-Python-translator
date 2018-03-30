@@ -1,3 +1,4 @@
-int arr(int arra[5]){
-    return arra[0];
+int arr(){
+    int x[6]={1,10,10,10,10,10}
+    return (x[0]+x[1]+x[2]+x[3]+x[4]+x[5]);
 }

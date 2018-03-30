@@ -1,6 +1,9 @@
-int arr(int arra[5]);
+int arr();
 
 int main(){
-    int array[5] = {0, 0, 0, 0, 0} ;
-    return arr(array);
+    if(arr()==51){
+        return 0;
+    } else{
+        return 4;
+    }
 }
