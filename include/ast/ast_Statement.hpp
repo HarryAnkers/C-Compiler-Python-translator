@@ -374,7 +374,7 @@ class If_Statement : public ASTNode
 
             statement1->compile(dst,state);
 
-            dst<<"$L"<<state.label()<<std::endl;
+            dst<<"$L"<<state.label()<<":"<<std::endl;
         }
 
         //for frame size
@@ -457,9 +457,9 @@ class IfElse_Statement : public ASTNode
             dst<<"b"<<" "<<"$L"<<state.labelId+1<<std::endl;
             dst<<"nop"<<std::endl;
 
-            dst<<"$L"<<state.label()<<std::endl;
+            dst<<"$L"<<state.label()<<":"<<std::endl;
             statement2->compile(dst,state);
-            dst<<"$L"<<state.label()<<std::endl;
+            dst<<"$L"<<state.label()<<":"<<std::endl;
         }
 
         //for frame size

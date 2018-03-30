@@ -24,7 +24,7 @@ addiu $2 , $0 , 0x2
 addu $2 , $2 , $0
 b $E0
 nop
-$L3
+$L3:
 addiu $2 , $0 , 0x0
 addu $2 , $2 , $0
 b $E0
