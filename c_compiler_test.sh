@@ -62,12 +62,16 @@ for DRIVER in test_deliverable/test_cases/*'_driver'.c ; do
     fi
 
     if [[ $TEST_OUTPUT -eq 20 ]] ; then
+        echo " "
         echo "$NAME, Fail, no $NAME-got executable in ${working_exec}"
     elif [[ $TEST_OUTPUT -ne 0 ]] ; then
+        echo " "
         echo "$NAME, Fail, Expected "0", got ${TEST_OUTPUT}"
     elif [[ ${have_compiler} -ne 0 ]] ; then
+        echo " "
         echo "$NAME, Fail, No C compiler"
     else
+        echo " "
         echo "$NAME, Pass"
     fi
         echo " "
