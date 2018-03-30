@@ -1,3 +1,9 @@
+int function();
+
 int main(){
-    return 0;
+    if(function()==1){
+        return 0;
+    }else{
+        return 3;
+    }
 }
