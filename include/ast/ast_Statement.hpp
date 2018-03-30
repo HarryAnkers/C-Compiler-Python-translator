@@ -190,21 +190,15 @@ class Declare : public ASTNode
 
         //compiler 
         virtual void compile(std::ostream &dst, CompilerState &state) const override{
-            std::cout<<"compiling declare"<<std::endl;
             int offset=state.offset(state.currentType);
             state.varVector.push_back(VariableBind(id, state.currentType, state.currentScope,offset));
             if(expression!=NULL){
-                std::cout<<"eval expr"<<std::endl;
                 int reg1 = state.getTempReg(0,dst);
                 expression->compile(dst,state);
-                std::cout<<"finished expr"<<std::endl;
                 state.ifLoad(dst,reg1);
-                std::cout<<"loaded expr in"<<std::endl;
                 dst<<"sw "<<"$"<<reg1<<" , "<<offset<<"($fp)"<<std::endl;
                 state.registers[reg1]=0;
-                std::cout<<"popping stuff"<<std::endl;
                 state.ifFull(dst);
-                std::cout<<"finished in declare"<<std::endl;
             } else {
                 int reg1 = state.getTempReg(1,dst);
                 dst<<"addi"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x0"<<std::endl;

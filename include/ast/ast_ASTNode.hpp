@@ -160,7 +160,7 @@ public:
     }
 
     int getTempReg(int x,std::ostream &dst){
-        /*for(int i=2;i<4;i++){
+        for(int i=2;i<4;i++){
             if(registers[i]==0){
                 registers[i]=x;
                 full=0;
@@ -172,8 +172,9 @@ public:
                 full=0;
                 return i;
             }
-        }*/
-        if(x==0){
+        }
+        throw std::invalid_argument( "ran out of registers" );
+        /*if(x==0){
             if(registers[21]==0){
                 stackChangeNeeded++;
                 return 21;
@@ -191,18 +192,16 @@ public:
             tempStack.push_back(offset("int"));
             adjustStack(adjustment);
             return 21;
-        }
+        }*/
     }
 
-    void ifLoad(std::ostream &dst, int x){
+    void ifLoad(std::ostream &dst, int x){/*
         if((x==21)||(x=22)){
             dst<<"lw"<<" "<<"$"<<x<<" , "<<tempStack[tempStack.size()-1]<<"($fp)"<<std::endl;
-        }
+        }*/
     }
 
-    void ifFull(std::ostream &dst){
-        std::cout<<"temp stack size is "<<tempStack.size()<<std::endl;
-        std::cout<<"stackChange is "<<stackChangeNeeded<<std::endl;
+    void ifFull(std::ostream &dst){/*
         while(stackChangeNeeded>0){
             tempStack.pop_back();
             stackChangeNeeded--;
@@ -210,7 +209,7 @@ public:
         if(full==1){
             registers[21]=0;
             dst<<"sw"<<" "<<"$"<<"21"<<" , "<<tempStack[tempStack.size()-1]<<"($fp)"<<std::endl;
-        }
+        }*/
     }
 
     void popScope(){

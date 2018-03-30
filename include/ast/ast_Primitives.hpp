@@ -108,13 +108,9 @@ public:
     }
 
     virtual void compile(std::ostream &dst, CompilerState &state) const override{
-        std::cout<<"in num"<<std::endl;
         int reg1 = state.getTempReg(1,dst);
-        std::cout<<"got num reg"<<std::endl;
         dst<<"addiu"<<" "<<"$"<<reg1<<" , "<<"$"<<"0"<<" , "<<"0x"<<state.toHex(value)<<std::endl;
-        std::cout<<"popping"<<std::endl;
         state.ifFull(dst);
-        std::cout<<"finished with num"<<std::endl;
     }
 
     virtual void count(CompilerState &state) const override {}
