@@ -13,11 +13,7 @@ int func(){
                     if(b<b){
                         return 3;
                     } else {
-                        if(c<a){
-                            return 1;
-                        } else{
-                            return 10;
-                        }
+                        return 10;
                     }
                 }
             }

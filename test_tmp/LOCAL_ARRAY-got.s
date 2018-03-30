@@ -2,9 +2,6 @@
 .ent arr
 .type arr, @function
 arr:
-.frame $fp,32, $ra
-.mask 0x40000000, -4
-.fmask 0x00000000, 0
 addiu $sp , $sp , -32
 sw $31 , 28($sp)
 sw $fp , 24($sp)

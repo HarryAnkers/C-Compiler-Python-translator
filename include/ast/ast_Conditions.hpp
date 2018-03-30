@@ -225,7 +225,7 @@ class LMore : public ConditionOp
             state.ifLoad(dst,reg2);
             state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
-            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
+            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             state.ifFull(dst);
         }
 };
@@ -249,7 +249,7 @@ class LLess : public ConditionOp
             state.ifLoad(dst,reg2);
             state.ifLoad(dst,reg3);
             int reg1 = state.getTempReg(1,dst);
-            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg3<<" , "<<"$"<<reg2<<std::endl;
+            dst<<"slt"<<" "<<"$"<<reg1<<" , "<<"$"<<reg2<<" , "<<"$"<<reg3<<std::endl;
             state.ifFull(dst);
         }
 };

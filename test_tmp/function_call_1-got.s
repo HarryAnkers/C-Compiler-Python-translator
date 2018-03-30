@@ -2,9 +2,6 @@
 .ent function1
 .type function1, @function
 function1:
-.frame $fp,8, $ra
-.mask 0x40000000, -4
-.fmask 0x00000000, 0
 addiu $sp , $sp , -8
 sw $31 , 4($sp)
 sw $fp , 0($sp)
@@ -27,9 +24,6 @@ nop
 .ent function2
 .type function2, @function
 function2:
-.frame $fp,24, $ra
-.mask 0x40000000, -4
-.fmask 0x00000000, 0
 addiu $sp , $sp , -24
 sw $31 , 20($sp)
 sw $fp , 16($sp)

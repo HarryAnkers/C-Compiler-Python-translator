@@ -2,9 +2,6 @@
 .ent func
 .type func, @function
 func:
-.frame $fp,24, $ra
-.mask 0x40000000, -4
-.fmask 0x00000000, 0
 addiu $sp , $sp , -24
 sw $31 , 20($sp)
 sw $fp , 16($sp)
@@ -23,7 +20,7 @@ addiu $2 , $0 , 0x2
 sw $2 , 12($fp)
 lw $2 , 0($fp)
 lw $3 , 0($fp)
-slt $2 , $3 , $2
+slt $2 , $2 , $3
 beq $2 , $0 , $L1
 nop
 addiu $2 , $0 , 0x2
@@ -36,22 +33,22 @@ nop
 $L1:
 lw $2 , 0($fp)
 lw $3 , 4($fp)
-slt $2 , $3 , $2
+slt $2 , $2 , $3
 beq $2 , $0 , $L2
 nop
 lw $2 , 0($fp)
 lw $3 , 8($fp)
-slt $2 , $3 , $2
+slt $2 , $2 , $3
 beq $2 , $0 , $L2
 nop
 lw $2 , 8($fp)
 lw $3 , 12($fp)
-slt $2 , $3 , $2
+slt $2 , $2 , $3
 beq $2 , $0 , $L2
 nop
 lw $2 , 4($fp)
 lw $3 , 4($fp)
-slt $2 , $3 , $2
+slt $2 , $2 , $3
 beq $2 , $0 , $L2
 nop
 addiu $2 , $0 , 0x3
@@ -62,30 +59,16 @@ nop
 b $L3
 nop
 $L2:
-lw $2 , 8($fp)
-lw $3 , 0($fp)
-slt $2 , $3 , $2
-beq $2 , $0 , $L3
-nop
-addiu $2 , $0 , 0x1
-addu $2 , $2 , $0
-andi $2 , $2 , 0x00ff
-b $E0
-nop
-b $L4
-nop
-$L3:
 addiu $2 , $0 , 0xa
 addu $2 , $2 , $0
 andi $2 , $2 , 0x00ff
 b $E0
 nop
+$L3:
 $L4:
 $L5:
 $L6:
 $L7:
-$L8:
-$L9:
 addiu $2 , $0 , 0x14
 addu $2 , $2 , $0
 andi $2 , $2 , 0x00ff

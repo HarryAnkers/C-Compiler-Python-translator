@@ -2,9 +2,6 @@
 .ent function
 .type function, @function
 function:
-.frame $fp,16, $ra
-.mask 0x40000000, -4
-.fmask 0x00000000, 0
 addiu $sp , $sp , -16
 sw $31 , 12($sp)
 sw $fp , 8($sp)
